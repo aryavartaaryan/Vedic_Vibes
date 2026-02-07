@@ -1,0 +1,1124 @@
+[
+    {
+        "id": 1,
+        "category": "Body Structure",
+        "question": {
+            "en": "Tell me, seeker, what is the natural frame of your body as you stand before the mirror?",
+            "hi": "हे साधक, आईने के समक्ष खड़े होने पर आपके शरीर की स्वाभाविक बनावट कैसी जान पड़ती है?"
+        },
+        "allowMultiple": false,
+        "options": [
+            {
+                "label": {
+                    "en": "Slim, slender, I hardly gain weight",
+                    "hi": "पतला, छरहरा, वजन मुश्किल से बढ़ता है"
+                },
+                "weights": {
+                    "vata": 5,
+                    "pitta": 0,
+                    "kapha": 0
+                }
+            },
+            {
+                "label": {
+                    "en": "Medium build, athletic muscles",
+                    "hi": "मध्यम कद-काठी, गठीला बदन"
+                },
+                "weights": {
+                    "vata": 0,
+                    "pitta": 5,
+                    "kapha": 0
+                }
+            },
+            {
+                "label": {
+                    "en": "Broad, solid, or curvy frame",
+                    "hi": "चौड़ा, मजबूत या भरा-पूरा शरीर"
+                },
+                "weights": {
+                    "vata": 0,
+                    "pitta": 0,
+                    "kapha": 5
+                }
+            }
+        ]
+    },
+    {
+        "id": 2,
+        "category": "Weight Patterns",
+        "question": {
+            "en": "How does your weight behave throughout the seasons of your life?",
+            "hi": "जीवन के विभिन्न पड़ावों और ऋतुओं में आपके वजन का व्यवहार कैसा रहता है?"
+        },
+        "allowMultiple": false,
+        "options": [
+            {
+                "label": {
+                    "en": "Fluctuates often, hard to hold steady",
+                    "hi": "अक्सर घटता-बढ़ता रहता है"
+                },
+                "weights": {
+                    "vata": 4,
+                    "pitta": 1,
+                    "kapha": 0
+                }
+            },
+            {
+                "label": {
+                    "en": "Steady, changes slowly if at all",
+                    "hi": "स्थिर रहता है, बहुत धीरे बदलता है"
+                },
+                "weights": {
+                    "vata": 0,
+                    "pitta": 2,
+                    "kapha": 4
+                }
+            },
+            {
+                "label": {
+                    "en": "I gain quickly but lose quickly too",
+                    "hi": "जल्दी बढ़ता है, पर जल्दी घट भी जाता है"
+                },
+                "weights": {
+                    "vata": 0,
+                    "pitta": 4,
+                    "kapha": 1
+                }
+            }
+        ]
+    },
+    {
+        "id": 3,
+        "category": "Skin Texture",
+        "question": {
+            "en": "By the touch of your own hand, how do you perceive the texture and warmth of your skin?",
+            "hi": "अपने स्वयं के स्पर्श से, आप अपनी त्वचा की बनावट और उष्णता को कैसा अनुभव करते हैं?"
+        },
+        "allowMultiple": true,
+        "options": [
+            {
+                "label": {
+                    "en": "Dry, rough, or cold to touch",
+                    "hi": "रूखी, खुरदरी या ठंडी"
+                },
+                "weights": {
+                    "vata": 4,
+                    "pitta": 0,
+                    "kapha": 0
+                }
+            },
+            {
+                "label": {
+                    "en": "Warm, oily T-zone, or reddish",
+                    "hi": "गर्म, तैलीय या लालिमा युक्त"
+                },
+                "weights": {
+                    "vata": 0,
+                    "pitta": 4,
+                    "kapha": 0
+                }
+            },
+            {
+                "label": {
+                    "en": "Soft, cool, moist, and thick",
+                    "hi": "नरम, ठंडी, नम और मोटी"
+                },
+                "weights": {
+                    "vata": 0,
+                    "pitta": 0,
+                    "kapha": 4
+                }
+            },
+            {
+                "label": {
+                    "en": "Prone to acne or inflammation",
+                    "hi": "मुंहासे या सूजन की संभावना"
+                },
+                "weights": {
+                    "vata": 0,
+                    "pitta": 3,
+                    "kapha": 0
+                }
+            }
+        ]
+    },
+    {
+        "id": 4,
+        "category": "Hair",
+        "question": {
+            "en": "Observe the crown of your head. Which quality describes your hair best?",
+            "hi": "अपने केशों का सूक्ष्म अवलोकन करें। आपके बालों की प्रकृति कैसी है?"
+        },
+        "allowMultiple": true,
+        "options": [
+            {
+                "label": {
+                    "en": "Dry, frizzy, thinner",
+                    "hi": "रूखे, उलझे हुए, पतले"
+                },
+                "weights": {
+                    "vata": 4,
+                    "pitta": 0,
+                    "kapha": 0
+                }
+            },
+            {
+                "label": {
+                    "en": "Fine, silky, maybe early graying",
+                    "hi": "मुलायम, रेशमी, शायद जल्दी सफेद होने वाले"
+                },
+                "weights": {
+                    "vata": 0,
+                    "pitta": 4,
+                    "kapha": 0
+                }
+            },
+            {
+                "label": {
+                    "en": "Thick, wavy, oily, lustrous",
+                    "hi": "घने, लहरदार, तैलीय, चमकदार"
+                },
+                "weights": {
+                    "vata": 0,
+                    "pitta": 0,
+                    "kapha": 4
+                }
+            }
+        ]
+    },
+    {
+        "id": 5,
+        "category": "Joints",
+        "question": {
+            "en": "How do your joints feel or sound?",
+            "hi": "आपके जोड़ कैसे महसूस होते हैं?"
+        },
+        "allowMultiple": false,
+        "options": [
+            {
+                "label": {
+                    "en": "They crack or pop often",
+                    "hi": "अक्सर कटकट की आवाज़ आती है"
+                },
+                "weights": {
+                    "vata": 5,
+                    "pitta": 0,
+                    "kapha": 0
+                }
+            },
+            {
+                "label": {
+                    "en": "Loose or flexible",
+                    "hi": "ढीले या लचीले"
+                },
+                "weights": {
+                    "vata": 1,
+                    "pitta": 3,
+                    "kapha": 0
+                }
+            },
+            {
+                "label": {
+                    "en": "Strong, sturdy, well-padded",
+                    "hi": "मजबूत, ठोस, गद्देदार"
+                },
+                "weights": {
+                    "vata": 0,
+                    "pitta": 0,
+                    "kapha": 5
+                }
+            }
+        ]
+    },
+    {
+        "id": 6,
+        "category": "Eyes",
+        "question": {
+            "en": "Look into your eyes. What do you see?",
+            "hi": "अपनी आंखों में देखें। आप क्या देखते हैं?"
+        },
+        "allowMultiple": false,
+        "options": [
+            {
+                "label": {
+                    "en": "Small, active, darting gaze",
+                    "hi": "छोटी, चंचल, अस्थिर नज़र"
+                },
+                "weights": {
+                    "vata": 4,
+                    "pitta": 0,
+                    "kapha": 0
+                }
+            },
+            {
+                "label": {
+                    "en": "Piercing, intense, or sensitive to light",
+                    "hi": "तीखी, तीव्र, या रोशनी के प्रति संवेदनशील"
+                },
+                "weights": {
+                    "vata": 0,
+                    "pitta": 4,
+                    "kapha": 0
+                }
+            },
+            {
+                "label": {
+                    "en": "Large, calm, loving, white sclera",
+                    "hi": "बड़ी, शांत, स्नेही, सफेद"
+                },
+                "weights": {
+                    "vata": 0,
+                    "pitta": 0,
+                    "kapha": 4
+                }
+            }
+        ]
+    },
+    {
+        "id": 7,
+        "category": "Teeth & Gums",
+        "question": {
+            "en": "How are your teeth arranged?",
+            "hi": "आपके दांत कैसे हैं?"
+        },
+        "allowMultiple": false,
+        "options": [
+            {
+                "label": {
+                    "en": "Uneven, protruding, or large gums",
+                    "hi": "असमान, बाहर निकले हुए या बड़े मसूड़े"
+                },
+                "weights": {
+                    "vata": 4,
+                    "pitta": 0,
+                    "kapha": 0
+                }
+            },
+            {
+                "label": {
+                    "en": "Medium sizes, yellowish tinge, soft gums",
+                    "hi": "मध्यम आकार, हल्का पीलापन, नरम मसूड़े"
+                },
+                "weights": {
+                    "vata": 0,
+                    "pitta": 4,
+                    "kapha": 0
+                }
+            },
+            {
+                "label": {
+                    "en": "Strong, white, perfectly aligned",
+                    "hi": "मजबूत, सफेद, एक कतार में"
+                },
+                "weights": {
+                    "vata": 0,
+                    "pitta": 0,
+                    "kapha": 4
+                }
+            }
+        ]
+    },
+    {
+        "id": 8,
+        "category": "Nails",
+        "question": {
+            "en": "Examine your fingernails.",
+            "hi": "अपने नाखूनों की जांच करें।"
+        },
+        "allowMultiple": true,
+        "options": [
+            {
+                "label": {
+                    "en": "Brittle, rough, or bitten",
+                    "hi": "नाज़ुक, खुरदरे या कुतरे हुए"
+                },
+                "weights": {
+                    "vata": 4,
+                    "pitta": 0,
+                    "kapha": 0
+                }
+            },
+            {
+                "label": {
+                    "en": "Pink, soft, flexible",
+                    "hi": "गुलाबी, नरम, लचीले"
+                },
+                "weights": {
+                    "vata": 0,
+                    "pitta": 4,
+                    "kapha": 0
+                }
+            },
+            {
+                "label": {
+                    "en": "Thick, strong, smooth, wide",
+                    "hi": "मोटे, मजबूत, चिकने, चौड़े"
+                },
+                "weights": {
+                    "vata": 0,
+                    "pitta": 0,
+                    "kapha": 4
+                }
+            }
+        ]
+    },
+    {
+        "id": 9,
+        "category": "Appetite",
+        "question": {
+            "en": "Let's talk food. How is your hunger?",
+            "hi": "खाने की बात करते हैं। आपकी भूख कैसी है?"
+        },
+        "allowMultiple": false,
+        "options": [
+            {
+                "label": {
+                    "en": "Irregular. Sometimes ravenous, sometimes forgot to eat.",
+                    "hi": "अनियमित। कभी बहुत भूख, कभी खाना भूल जाते हैं।"
+                },
+                "weights": {
+                    "vata": 5,
+                    "pitta": 0,
+                    "kapha": 0
+                }
+            },
+            {
+                "label": {
+                    "en": "Sharp! I get 'hangry' if I miss a meal.",
+                    "hi": "तेज! खाना न मिले तो गुस्सा आता है।"
+                },
+                "weights": {
+                    "vata": 0,
+                    "pitta": 5,
+                    "kapha": 0
+                }
+            },
+            {
+                "label": {
+                    "en": "Steady but low. I can skip meals easily.",
+                    "hi": "स्थिर लेकिन कम। मैं आसानी से भोजन छोड़ सकता हूँ।"
+                },
+                "weights": {
+                    "vata": 0,
+                    "pitta": 0,
+                    "kapha": 5
+                }
+            }
+        ]
+    },
+    {
+        "id": 10,
+        "category": "Digestion",
+        "question": {
+            "en": "How does your stomach behave after meals?",
+            "hi": "खाने के बाद आपका पेट कैसा महसूस करता है?"
+        },
+        "allowMultiple": true,
+        "options": [
+            {
+                "label": {
+                    "en": "Lots of gas, bloating, or gurgling",
+                    "hi": "बहुत गैस, पेट फूलना या गुड़गुड़ाहट"
+                },
+                "weights": {
+                    "vata": 5,
+                    "pitta": 0,
+                    "kapha": 0
+                }
+            },
+            {
+                "label": {
+                    "en": "Heartburn, acidity, or burning",
+                    "hi": "सीने में जलन, एसिडिटी"
+                },
+                "weights": {
+                    "vata": 0,
+                    "pitta": 5,
+                    "kapha": 0
+                }
+            },
+            {
+                "label": {
+                    "en": "Heavy feeling, slow digestion, sleepy",
+                    "hi": "भारीपन, धीमा पाचन, नींद आना"
+                },
+                "weights": {
+                    "vata": 0,
+                    "pitta": 0,
+                    "kapha": 5
+                }
+            }
+        ]
+    },
+    {
+        "id": 11,
+        "category": "Taste Preference",
+        "question": {
+            "en": "Which tastes do you crave most?",
+            "hi": "आपको कौन से स्वाद सबसे ज्यादा पसंद हैं?"
+        },
+        "allowMultiple": true,
+        "options": [
+            {
+                "label": {
+                    "en": "Sweet, Sour, Salty",
+                    "hi": "मीठा, खट्टा, नमकीन"
+                },
+                "weights": {
+                    "vata": 4,
+                    "pitta": 0,
+                    "kapha": 0
+                }
+            },
+            {
+                "label": {
+                    "en": "Sweet, Bitter, Astringent (Dry)",
+                    "hi": "मीठा, कड़वा, कसैला"
+                },
+                "weights": {
+                    "vata": 0,
+                    "pitta": 4,
+                    "kapha": 0
+                }
+            },
+            {
+                "label": {
+                    "en": "Pungent (Spicy), Bitter, Astringent",
+                    "hi": "तीखा, कड़वा, कसैला"
+                },
+                "weights": {
+                    "vata": 0,
+                    "pitta": 0,
+                    "kapha": 4
+                }
+            }
+        ]
+    },
+    {
+        "id": 12,
+        "category": "Thirst",
+        "question": {
+            "en": "How thirsty do you get?",
+            "hi": "आपको प्यास कितनी लगती है?"
+        },
+        "allowMultiple": false,
+        "options": [
+            {
+                "label": {
+                    "en": "Variable. I prefer warm drinks.",
+                    "hi": "कम-ज्यादा होती है। मुझे गर्म पेय पसंद हैं।"
+                },
+                "weights": {
+                    "vata": 3,
+                    "pitta": 0,
+                    "kapha": 0
+                }
+            },
+            {
+                "label": {
+                    "en": "Very thirsty! Give me cold water.",
+                    "hi": "बहुत प्यास! मुझे ठंडा पानी चाहिए।"
+                },
+                "weights": {
+                    "vata": 0,
+                    "pitta": 5,
+                    "kapha": 0
+                }
+            },
+            {
+                "label": {
+                    "en": "Rarely. I don't drink much.",
+                    "hi": "बहुत कम। मैं ज्यादा पानी नहीं पीता।"
+                },
+                "weights": {
+                    "vata": 0,
+                    "pitta": 0,
+                    "kapha": 4
+                }
+            }
+        ]
+    },
+    {
+        "id": 13,
+        "category": "Elimination",
+        "question": {
+            "en": "Let's be real. How is your elimination?",
+            "hi": "सच बताएं। आपका पेट साफ़ कैसा होता है?"
+        },
+        "allowMultiple": false,
+        "options": [
+            {
+                "label": {
+                    "en": "Hard, dry, constipated often",
+                    "hi": "सख्त, सूखा, अक्सर कब्ज"
+                },
+                "weights": {
+                    "vata": 5,
+                    "pitta": 0,
+                    "kapha": 0
+                }
+            },
+            {
+                "label": {
+                    "en": "Soft, loose, sometimes burning, frequent",
+                    "hi": "नरम, ढीला, कभी-कभी जलन, बार-बार"
+                },
+                "weights": {
+                    "vata": 0,
+                    "pitta": 5,
+                    "kapha": 0
+                }
+            },
+            {
+                "label": {
+                    "en": "Regular, solid, heavy, once a day",
+                    "hi": "नियमित, ठोस, भारी, दिन में एक बार"
+                },
+                "weights": {
+                    "vata": 0,
+                    "pitta": 0,
+                    "kapha": 5
+                }
+            }
+        ]
+    },
+    {
+        "id": 14,
+        "category": "Sleep Quality",
+        "question": {
+            "en": "How do you sleep at night?",
+            "hi": "रात में आपकी नींद कैसी होती है?"
+        },
+        "allowMultiple": true,
+        "options": [
+            {
+                "label": {
+                    "en": "Light, interrupted, I wake up thinking",
+                    "hi": "हल्की, बार-बार टूटने वाली, विचार चलते रहते हैं"
+                },
+                "weights": {
+                    "vata": 4,
+                    "pitta": 1,
+                    "kapha": 0
+                }
+            },
+            {
+                "label": {
+                    "en": "Sound, but I need less sleep (6ish hours)",
+                    "hi": "अच्छी, लेकिन कम नींद की जरूरत (6 घंटे)"
+                },
+                "weights": {
+                    "vata": 0,
+                    "pitta": 4,
+                    "kapha": 0
+                }
+            },
+            {
+                "label": {
+                    "en": "Deep, heavy, I can sleep 9+ hours",
+                    "hi": "बहुत गहरी, भारी, 9+ घंटे सो सकता हूँ"
+                },
+                "weights": {
+                    "vata": 0,
+                    "pitta": 0,
+                    "kapha": 5
+                }
+            },
+            {
+                "label": {
+                    "en": "I grind my teeth or sweat",
+                    "hi": "दांत पीसता हूँ या पसीना आता है"
+                },
+                "weights": {
+                    "vata": 1,
+                    "pitta": 3,
+                    "kapha": 0
+                }
+            }
+        ]
+    },
+    {
+        "id": 15,
+        "category": "Activity Level",
+        "question": {
+            "en": "How do you move through life?",
+            "hi": "आपकी जीवनशैली में गति कैसी है?"
+        },
+        "allowMultiple": false,
+        "options": [
+            {
+                "label": {
+                    "en": "Fast! I walk fast, talk fast, eat fast.",
+                    "hi": "तेज! तेज चलना, तेज बोलना, तेज खाना।"
+                },
+                "weights": {
+                    "vata": 5,
+                    "pitta": 1,
+                    "kapha": 0
+                }
+            },
+            {
+                "label": {
+                    "en": "Determined. I move with purpose and precision.",
+                    "hi": "दृढ़। मैं उद्देश्य और सटीकता के साथ चलता हूँ।"
+                },
+                "weights": {
+                    "vata": 0,
+                    "pitta": 4,
+                    "kapha": 1
+                }
+            },
+            {
+                "label": {
+                    "en": "Slow and steady. I take my time.",
+                    "hi": "धीमा और स्थिर। मैं आराम से काम करता हूँ।"
+                },
+                "weights": {
+                    "vata": 0,
+                    "pitta": 0,
+                    "kapha": 5
+                }
+            }
+        ]
+    },
+    {
+        "id": 16,
+        "category": "Learning Style",
+        "question": {
+            "en": "When learning something new...",
+            "hi": "जब आप कुछ नया सीखते हैं..."
+        },
+        "allowMultiple": false,
+        "options": [
+            {
+                "label": {
+                    "en": "I learn fast but forget fast.",
+                    "hi": "जल्दी सीखता हूँ लेकिन जल्दी भूल जाता हूँ।"
+                },
+                "weights": {
+                    "vata": 4,
+                    "pitta": 0,
+                    "kapha": 0
+                }
+            },
+            {
+                "label": {
+                    "en": "I understand the logic quickly and remember well.",
+                    "hi": "तर्क जल्दी समझता हूँ और अच्छी तरह याद रखता हूँ।"
+                },
+                "weights": {
+                    "vata": 0,
+                    "pitta": 4,
+                    "kapha": 0
+                }
+            },
+            {
+                "label": {
+                    "en": "Takes time to learn, but I never forget.",
+                    "hi": "सीखने में समय लगता है, लेकिन कभी नहीं भूलता।"
+                },
+                "weights": {
+                    "vata": 0,
+                    "pitta": 0,
+                    "kapha": 5
+                }
+            }
+        ]
+    },
+    {
+        "id": 17,
+        "category": "Emotions",
+        "question": {
+            "en": " Under extreme stress, I tend to be...",
+            "hi": "अत्यधिक तनाव में, मैं अक्सर..."
+        },
+        "allowMultiple": true,
+        "options": [
+            {
+                "label": {
+                    "en": "Anxious, fearful, or worried",
+                    "hi": "चिंतित, भयभीत या परेशान"
+                },
+                "weights": {
+                    "vata": 5,
+                    "pitta": 0,
+                    "kapha": 0
+                }
+            },
+            {
+                "label": {
+                    "en": "Angry, critical, or frustrated",
+                    "hi": "क्रोधित, आलोचनात्मक या निराश"
+                },
+                "weights": {
+                    "vata": 0,
+                    "pitta": 5,
+                    "kapha": 0
+                }
+            },
+            {
+                "label": {
+                    "en": "Withdrawn, silent, or greedy",
+                    "hi": "चुपचाप, उदास या लोभी"
+                },
+                "weights": {
+                    "vata": 0,
+                    "pitta": 0,
+                    "kapha": 5
+                }
+            }
+        ]
+    },
+    {
+        "id": 18,
+        "category": "Weather Sensitivity",
+        "question": {
+            "en": "Which weather makes you uncomfortable?",
+            "hi": "किस मौसम में आपको परेशानी होती है?"
+        },
+        "allowMultiple": true,
+        "options": [
+            {
+                "label": {
+                    "en": "Cold and Wind (I love warmth)",
+                    "hi": "ठंड और हवा (मुझे गर्मी पसंद है)"
+                },
+                "weights": {
+                    "vata": 5,
+                    "pitta": 0,
+                    "kapha": 1
+                }
+            },
+            {
+                "label": {
+                    "en": "Heat and Sun (I love cool breeze)",
+                    "hi": "गर्मी और धूप (मुझे ठंडी हवा पसंद है)"
+                },
+                "weights": {
+                    "vata": 0,
+                    "pitta": 5,
+                    "kapha": 0
+                }
+            },
+            {
+                "label": {
+                    "en": "Damp, Rainy, or Cold (I prefer dry heat)",
+                    "hi": "नमी, बारिश या ठंड (मुझे सूखी गर्मी पसंद है)"
+                },
+                "weights": {
+                    "vata": 1,
+                    "pitta": 0,
+                    "kapha": 5
+                }
+            }
+        ]
+    },
+    {
+        "id": 19,
+        "category": "Talking",
+        "question": {
+            "en": "How conversational are you?",
+            "hi": "आप कितनी बातें करते हैं?"
+        },
+        "allowMultiple": false,
+        "options": [
+            {
+                "label": {
+                    "en": "Talkative! I jump from topic to topic.",
+                    "hi": "बातूनी! मैं एक विषय से दूसरे पर कूदता हूँ।"
+                },
+                "weights": {
+                    "vata": 4,
+                    "pitta": 0,
+                    "kapha": 0
+                }
+            },
+            {
+                "label": {
+                    "en": "I speak to the point, clear and sharp.",
+                    "hi": "मैं मुद्दे की बात करता हूँ, स्पष्ट और तेज।"
+                },
+                "weights": {
+                    "vata": 0,
+                    "pitta": 4,
+                    "kapha": 0
+                }
+            },
+            {
+                "label": {
+                    "en": "I speak slowly, or listen more than talk.",
+                    "hi": "मैं धीरे बोलता हूँ, या बोलने से ज्यादा सुनता हूँ।"
+                },
+                "weights": {
+                    "vata": 0,
+                    "pitta": 0,
+                    "kapha": 4
+                }
+            }
+        ]
+    },
+    {
+        "id": 20,
+        "category": "Spending Habits",
+        "question": {
+            "en": "How do you handle money?",
+            "hi": "आप पैसे कैसे संभालते हैं?"
+        },
+        "allowMultiple": false,
+        "options": [
+            {
+                "label": {
+                    "en": "Impulsive. Money burns a hole in my pocket!",
+                    "hi": "आवेग में। पैसा मेरी जेब में टिकता नहीं!"
+                },
+                "weights": {
+                    "vata": 5,
+                    "pitta": 0,
+                    "kapha": 0
+                }
+            },
+            {
+                "label": {
+                    "en": "Strategic. I spend on quality or luxury.",
+                    "hi": "रणनीतिक। मैं गुणवत्ता या विलासिता पर खर्च करता हूँ।"
+                },
+                "weights": {
+                    "vata": 0,
+                    "pitta": 5,
+                    "kapha": 0
+                }
+            },
+            {
+                "label": {
+                    "en": "Saver. I prefer to hoard for safety.",
+                    "hi": "बचत करने वाला। मैं सुरक्षा के लिए जमा करना पसंद करता हूँ।"
+                },
+                "weights": {
+                    "vata": 0,
+                    "pitta": 0,
+                    "kapha": 5
+                }
+            }
+        ]
+    },
+    {
+        "id": 21,
+        "category": "Energy Levels",
+        "question": {
+            "en": "How is your stamina?",
+            "hi": "आपकी सहनशक्ति कैसी है?"
+        },
+        "allowMultiple": false,
+        "options": [
+            {
+                "label": {
+                    "en": "Bursts of energy, then sudden crash",
+                    "hi": "ऊर्जा के धमाके, फिर अचानक थकान"
+                },
+                "weights": {
+                    "vata": 5,
+                    "pitta": 0,
+                    "kapha": 0
+                }
+            },
+            {
+                "label": {
+                    "en": "Moderate, I can push through",
+                    "hi": "मध्यम, मैं काम पूरा कर लेता हूँ"
+                },
+                "weights": {
+                    "vata": 0,
+                    "pitta": 4,
+                    "kapha": 0
+                }
+            },
+            {
+                "label": {
+                    "en": "High endurance, slow to tire",
+                    "hi": "उच्च सहनशक्ति, देर से थकान"
+                },
+                "weights": {
+                    "vata": 0,
+                    "pitta": 0,
+                    "kapha": 5
+                }
+            }
+        ]
+    },
+    {
+        "id": 22,
+        "category": "Dreams",
+        "question": {
+            "en": "What do you often dream of?",
+            "hi": "आप अक्सर किसके सपने देखते हैं?"
+        },
+        "allowMultiple": true,
+        "options": [
+            {
+                "label": {
+                    "en": "Flying, running, jumping, fear",
+                    "hi": "उड़ना, दौड़ना, कूदना, डर"
+                },
+                "weights": {
+                    "vata": 4,
+                    "pitta": 0,
+                    "kapha": 0
+                }
+            },
+            {
+                "label": {
+                    "en": "Fire, light, fighting, anger",
+                    "hi": "आग, प्रकाश, लड़ाई, गुस्सा"
+                },
+                "weights": {
+                    "vata": 0,
+                    "pitta": 4,
+                    "kapha": 0
+                }
+            },
+            {
+                "label": {
+                    "en": "Water, slow motion, romantic, silent",
+                    "hi": "पानी, धीमी गति, रोमांटिक, शांत"
+                },
+                "weights": {
+                    "vata": 0,
+                    "pitta": 0,
+                    "kapha": 4
+                }
+            }
+        ]
+    },
+    {
+        "id": 23,
+        "category": "Temperature (Internal)",
+        "question": {
+            "en": "Are your hands and feet...",
+            "hi": "क्या आपके हाथ और पैर..."
+        },
+        "allowMultiple": false,
+        "options": [
+            {
+                "label": {
+                    "en": "Usually cold",
+                    "hi": "आमतौर पर ठंडे"
+                },
+                "weights": {
+                    "vata": 4,
+                    "pitta": 0,
+                    "kapha": 0
+                }
+            },
+            {
+                "label": {
+                    "en": "Usually warm",
+                    "hi": "आमतौर पर गर्म"
+                },
+                "weights": {
+                    "vata": 0,
+                    "pitta": 4,
+                    "kapha": 0
+                }
+            },
+            {
+                "label": {
+                    "en": "Cool and moist",
+                    "hi": "ठंडे और नम"
+                },
+                "weights": {
+                    "vata": 0,
+                    "pitta": 0,
+                    "kapha": 4
+                }
+            }
+        ]
+    },
+    {
+        "id": 24,
+        "category": "Eyes White",
+        "question": {
+            "en": "Check the whites of your eyes.",
+            "hi": "अपनी आंखों का सफेद हिस्सा जांचें।"
+        },
+        "allowMultiple": false,
+        "options": [
+            {
+                "label": {
+                    "en": "Grayish, dull, or brownish spots",
+                    "hi": "धूसर, सुस्त, या भूरे धब्बे"
+                },
+                "weights": {
+                    "vata": 3,
+                    "pitta": 0,
+                    "kapha": 0
+                }
+            },
+            {
+                "label": {
+                    "en": "Reddish or yellow tinge",
+                    "hi": "लालिमा या पीलापन"
+                },
+                "weights": {
+                    "vata": 0,
+                    "pitta": 3,
+                    "kapha": 0
+                }
+            },
+            {
+                "label": {
+                    "en": "Very white, milky",
+                    "hi": "बहुत सफेद, दूधिया"
+                },
+                "weights": {
+                    "vata": 0,
+                    "pitta": 0,
+                    "kapha": 3
+                }
+            }
+        ]
+    },
+    {
+        "id": 25,
+        "category": "Pulse",
+        "question": {
+            "en": "Feel your pulse. What animal does it move like?",
+            "hi": "अपनी नब्ज महसूस करें। यह किस जानवर की तरह चलती है?"
+        },
+        "allowMultiple": false,
+        "options": [
+            {
+                "label": {
+                    "en": "Snake: Fast, slithering, irregular",
+                    "hi": "सांप: तेज, रेंगने वाली, अनियमित"
+                },
+                "weights": {
+                    "vata": 5,
+                    "pitta": 0,
+                    "kapha": 0
+                }
+            },
+            {
+                "label": {
+                    "en": "Frog: Jumping, bounding, distinct",
+                    "hi": "मेंढक: कूदने वाली, उछलती हुई"
+                },
+                "weights": {
+                    "vata": 0,
+                    "pitta": 5,
+                    "kapha": 0
+                }
+            },
+            {
+                "label": {
+                    "en": "Swan: Slow, steady, gliding",
+                    "hi": "हंस: धीमी, स्थिर, तैरती हुई"
+                },
+                "weights": {
+                    "vata": 0,
+                    "pitta": 0,
+                    "kapha": 5
+                }
+            }
+        ]
+    }
+]

@@ -1,0 +1,260 @@
+@import url('https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700&family=Lato:wght@300;400&display=swap');
+
+/* --- ATMOSPHERE --- */
+.container {
+    position: relative;
+    padding: 10rem 2rem;
+    /* Generous whitespace */
+    overflow: hidden;
+    /* Seamless: Start at #050A30 (Mantra section color) -> Teal */
+    background: linear-gradient(to bottom, #050A30 0%, #004D40 100%);
+    color: #F5F5DC;
+    /* Sandalwood Cream text */
+    font-family: 'Lato', sans-serif;
+}
+
+/* Local texture removed in favor of Global .main texture */
+.textureOverlay {
+    display: none;
+}
+
+/* Grain Filter */
+.container::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: url("https://www.transparenttextures.com/patterns/stardust.png");
+    /* Subtle grain */
+    opacity: 0.15;
+    pointer-events: none;
+    z-index: 1;
+}
+
+/* Prana Particle Canvas */
+.particleCanvas {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 2;
+    opacity: 0.8;
+}
+
+/* --- CONTENT --- */
+.contentWrapper {
+    position: relative;
+    z-index: 10;
+    max-width: 900px;
+    margin: 0 auto;
+    text-align: center;
+    padding: 4rem 2rem;
+
+    /* Organic/Fluid Mask (Cave/Lotus Arch) */
+    background: rgba(5, 10, 48, 0.4);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(212, 175, 55, 0.15);
+    border-radius: 40% 40% 10% 10% / 20% 20% 5% 5%;
+    /* Arch shape */
+    box-shadow: 0 0 100px rgba(0, 0, 0, 0.5);
+}
+
+/* Om Anchor */
+.omAnchor {
+    position: relative;
+    display: inline-block;
+    font-size: 4rem;
+    color: #D4AF37;
+    margin-bottom: 2rem;
+    z-index: 20;
+}
+
+.omAnchor::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 120px;
+    height: 120px;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 50%;
+    filter: blur(5px);
+    /* Moon halo */
+    z-index: -1;
+}
+
+/* Solar Flare Heading */
+.heading {
+    font-family: 'Cinzel Decorative', cursive;
+    font-size: 3.5rem;
+    margin-bottom: 3rem;
+    color: #D4AF37;
+    line-height: 1.2;
+}
+
+/* Typography styles */
+.bodyText {
+    font-size: 1.3rem;
+    line-height: 2;
+    color: #F5F5DC;
+    font-weight: 300;
+    margin-bottom: 1.5rem;
+}
+
+.keyword {
+    color: #FFD700;
+    font-weight: 400;
+    text-shadow: 0 0 10px rgba(255, 215, 0, 0.3);
+    animation: heartbeat 3s infinite ease-in-out;
+    display: inline-block;
+}
+
+/* Interactive Words (Heal, Rejuvenate, Thrive) */
+.activeWord {
+    display: inline-block;
+    transition: all 0.4s ease;
+    color: #F5F5DC;
+    border-bottom: 1px dotted rgba(212, 175, 55, 0.3);
+}
+
+/* These classes are toggled by parent state via CSS variable or class injection, 
+   or we use a distinct class when button is hovering */
+.container.buttonHovered .activeWord {
+    transform: scale(1.1);
+    /* 5% enlarge + glow */
+    color: #FFD700;
+    text-shadow: 0 0 15px rgba(255, 215, 0, 0.6);
+}
+
+@keyframes heartbeat {
+
+    0%,
+    100% {
+        text-shadow: 0 0 5px rgba(255, 215, 0, 0.2);
+        transform: scale(1);
+    }
+
+    50% {
+        text-shadow: 0 0 15px rgba(255, 215, 0, 0.5);
+        transform: scale(1.02);
+    }
+}
+
+/* --- STONE SEAL BUTTON --- */
+.stoneSealButton {
+    display: inline-block;
+    background: #1a1a1a;
+    color: #D4AF37;
+    font-family: 'Cinzel Decorative', cursive;
+    font-size: 1.1rem;
+    font-weight: 700;
+    padding: 1.2rem 3.5rem;
+    margin-top: 4rem;
+    cursor: pointer;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    border: 1px solid #333;
+
+    /* Hand-carved Stone Look */
+    border-radius: 2px 20px 3px 25px;
+    box-shadow:
+        inset 2px 2px 10px rgba(255, 255, 255, 0.05),
+        0 10px 30px rgba(0, 0, 0, 0.5);
+
+    transition: all 0.4s ease;
+}
+
+.stoneSealButton:hover {
+    transform: translateY(-2px);
+    background: #252525;
+    color: #FFD700;
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.6);
+}
+
+
+/* --- MARIGOLD PETAL SYSTEM --- */
+.petalContainer {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    pointer-events: none;
+    z-index: 5;
+}
+
+.petal {
+    position: absolute;
+    width: 12px;
+    height: 12px;
+    background: radial-gradient(circle at 30% 30%, #FF8C00, #D35400);
+    border-radius: 50% 0 50% 0;
+    opacity: 0;
+    animation: fallPetal 12s linear infinite;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+}
+
+.petal:nth-child(1) {
+    left: 10%;
+    animation-delay: 0s;
+}
+
+.petal:nth-child(2) {
+    left: 80%;
+    animation-delay: 3s;
+    animation-duration: 15s;
+}
+
+.petal:nth-child(3) {
+    left: 40%;
+    animation-delay: 7s;
+    width: 10px;
+    height: 10px;
+}
+
+.petal:nth-child(4) {
+    left: 60%;
+    animation-delay: 2s;
+    width: 14px;
+    height: 14px;
+}
+
+@keyframes fallPetal {
+    0% {
+        transform: translateY(-50px) rotate(0deg);
+        opacity: 0;
+    }
+
+    10% {
+        opacity: 0.9;
+    }
+
+    80% {
+        opacity: 0.9;
+    }
+
+    100% {
+        transform: translateY(90vh) rotate(360deg);
+        opacity: 0;
+    }
+}
+
+@media (max-width: 768px) {
+    .heading {
+        font-size: 2.5rem;
+    }
+
+    .contentWrapper {
+        padding: 3rem 1.5rem;
+        border-radius: 20px;
+    }
+
+    .container {
+        padding: 6rem 1.5rem;
+    }
+}

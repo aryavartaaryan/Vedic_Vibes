@@ -1,141 +1,443 @@
-.page {
-  --background: #fafafa;
-  --foreground: #fff;
+@import url('https://fonts.googleapis.com/css2?family=Tiro+Devanagari+Sanskrit:ital@0;1&family=Lato:wght@300;400&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700&display=swap');
 
-  --text-primary: #000;
-  --text-secondary: #666;
+/* --- DIGITAL GURUKUL THEME --- */
+:root {
+  /* Palette */
+  --color-temple-red: #8B0000;
+  --color-burnt-saffron: #E36112;
+  --color-antique-palm: #F3E5AB;
+  --color-charcoal-stone: #2F2F2F;
+  --color-mustard-marigold: #FFDB58;
+  --color-aged-bronze: #804a00;
 
-  --button-primary-hover: #383838;
-  --button-secondary-hover: #f2f2f2;
-  --button-secondary-border: #ebebeb;
+  /* Fonts */
+  --font-sanskrit: 'Tiro Devanagari Sanskrit', serif;
+  --font-breath: 'Lato', sans-serif;
+  --font-cinzel: 'Cinzel Decorative', cursive;
+  /* Added for new font */
 
-  display: flex;
-  min-height: 100vh;
-  align-items: center;
-  justify-content: center;
-  font-family: var(--font-geist-sans);
-  background-color: var(--background);
+  /* Shadows */
+  --shadow-candle: 0 0 40px rgba(227, 97, 18, 0.2);
 }
 
 .main {
-  display: flex;
+  background-color: var(--color-charcoal-stone);
+  min-height: 100vh;
+  font-family: var(--font-breath);
+  color: var(--color-antique-palm);
+  overflow-x: hidden;
+  position: relative;
+}
+
+/* GLOBAL TEXTURE OVERLAY */
+.main::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: url("https://www.transparenttextures.com/patterns/stardust.png");
+  opacity: 0.08;
+  pointer-events: none;
+  z-index: 999;
+  /* Highest layer for unified grain */
+  mix-blend-mode: overlay;
+}
+
+/* --- HERO SECTION: THE INNER ASHRAM --- */
+.hero {
+  position: relative;
   min-height: 100vh;
   width: 100%;
-  max-width: 800px;
-  flex-direction: column;
-  align-items: flex-start;
-  justify-content: space-between;
-  background-color: var(--foreground);
-  padding: 120px 60px;
-}
-
-.intro {
   display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  text-align: left;
-  gap: 24px;
-}
-
-.intro h1 {
-  max-width: 320px;
-  font-size: 40px;
-  font-weight: 600;
-  line-height: 48px;
-  letter-spacing: -2.4px;
-  text-wrap: balance;
-  color: var(--text-primary);
-}
-
-.intro p {
-  max-width: 440px;
-  font-size: 18px;
-  line-height: 32px;
-  text-wrap: balance;
-  color: var(--text-secondary);
-}
-
-.intro a {
-  font-weight: 500;
-  color: var(--text-primary);
-}
-
-.ctas {
-  display: flex;
-  flex-direction: row;
-  width: 100%;
-  max-width: 440px;
-  gap: 16px;
-  font-size: 14px;
-}
-
-.ctas a {
-  display: flex;
-  justify-content: center;
   align-items: center;
-  height: 40px;
-  padding: 0 16px;
-  border-radius: 128px;
-  border: 1px solid transparent;
-  transition: 0.2s;
+  justify-content: center;
+  overflow: hidden;
+  /* Seamless Descent: Charcoal -> Midnight Indigo */
+  background: linear-gradient(180deg, #1a1a1a 0%, #151520 60%, #050A30 100%);
+  box-shadow: inset 0 0 150px rgba(0, 0, 0, 0.9);
+}
+
+/* Mist Separator for Smooth Transitions */
+.fadeSeparator {
+  height: 150px;
+  width: 100%;
+  margin-top: -75px;
+  /* Overlap previous section */
+  margin-bottom: -75px;
+  /* Overlap next section */
+  position: relative;
+  z-index: 100;
+  background: radial-gradient(ellipse at center, rgba(5, 10, 48, 0.8) 0%, transparent 70%);
+  filter: blur(20px);
+  pointer-events: none;
+}
+
+/* Architectural Pillars / Archway Frame */
+.archwayFrame {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 20;
+  border: 40px solid transparent;
+  border-image: url("https://www.transparenttextures.com/patterns/wood-pattern.png") 30 stretch;
+  opacity: 0.6;
+}
+
+.archwayFrame::before,
+.archwayFrame::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 80px;
+  background: linear-gradient(90deg, #1a0f0a, transparent);
+  /* Shadow of pillars */
+}
+
+.archwayFrame::before {
+  left: 0;
+}
+
+.archwayFrame::after {
+  right: 0;
+  transform: scaleX(-1);
+}
+
+
+/* God Rays */
+.godRayContainer {
+  position: absolute;
+  top: -10%;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+  pointer-events: none;
+  opacity: 0.3;
+}
+
+.godRay {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  width: 100px;
+  height: 150vh;
+  background: linear-gradient(180deg, rgba(255, 219, 88, 0.3) 0%, transparent 80%);
+  filter: blur(20px);
+  transform-origin: top center;
+  animation: swayRay 10s ease-in-out infinite alternate;
+}
+
+.godRay:nth-child(1) {
+  transform: translateX(-50%) rotate(0deg);
+  animation-duration: 12s;
+}
+
+.godRay:nth-child(2) {
+  transform: translateX(-50%) rotate(15deg);
+  animation-duration: 15s;
+}
+
+.godRay:nth-child(3) {
+  transform: translateX(-50%) rotate(-15deg);
+  animation-duration: 18s;
+}
+
+@keyframes swayRay {
+  0% {
+    opacity: 0.2;
+    transform: translateX(-50%) rotate(var(--r, 0deg)) scaleY(1);
+  }
+
+  100% {
+    opacity: 0.4;
+    transform: translateX(-50%) rotate(var(--r, 0deg)) scaleY(1.05);
+  }
+}
+
+
+/* Sri Yantra Background */
+.sriYantraBg {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 80vh;
+  height: 80vh;
+  transform: translate(-50%, -50%);
+  opacity: 0.05;
+  z-index: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Ccircle cx='50' cy='50' r='48' stroke='%23F3E5AB' stroke-width='0.5' fill='none'/%3E%3Cpolygon points='50,2 90,80 10,80' stroke='%23F3E5AB' stroke-width='0.5' fill='none'/%3E%3Cpolygon points='50,98 10,20 90,20' stroke='%23F3E5AB' stroke-width='0.5' fill='none'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: center;
+  animation: pulseYantra 20s ease-in-out infinite;
+}
+
+@keyframes pulseYantra {
+  0% {
+    transform: translate(-50%, -50%) scale(1) rotate(0deg);
+    opacity: 0.05;
+  }
+
+  50% {
+    transform: translate(-50%, -50%) scale(1.05) rotate(5deg);
+    opacity: 0.08;
+  }
+
+  100% {
+    transform: translate(-50%, -50%) scale(1) rotate(0deg);
+    opacity: 0.05;
+  }
+}
+
+
+/* Content Layer */
+.heroContent {
+  position: relative;
+  z-index: 10;
+  text-align: center;
+  max-width: 900px;
+  padding: 2rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.omSymbol {
+  font-size: 6rem;
+  margin-bottom: 2rem;
+  color: transparent;
+  /* Text fill transparent for background clip if supported, else fallback */
+  background: linear-gradient(135deg, #FFDB58 0%, #B8860B 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  /* Gold Leaf Emboss Effect */
+  text-shadow:
+    1px 1px 0px rgba(0, 0, 0, 0.5),
+    /* Depth */
+    0 0 20px rgba(255, 219, 88, 0.6);
+  /* Glow */
+  filter: drop-shadow(0 0 10px rgba(227, 97, 18, 0.3));
+  font-family: var(--font-sanskrit);
+}
+
+.heroTitle {
+  font-family: 'Cinzel Decorative', cursive;
+  font-size: 4rem;
+  font-weight: 700;
+  /* FUSION: Rishi Gold Gradient on Cosmic Background */
+  background: linear-gradient(to right, #F3E5AB 20%, #FFDB58 50%, #E36112 80%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  line-height: 1.2;
+  margin-bottom: 2rem;
+  /* Red/Gold Glow */
+  text-shadow: 0 0 30px rgba(227, 97, 18, 0.4);
+  filter: drop-shadow(0 4px 6px rgba(0, 0, 0, 0.5));
+  opacity: 0;
+  animation: fadeUp 2s ease-out 0.5s forwards;
+  letter-spacing: 1px;
+}
+
+.heroSubtitle {
+  font-family: var(--font-breath);
+  font-size: 1.2rem;
+  font-weight: 300;
+  letter-spacing: 0.05em;
+  /* Breathable spacing */
+  line-height: 2;
+  color: rgba(243, 229, 171, 0.8);
+  margin-bottom: 4rem;
+  max-width: 750px;
+  opacity: 0;
+  animation: fadeUp 2s ease-out 1.2s forwards;
+}
+
+@keyframes fadeUp {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+
+/* Scroll Button (Wax Seal Style) */
+.scrollButtonWrapper {
+  position: relative;
+  display: inline-block;
+  opacity: 0;
+  animation: fadeUp 2s ease-out 2s forwards;
+}
+
+.ctaButton {
+  background-color: var(--color-antique-palm);
+  color: var(--color-temple-red);
+  font-family: var(--font-sanskrit);
+  font-weight: 700;
+  font-size: 1.3rem;
+  padding: 1rem 4rem;
+  border-radius: 2px;
+  position: relative;
+  box-shadow:
+    0 5px 15px rgba(0, 0, 0, 0.4),
+    inset 0 0 20px rgba(139, 69, 19, 0.2);
+  /* Interior shadow for old paper feel */
+  border: 1px solid #d4c5a0;
+  transition: all 0.5s ease;
+  overflow: hidden;
   cursor: pointer;
-  width: fit-content;
-  font-weight: 500;
+  text-decoration: none;
+  display: inline-block;
 }
 
-a.primary {
-  background: var(--text-primary);
-  color: var(--background);
-  gap: 8px;
+/* Wax Seal on the Left */
+.ctaButton::before {
+  content: '🕉';
+  position: absolute;
+  left: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 30px;
+  height: 30px;
+  background: var(--color-temple-red);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #eea221;
+  font-size: 1rem;
+  border: 2px solid #5a0000;
+  box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5);
 }
 
-a.secondary {
-  border-color: var(--button-secondary-border);
+.ctaButton:hover {
+  transform: scale(1.02);
+  background-color: #fff8dc;
+  box-shadow: 0 0 30px rgba(227, 97, 18, 0.4);
 }
 
-/* Enable hover only on non-touch devices */
-@media (hover: hover) and (pointer: fine) {
-  a.primary:hover {
-    background: var(--button-primary-hover);
-    border-color: transparent;
+
+/* Atmospheric Mist/Smoke */
+.mistContainer {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 30vh;
+  z-index: 5;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.mistLayer {
+  position: absolute;
+  bottom: -20px;
+  left: 0;
+  width: 200%;
+  height: 100%;
+  background: url("https://www.transparenttextures.com/patterns/foggy-birds.png");
+  opacity: 0.1;
+  animation: driftMist 40s linear infinite;
+}
+
+@keyframes driftMist {
+  from {
+    transform: translateX(0);
   }
 
-  a.secondary:hover {
-    background: var(--button-secondary-hover);
-    border-color: transparent;
+  to {
+    transform: translateX(-50%);
   }
 }
 
-@media (max-width: 600px) {
-  .main {
-    padding: 48px 24px;
-  }
 
-  .intro {
-    gap: 16px;
-  }
-
-  .intro h1 {
-    font-size: 32px;
-    line-height: 40px;
-    letter-spacing: -1.92px;
-  }
+/* --- SECTIONS (Remaining) --- */
+.section {
+  padding: 6rem 2rem;
+  max-width: 1100px;
+  margin: 0 auto;
+  border-bottom: 1px solid rgba(243, 229, 171, 0.1);
 }
 
-@media (prefers-color-scheme: dark) {
-  .logo {
-    filter: invert();
+.consultationCard {
+  background: var(--color-antique-palm);
+  color: var(--color-temple-red);
+  padding: 4rem;
+  border-radius: 4px;
+  text-align: center;
+  box-shadow: var(--shadow-candle);
+}
+
+/* New class for consultation title */
+.consultationTitle {
+  font-family: 'Cinzel Decorative', cursive;
+  font-size: 3rem;
+  color: var(--color-temple-red);
+  /* Or a suitable color from your palette */
+  margin-bottom: 1.5rem;
+  text-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+}
+
+.footer {
+  background: #081015;
+  padding: 6rem 2rem;
+  text-align: center;
+  font-family: var(--font-breath);
+  font-size: 0.9rem;
+  position: relative;
+  border-top: none;
+  color: rgba(255, 255, 255, 0.4);
+}
+
+.footerBrand {
+  font-family: 'Cinzel Decorative', cursive;
+  font-size: 2rem;
+  color: var(--color-antique-palm);
+  display: block;
+  margin-bottom: 1rem;
+  letter-spacing: 2px;
+}
+
+.footerMantra {
+  font-family: 'Cinzel Decorative', cursive;
+  font-size: 1.5rem;
+  color: #FFDB58;
+  /* Gold color for mantra */
+  display: block;
+  margin-bottom: 0.5rem;
+  text-shadow:
+    0 0 5px rgba(255, 219, 88, 0.5),
+    0 0 10px rgba(255, 219, 88, 0.4),
+    0 0 15px rgba(255, 219, 88, 0.3);
+  /* Gold glowing style */
+}
+
+.footerMeaning {
+  font-style: italic;
+  font-family: var(--font-breath);
+  /* Using existing body font */
+  font-size: 1.1rem;
+  color: #aaa;
+  margin-top: 1rem;
+}
+
+@media (max-width: 768px) {
+  .heroTitle {
+    font-size: 2.5rem;
   }
 
-  .page {
-    --background: #000;
-    --foreground: #000;
+  .archwayFrame {
+    border-width: 20px;
+  }
 
-    --text-primary: #ededed;
-    --text-secondary: #999;
-
-    --button-primary-hover: #ccc;
-    --button-secondary-hover: #1a1a1a;
-    --button-secondary-border: #1a1a1a;
+  .section {
+    padding: 4rem 1.5rem;
   }
 }

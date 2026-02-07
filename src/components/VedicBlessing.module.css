@@ -1,0 +1,64 @@
+.card {
+    background: #FFF8E7;
+    /* Light cream/ivory */
+    border: 1px solid rgba(212, 175, 55, 0.2);
+    /* Subtle gold border */
+    border-radius: var(--radius);
+    padding: 2.5rem;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+    box-shadow: var(--shadow-sm);
+    margin-bottom: 2rem;
+}
+
+.pattern {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0.05;
+    background-image: radial-gradient(circle at 1px 1px, #D4AF37 1px, transparent 0);
+    background-size: 20px 20px;
+    pointer-events: none;
+}
+
+.icon {
+    color: var(--accent-gold);
+    margin-bottom: 1rem;
+}
+
+.sanskrit {
+    font-family: serif;
+    /* Should use Noto Serif Devanagari if loaded, otherwise serif fallback */
+    font-size: 1.5rem;
+    color: #8B5A2B;
+    /* Deep earth/gold tone */
+    margin-bottom: 0.5rem;
+    font-weight: 500;
+    line-height: 1.6;
+}
+
+.transliteration {
+    font-family: var(--font-body);
+    font-style: italic;
+    color: var(--text-light);
+    font-size: 1rem;
+    margin-bottom: 1rem;
+}
+
+.translation {
+    font-family: var(--font-body);
+    color: var(--text-dark);
+    font-weight: 500;
+}
+
+.label {
+    text-transform: uppercase;
+    font-size: 0.75rem;
+    letter-spacing: 1.5px;
+    color: var(--accent-gold);
+    margin-bottom: 1rem;
+    display: block;
+}

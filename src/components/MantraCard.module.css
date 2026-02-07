@@ -1,0 +1,53 @@
+.card {
+    background: var(--khadi-white);
+    border: 1px solid var(--sandalwood);
+    border-top: 4px solid var(--sacred-kumkum);
+    padding: 2rem;
+    margin: 2rem 0;
+    border-radius: 4px;
+    box-shadow: var(--shadow-warm);
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+}
+
+.sanskrit {
+    font-family: var(--font-header);
+    font-size: 1.5rem;
+    color: var(--sacred-kumkum);
+    line-height: 1.6;
+    margin-bottom: 1rem;
+    font-weight: 700;
+}
+
+.transliteration {
+    font-style: italic;
+    color: var(--text-muted);
+    font-size: 1rem;
+    margin-bottom: 1rem;
+    font-family: var(--font-header);
+}
+
+.divider {
+    height: 1px;
+    background: var(--sandalwood);
+    width: 40%;
+    margin: 1.5rem auto;
+}
+
+.meaning {
+    color: var(--text-main);
+    font-size: 1rem;
+    line-height: 1.6;
+    margin-bottom: 1rem;
+    font-style: italic;
+}
+
+.usage {
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: var(--sacred-saffron);
+    margin-top: 1rem;
+    font-weight: 700;
+}
