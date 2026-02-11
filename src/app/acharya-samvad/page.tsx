@@ -9,7 +9,6 @@ import translations from '@/lib/vaidya-translations.json';
 import { useSearchParams } from 'next/navigation';
 import TypewriterMessage from '@/components/TypewriterMessage';
 import VaidyaVoiceModal from '@/components/VaidyaVoiceModal';
-import IntroVideoFlash from '@/components/IntroVideoFlash/IntroVideoFlash';
 
 interface DiagnosisResult {
     diagnosis: BilingualString;
@@ -38,7 +37,6 @@ function DigitalVaidyaContent() {
     const [result, setResult] = useState<DiagnosisResult | null>(null);
     const [lang, setLang] = useState<'en' | 'hi'>(initialLang);
     const [isVoiceCallOpen, setIsVoiceCallOpen] = useState(false);
-    const [showFlash, setShowFlash] = useState(searchParams?.get('showFlash') === 'true');
     const bottomRef = useRef<HTMLDivElement>(null);
     const debounceTimerRef = useRef<NodeJS.Timeout | null>(null);
 
@@ -341,17 +339,6 @@ function DigitalVaidyaContent() {
                     आपकी शारीरिक, मानसिक, और आध्यात्मिक समस्याओं के समाधान हेतु आचार्य जी से संवाद करें।
                 </p>
             </div>
-
-            {/* Intro Video Flash for Transition */}
-            {showFlash && (
-                <IntroVideoFlash
-                    videos={[{
-                        src: '/videos/Flash Videos/kailash2.mp4',
-                        text: "उम्मीद है मंत्रों को सुनने के बाद आपका चित्त प्रसन्न और शांत हुआ होगा.. अब आप आचार्य प्रणव से मिलने जा रहे हैं......"
-                    }]}
-                    onComplete={() => setShowFlash(false)}
-                />
-            )}
 
             <div className={styles.contentLayer}>
                 {/* Mobile Specific Header (Stacked) */}
