@@ -7,7 +7,7 @@ import styles from './GayatriMantraSection.module.css';
 
 const mantraLines = [
     "ॐ भूर्भुवः स्वः",
-    "तत्सवितुर्वरेण्यं",
+    "तत् सवितुर्वरेण्यं",
     "भर्गो देवस्य धीमहि",
     "धियो यो नः प्रचोदयात्"
 ];
@@ -24,20 +24,41 @@ export default function GayatriMantraSection() {
     // Split mantra into Grapheme Clusters (Aksharas) or Words to preserve Devanagari rendering
     const getSegments = (text: string) => {
         if (typeof Intl !== 'undefined' && 'Segmenter' in Intl) {
-            const segmenter = new Intl.Segmenter("hi", { granularity: "grapheme" });
+            const segmenter = new Intl.Segmenter("hi", { granularity: "word" });
             return [...segmenter.segment(text)].map(s => s.segment);
         }
         // Fallback to words if Segmenter is not available to avoid broken characters
         return text.split(" ");
     };
 
+    // Loop Animation Logic
+    const [animationKey, setAnimationKey] = useState(0);
+
+    useEffect(() => {
+        if (!isClient) return;
+
+        // Cycle duration: Appear (staggered ~2s) + Stay (3s) + Disappear (1s) = ~6s
+        const interval = setInterval(() => {
+            setAnimationKey(prev => prev + 1);
+        }, 7000); // 7 seconds per cycle to be safe
+
+        return () => clearInterval(interval);
+    }, [isClient]);
+
     const containerVariants = {
         hidden: { opacity: 0 },
         visible: {
             opacity: 1,
             transition: {
-                staggerChildren: 0.1,
-                delayChildren: 0.5
+                staggerChildren: 0.15, // Slowed down for grandeur
+                delayChildren: 0.2
+            }
+        },
+        exit: {
+            opacity: 0,
+            transition: {
+                duration: 1,
+                ease: "easeInOut"
             }
         }
     };
@@ -49,21 +70,18 @@ export default function GayatriMantraSection() {
             y: 0,
             textShadow: "0 0 20px rgba(212, 175, 55, 0.8)",
             transition: {
-                // Spring animation implied by stiffness/damping
-                damping: 12,
-                stiffness: 200
+                duration: 0.8,
+                ease: "easeOut"
             }
         }
     };
 
-    if (!isClient) return null; // Avoid hydration mismatch for random particles
+    if (!isClient) return null;
 
     return (
         <section className={styles.sectionner}>
-            {/* --- ATMOSPHERE --- */}
+            {/* ... Background elements ... */}
             <div className={styles.solarOrb}></div>
-
-            {/* Rotating Mandala SVG */}
             <div className={styles.mandalaBg}>
                 <svg viewBox="0 0 100 100" style={{ width: '100%', height: '100%' }}>
                     <circle cx="50" cy="50" r="45" stroke="#D4AF37" strokeWidth="0.2" fill="none" strokeDasharray="1 1" />
@@ -72,7 +90,6 @@ export default function GayatriMantraSection() {
                 </svg>
             </div>
 
-            {/* Floating Particles */}
             <div className={styles.particleContainer}>
                 {[...Array(20)].map((_, i) => (
                     <div
@@ -94,25 +111,37 @@ export default function GayatriMantraSection() {
                 className={styles.card}
                 initial={{ opacity: 0, scale: 0.95 }}
                 whileInView={{ opacity: 1, scale: 1 }}
+                viewport={{ once: true }}
                 transition={{ duration: 1.5, ease: "easeOut" }}
             >
                 <div className={styles.sanskritText}>
-                    {mantraLines.map((line, lineIndex) => (
-                        <motion.div
-                            key={lineIndex}
-                            variants={containerVariants}
-                            initial="hidden"
-                            whileInView="visible"
-                            viewport={{ once: true }}
-                            style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center', width: '100%', marginBottom: '1rem' }}
-                        >
-                            {getSegments(line).map((char, charIndex) => (
-                                <motion.span key={charIndex} variants={charVariants} className={styles.char}>
-                                    {char}
-                                </motion.span>
-                            ))}
-                        </motion.div>
-                    ))}
+                    {/* Re-mount on key change to trigger animation from scratch */}
+                    <motion.div
+                        key={animationKey}
+                        variants={containerVariants}
+                        initial="hidden"
+                        animate="visible"
+                        exit="exit"
+                        style={{ width: '100%' }}
+                    >
+                        {mantraLines.map((line, lineIndex) => (
+                            <div
+                                key={lineIndex}
+                                style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center', width: '100%', marginBottom: '1rem' }}
+                            >
+                                {getSegments(line).map((char, charIndex) => (
+                                    <motion.span
+                                        key={charIndex}
+                                        variants={charVariants}
+                                        className={styles.char}
+                                        style={{ display: 'inline-block', marginRight: '0.25rem' }} // Ensure words don't break
+                                    >
+                                        {char}
+                                    </motion.span>
+                                ))}
+                            </div>
+                        ))}
+                    </motion.div>
                 </div>
 
                 <motion.p

@@ -139,8 +139,8 @@ const SolarFlareText = ({ children }: { children: React.ReactNode }) => {
         <motion.h2
             ref={ref}
             className={styles.heading}
-            initial={{ filter: "brightness(500%) blur(10px)", color: "#fff", opacity: 0 }}
-            animate={isInView ? { filter: "brightness(100%) blur(0)", color: "#D4AF37", opacity: 1 } : {}}
+            initial={{ filter: "brightness(500%) blur(10px)", opacity: 0 }}
+            animate={isInView ? { filter: "brightness(100%) blur(0)", opacity: 1 } : {}}
             transition={{ duration: 2.5, ease: "easeOut" }}
         >
             {children}
@@ -148,18 +148,35 @@ const SolarFlareText = ({ children }: { children: React.ReactNode }) => {
     );
 };
 
-const LuminescentText = ({ children, delay = 0 }: { children: React.ReactNode, delay?: number }) => {
+const LuminescentText = ({ children, delay = 0, loop = false }: { children: React.ReactNode, delay?: number, loop?: boolean }) => {
     const ref = useRef(null);
     const isInView = useInView(ref, { once: true, margin: "-50px" });
+    const [key, setKey] = useState(0);
+
+    useEffect(() => {
+        if (!loop || !isInView) return;
+
+        const interval = setInterval(() => {
+            setKey(prev => prev + 1);
+        }, 6000); // 6s cycle (Appear -> Stay -> Disappear -> Reappear)
+
+        return () => clearInterval(interval);
+    }, [loop, isInView]);
 
     return (
         <motion.div
             ref={ref}
             className={styles.bodyText}
-            initial={{ opacity: 0.1, textShadow: "0 0 0 rgba(0,0,0,0)" }}
+            key={key} // Force re-render for loop
+            initial={{ opacity: 0, textShadow: "0 0 0 rgba(0,0,0,0)" }}
             animate={isInView ? {
-                opacity: 1,
-                transition: { duration: 1.5, delay: delay }
+                opacity: [0, 1, 1, 0], // Loop opacity
+                transition: {
+                    duration: 6,
+                    times: [0, 0.2, 0.8, 1], // Fade in (20%), Stay (60%), Fade out (20%)
+                    delay: key === 0 ? delay : 0, // Initial delay only
+                    repeat: loop ? 0 : 0
+                }
             } : {}}
         >
             <motion.span
@@ -187,10 +204,7 @@ export default function PranicPathSection() {
 
             {/* Marigolds */}
             <div className={styles.petalContainer}>
-                <div className={styles.petal}></div>
-                <div className={styles.petal}></div>
-                <div className={styles.petal}></div>
-                <div className={styles.petal}></div>
+                {/* Petals logic can remain or be styled in CSS */}
             </div>
 
             {/* Sri Yantra - Deep Etched Pulse */}
@@ -217,19 +231,12 @@ export default function PranicPathSection() {
                 <div className={styles.omAnchor}>🕉</div>
 
                 <SolarFlareText>
-                    The Vedic Way
+                    The Pranic Way
                 </SolarFlareText>
 
-                {/* Scroll Triggered Text */}
-                <LuminescentText delay={0.2}>
-                    We believe that true wellness is not just the absence of disease, but the vibrant flow of <span className={styles.keyword}>Prana</span> (life force) through body, mind, and spirit.
-                </LuminescentText>
-
-                <LuminescentText delay={1.0}>
-                    Our approach fuses the ancient diagnostic wisdom of the <span className={styles.keyword}>Great Rishis</span> with modern accessibility, offering you a <span className={styles.keyword}>Sacred Space</span> to
-                    <span className={styles.activeWord}> Heal</span>,
-                    <span className={styles.activeWord}> Rejuvenate</span>, and
-                    <span className={styles.activeWord}> Thrive</span>.
+                {/* Looping Subheading */}
+                <LuminescentText delay={0.2} loop>
+                    Experience the convergence of Ancient Vedic Science and Advanced AI. We provide personalized guidance for <span className={styles.keyword}>Healing</span> your body, <span className={styles.keyword}>Rejuvenating</span> your mind, and <span className={styles.keyword}>Awakening</span> your spirit through the timeless wisdom of Ayurveda and Meditation.
                 </LuminescentText>
 
                 <Link href="/dhyan-kshetra">
@@ -238,9 +245,16 @@ export default function PranicPathSection() {
                         onMouseEnter={() => setIsHovered(true)}
                         onMouseLeave={() => setIsHovered(false)}
                     >
-                        Begin Your Journey
+                        Click to Transform Your Life
                     </button>
                 </Link>
+
+                {/* Branding Footer */}
+                <div className={styles.brandingFooter}>
+                    <div className={styles.brandMain}>
+                        प्रणव.AI द्वारा निर्मित
+                    </div>
+                </div>
             </div>
         </section>
     );

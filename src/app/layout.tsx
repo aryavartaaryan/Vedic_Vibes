@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
-import { Noto_Serif_Devanagari, Mukta, Playfair_Display } from "next/font/google";
+import { Noto_Serif_Devanagari, Mukta, Playfair_Display, Rozha_One, Hind } from "next/font/google";
 import Footer from "@/components/Footer";
-import SevakChatbot from "@/components/SevakChatbot";
+// import SevakChatbot from "@/components/SevakChatbot";
 import "./globals.css";
 
 const notoSerif = Noto_Serif_Devanagari({
@@ -25,6 +25,20 @@ const playfair = Playfair_Display({
   display: "swap",
 });
 
+const rozhaOne = Rozha_One({
+  weight: ["400"],
+  subsets: ["devanagari", "latin"],
+  variable: "--font-rozha",
+  display: "swap",
+});
+
+const hind = Hind({
+  weight: ["300", "400", "500", "600", "700"],
+  subsets: ["devanagari", "latin"],
+  variable: "--font-hind",
+  display: "swap",
+});
+
 export const metadata: Metadata = {
   title: "VedicVibes | Authentic Indian Vegetarian Recipes",
   description: "Discover authentic Indian vegetarian recipes with a modern twist and Vedic wisdom. Personalized recommendations from every region of India.",
@@ -37,7 +51,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${notoSerif.variable} ${mukta.variable} ${playfair.variable}`}>
+      <body className={`${notoSerif.variable} ${mukta.variable} ${playfair.variable} ${rozhaOne.variable} ${hind.variable}`}>
         {children}
         <Footer />
         {/* <SevakChatbot /> */}
