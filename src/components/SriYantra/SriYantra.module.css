@@ -9,95 +9,80 @@
     position: relative;
 }
 
-/* Center Yantra Container */
+/* Center Yantra Container - Base for layers */
 .container {
     position: relative;
     width: 100%;
     max-width: 590px;
-    /* Increased by 20% from 492px */
     height: 590px;
-    /* Increased by 20% from 492px */
     display: flex;
     align-items: center;
     justify-content: center;
     pointer-events: none;
     z-index: 10;
-    opacity: 1;
     margin: 0 15px;
+    background: transparent !important;
 }
 
-/* Side Yantra Container - Smaller than center, with spacing */
+/* Layered Components */
+.skeletonLayer {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1;
+}
+
+.mainSkeletonSvg {
+    width: 100%;
+    height: 100%;
+    opacity: 0.7;
+}
+
+.authenticCore {
+    position: absolute;
+    width: 32%;
+    /* Smaller "Core" look for better visibility */
+    height: 32%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 2;
+    transition: all 0.5s ease;
+}
+
+.coreImage {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    mix-blend-mode: screen;
+    filter: grayscale(100%) brightness(1.8) contrast(1.4) drop-shadow(0 0 15px rgba(255, 255, 255, 0.4));
+    opacity: 0.9;
+}
+
+.sideImageEffect {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    mix-blend-mode: screen;
+    filter: grayscale(100%) brightness(1.5) contrast(1.2) drop-shadow(0 0 8px rgba(255, 255, 255, 0.2));
+    opacity: 0.6;
+}
+
+/* Side Yantra Container */
 .sideYantra {
     position: relative;
     width: 100%;
     max-width: 245px;
-    /* Reduced by 20% from 306px */
     height: 245px;
     display: flex;
     align-items: center;
     justify-content: center;
     pointer-events: none;
     z-index: 5;
-    opacity: 0.95;
     margin: 0 120px;
-    /* Increased from 80px to ensure no collision */
-}
-
-/* Center Yantra - Static (No Rotation) */
-.yantra {
-    width: 100%;
-    height: 100%;
-    /* Animation removed for static alignment */
-    filter: drop-shadow(0 0 10px rgba(184, 134, 11, 0.4));
-}
-
-/* Side Yantras - Clockwise Rotation (opposite) */
-.yantraClockwise {
-    width: 100%;
-    height: 100%;
-    animation: clockwiseRotate 35s linear infinite;
-    filter: drop-shadow(0 0 8px rgba(184, 134, 11, 0.3));
-}
-
-/* Counter-clockwise rotation for center yantra */
-@keyframes meditativeRotate {
-    from {
-        transform: rotate(0deg);
-    }
-
-    to {
-        transform: rotate(-360deg);
-    }
-}
-
-/* Clockwise rotation for side yantras */
-@keyframes clockwiseRotate {
-    from {
-        transform: rotate(0deg);
-    }
-
-    to {
-        transform: rotate(360deg);
-    }
-}
-
-/* Breathing pulse effect for Bindu */
-.binduPulse {
-    animation: binduPulse 8s ease-in-out infinite;
-}
-
-@keyframes binduPulse {
-
-    0%,
-    100% {
-        r: 2.5;
-        opacity: 0.9;
-    }
-
-    50% {
-        r: 4;
-        opacity: 1;
-    }
+    background: transparent !important;
 }
 
 /* Responsive adjustments */
@@ -121,12 +106,19 @@
     }
 
     .container {
-        max-width: 360px;
-        height: 360px;
+        max-width: 92vw;
+        height: 92vw;
+        margin: 10px 0;
+        background: transparent !important;
     }
 
     .sideYantra {
         display: none;
         /* Hide side yantras on mobile */
+    }
+
+    .authenticImage {
+        filter: grayscale(100%) brightness(2) contrast(1.3) drop-shadow(0 0 12px rgba(255, 255, 255, 0.4));
+        opacity: 0.9;
     }
 }

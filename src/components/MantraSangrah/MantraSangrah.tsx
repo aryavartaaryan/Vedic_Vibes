@@ -480,47 +480,58 @@ export default function MantraSangrah({ lang, startPlaying = false }: MantraSang
                         <Sparkles size={20} className={styles.headerIcon} />
                         <h2>{lang === 'hi' ? 'मंत्र संग्रह' : 'Mantra Sangrah'}</h2>
                     </div>
-
+                    <button
+                        className={styles.closeBtn}
+                        onClick={() => setIsOpen(false)}
+                        aria-label="Close"
+                        title={lang === 'hi' ? 'बंद करें' : 'Close'}
+                    >
+                        <X size={26} />
+                    </button>
                 </div>
 
                 {/* Divider */}
                 <div className={styles.divider} />
 
-                {/* Playlist */}
+                {/* Playlist Scroll Area */}
                 <div className={styles.playlist}>
                     <p className={styles.sectionLabel}>
                         {lang === 'hi' ? '🙏 दिव्य मंत्र चुनें' : '🙏 Select Divine Mantra'}
                     </p>
-                    {playlist.map((track) => (
-                        <button
-                            key={track.id}
-                            className={`${styles.trackItem} ${currentTrack?.id === track.id ? styles.trackActive : ''}`}
-                            onClick={() => selectTrack(track)}
-                        >
-                            <div className={styles.trackInfo}>
-                                <span className={styles.trackTitle}>
-                                    {track.titleHi}
-                                </span>
-                                {track.isDefault && (
-                                    <span className={track.id === 'guidance' ? styles.trackBadgeGuidance : styles.trackBadge}>
-                                        {lang === 'hi' ? 'प्रारंभिक' : 'Prarambhik'}
+                    <div className={styles.trackList}>
+                        {playlist.map((track) => (
+                            <button
+                                key={track.id}
+                                className={`${styles.trackItem} ${currentTrack?.id === track.id ? styles.trackActive : ''}`}
+                                onClick={() => selectTrack(track)}
+                            >
+                                <div className={styles.trackInfo}>
+                                    <span className={styles.trackTitle}>
+                                        {track.titleHi}
                                     </span>
-                                )}
-                                {track.isSpecial && (
-                                    <span className={styles.trackBadge}>
-                                        {lang === 'hi' ? 'विशेष' : 'Vishesh'}
-                                    </span>
-                                )}
-                            </div>
-                            <div className={styles.trackAction}>
-                                {currentTrack?.id === track.id && isPlaying ? (
-                                    <Pause size={18} />
-                                ) : (
-                                    <Play size={18} />
-                                )}
-                            </div>
-                        </button>
-                    ))}
+                                    <div className={styles.badgeContainer}>
+                                        {track.isDefault && (
+                                            <span className={track.id === 'guidance' ? styles.trackBadgeGuidance : styles.trackBadge}>
+                                                {lang === 'hi' ? 'प्रारंभिक' : 'Prarambhik'}
+                                            </span>
+                                        )}
+                                        {track.isSpecial && (
+                                            <span className={styles.trackBadge}>
+                                                {lang === 'hi' ? 'विशेष' : 'Vishesh'}
+                                            </span>
+                                        )}
+                                    </div>
+                                </div>
+                                <div className={styles.trackAction}>
+                                    {currentTrack?.id === track.id && isPlaying ? (
+                                        <Pause size={20} />
+                                    ) : (
+                                        <Play size={20} />
+                                    )}
+                                </div>
+                            </button>
+                        ))}
+                    </div>
                 </div>
 
                 {/* Audio Controls - Compact Mini Player */}
@@ -532,7 +543,7 @@ export default function MantraSangrah({ lang, startPlaying = false }: MantraSang
                             className={styles.miniPlayBtn}
                             onClick={togglePlayPause}
                         >
-                            {isPlaying ? <Pause size={20} /> : <Play size={20} className={styles.playIconOffset} />}
+                            {isPlaying ? <Pause size={22} /> : <Play size={22} className={styles.playIconOffset} />}
                         </button>
 
                         <div className={styles.miniTrackInfo}>

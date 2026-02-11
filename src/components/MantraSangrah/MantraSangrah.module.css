@@ -371,7 +371,17 @@
 
     transform: translateX(-100%);
     transition: transform 0.45s cubic-bezier(0.4, 0, 0.2, 1);
-    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Scrollable content area */
+.panel::-webkit-scrollbar {
+    width: 0;
+}
+
+.panel {
+    scrollbar-width: none;
 }
 
 .panelOpen {
@@ -425,24 +435,23 @@
 }
 
 .closeBtn {
-    background: rgba(255, 255, 255, 0.05);
-    border: 1px solid rgba(212, 175, 55, 0.3);
-    border-radius: 50%;
-    width: 40px;
-    height: 40px;
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(212, 175, 55, 0.4);
+    border-radius: 12px;
+    width: 44px;
+    height: 44px;
     display: flex;
     align-items: center;
     justify-content: center;
     padding: 0;
-    color: #D4AF37;
+    color: #FFD700;
     cursor: pointer;
-    transition: all 0.3s ease;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 0 0 15px rgba(255, 215, 0, 0.1);
 }
 
-.closeBtn:hover {
-    background: rgba(255, 165, 0, 0.2);
-    border-color: rgba(255, 215, 0, 0.6);
-    transform: rotate(90deg);
+.closeBtn:active {
+    transform: scale(0.9);
 }
 
 /* ============================================
@@ -482,7 +491,13 @@
     /* Allow flex compression if needed */
     overflow-y: auto;
     padding-right: 8px;
-    margin-bottom: 10px;
+    margin-bottom: 0;
+}
+
+.trackList {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
 }
 
 .playlist::-webkit-scrollbar {
@@ -528,7 +543,14 @@
 .trackInfo {
     display: flex;
     flex-direction: column;
-    gap: 5px;
+    gap: 8px;
+    flex: 1;
+}
+
+.badgeContainer {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
 }
 
 .trackTitle {
@@ -699,55 +721,150 @@
    RESPONSIVE
    ============================================ */
 
+/* ============================================
+   RESPONSIVE
+   ============================================ */
+
 @media (max-width: 768px) {
     .triggerContainer {
-        left: 12px;
+        left: 20px;
         top: auto;
-        bottom: 100px;
+        bottom: 120px;
         transform: none;
+        gap: 8px;
     }
 
     .trigger {
-        width: 60px;
-        height: 60px;
+        width: 64px;
+        height: 64px;
+        border-width: 2px;
     }
 
     .lotusIcon {
-        font-size: 1.6rem;
+        font-size: 1.8rem;
     }
 
     .triggerLabel {
-        font-size: 0.7rem;
-        max-width: 90px;
+        font-size: 0.75rem;
+        max-width: 100px;
+        font-weight: 600;
     }
 
     .acharyaContainer {
-        right: 12px;
+        right: 20px;
         top: auto;
-        bottom: 100px;
+        bottom: 120px;
         transform: none;
+        gap: 8px;
     }
 
     .acharyaTrigger {
-        width: 60px;
-        height: 60px;
+        width: 64px;
+        height: 64px;
+        border-width: 2px;
+    }
+
+    .acharyaIcon {
+        font-size: 1.8rem;
     }
 
     .acharyaLabel {
-        font-size: 0.7rem;
-        max-width: 80px;
+        font-size: 0.75rem;
+        max-width: 90px;
+        font-weight: 600;
     }
 
     .soundToggle {
-        right: 12px;
-        top: 100px;
-        width: 46px;
-        height: 46px;
+        right: 20px;
+        top: 20px;
+        width: 48px;
+        height: 48px;
     }
 
+    /* Transform Panel into Bottom Sheet */
     .panel {
         width: 100%;
-        max-width: 100%;
-        padding: 22px;
+        height: 85vh;
+        max-width: none;
+        left: 0;
+        top: auto;
+        bottom: 0;
+        transform: translateY(100%);
+        border-right: none;
+        border-top: 2px solid rgba(212, 175, 55, 0.6);
+        border-radius: 32px 32px 0 0;
+        padding: 24px 20px;
+        box-shadow: 0 -10px 40px rgba(0, 0, 0, 0.8);
+    }
+
+    .panelOpen {
+        transform: translateY(0);
+    }
+
+    /* Pull Handle for Aesthetics */
+    .panel::after {
+        content: '';
+        position: absolute;
+        top: 12px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 48px;
+        height: 4px;
+        background: rgba(212, 175, 55, 0.4);
+        border-radius: 2px;
+    }
+
+    .header {
+        position: sticky;
+        top: 0;
+        background: inherit;
+        z-index: 10;
+        padding-bottom: 12px;
+        margin-bottom: 0;
+    }
+
+    .headerTitle h2 {
+        font-size: 1.35rem;
+    }
+
+    .divider {
+        margin: 12px 0 20px;
+    }
+
+    .playlist {
+        padding-bottom: 80px;
+        /* Space for mini-player */
+    }
+
+    .trackItem {
+        padding: 16px;
+        border-radius: 14px;
+        margin-bottom: 4px;
+    }
+
+    .trackTitle {
+        font-size: 1.05rem;
+    }
+
+    .trackBadge {
+        font-size: 0.7rem;
+        padding: 2px 8px;
+    }
+
+    /* Fixed Controls at Bottom on Mobile */
+    .controls {
+        position: sticky;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        margin-top: auto;
+        border-radius: 16px;
+        padding: 14px;
+        background: rgba(15, 8, 3, 0.9);
+        box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.4);
+    }
+
+    .footer {
+        padding-bottom: 10px;
     }
 }
