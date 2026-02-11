@@ -252,7 +252,7 @@ export default function PranicPathSection() {
                 {/* Branding Footer */}
                 <div className={styles.brandingFooter}>
                     <div className={styles.brandMain}>
-                        A Product Crafted by Research & Development of Pranav.AI
+                        A Product Crafted by the Research & Development of Pranav.AI
                     </div>
                 </div>
             </div>

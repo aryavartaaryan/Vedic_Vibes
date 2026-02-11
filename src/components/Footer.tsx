@@ -63,7 +63,7 @@ export default function Footer() {
                 <div style={{
                     borderTop: '1px solid rgba(255,255,255,0.05)',
                     paddingTop: '2rem',
-                    fontSize: '0.8rem',
+                    fontSize: '1rem',
                     opacity: 0.8,
                     fontFamily: "'Lato', sans-serif",
                     display: 'flex',
@@ -72,7 +72,7 @@ export default function Footer() {
                     gap: '5px',
                     color: '#F3E5AB'
                 }}>
-                    A Product Crafted by Research & Development of Pranav.AI
+                    A Product Crafted by the Research & Development of Pranav.AI
                 </div>
             </div>
         </footer >
