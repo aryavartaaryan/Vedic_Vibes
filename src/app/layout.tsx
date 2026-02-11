@@ -40,7 +40,7 @@ export default function RootLayout({
       <body className={`${notoSerif.variable} ${mukta.variable} ${playfair.variable}`}>
         {children}
         <Footer />
-        <SevakChatbot />
+        {/* <SevakChatbot /> */}
       </body>
     </html>
   );
