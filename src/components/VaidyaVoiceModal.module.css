@@ -3,7 +3,7 @@
 .overlay {
     position: fixed;
     inset: 0;
-    z-index: 9999;
+    z-index: 999;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -64,8 +64,16 @@
     width: 100%;
     max-width: 600px;
     height: 100%;
-    padding: 2rem;
-    gap: 1.5rem;
+    padding: 2rem 1.5rem;
+    gap: 1.2rem;
+}
+
+@media (max-width: 768px) {
+    .content {
+        padding: 1.5rem 1rem;
+        justify-content: flex-start;
+        padding-top: 4rem;
+    }
 }
 
 /* Header */
@@ -247,6 +255,7 @@
 .omSymbol {
     font-size: 3.5rem;
     filter: drop-shadow(0 0 8px rgba(196, 145, 2, 0.5));
+    line-height: 1;
 }
 
 /* Transcript area */
@@ -391,24 +400,45 @@
         padding: 1rem;
     }
 
+    .header {
+        margin-top: 1rem;
+    }
+
     .headerTitle {
-        font-size: 1.6rem;
+        font-size: 1.5rem;
+    }
+
+    .headerSubtitle {
+        font-size: 0.85rem;
     }
 
     .omCircle {
-        width: 110px;
-        height: 110px;
+        width: 100px;
+        height: 100px;
     }
 
     .omSymbol {
-        font-size: 2.8rem;
+        font-size: 2.5rem;
     }
 
     .transcriptArea {
-        max-height: 140px;
+        max-height: 120px;
     }
 
     .controls {
-        gap: 1.5rem;
+        gap: 1.2rem;
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+
+    .lotusButton {
+        transform: scale(0.9);
+    }
+
+    .closeButton {
+        top: 1rem;
+        right: 1rem;
+        width: 38px;
+        height: 38px;
     }
 }

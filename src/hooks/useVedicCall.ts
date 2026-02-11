@@ -38,8 +38,8 @@ export function useVedicCall(): UseVedicCallReturn {
                 typeof args[0] === 'string'
                     ? args[0]
                     : args[0] && typeof (args[0] as Error).message === 'string'
-                      ? (args[0] as Error).message
-                      : '';
+                        ? (args[0] as Error).message
+                        : '';
             if (isEjectionMessage(msg)) return;
             originalError.apply(console, args);
         };
@@ -142,10 +142,10 @@ export function useVedicCall(): UseVedicCallReturn {
                     typeof payload?.error === 'object' && payload.error?.message
                         ? String(payload.error.message)
                         : typeof payload?.message === 'string'
-                          ? payload.message
-                          : typeof payload?.error === 'string'
-                            ? payload.error
-                            : 'An error occurred during the call';
+                            ? payload.message
+                            : typeof payload?.error === 'string'
+                                ? payload.error
+                                : 'An error occurred during the call';
                 const isEjectionOrMeetingEnded =
                     /ejection|meeting\s*has\s*ended|meeting\s*ended/i.test(message);
                 if (isEjectionOrMeetingEnded) {
@@ -162,9 +162,18 @@ export function useVedicCall(): UseVedicCallReturn {
             });
 
             // Start the call in Hindi by default (first message override; assistant prompt in dashboard can keep rest in Hindi)
+            // Dynamic Greetings from Acharya Pranav
+            const greetings = [
+                "आयुष्मान भव! यशस्वी भव! बेटा, मैं आचार्य प्रणव हूँ। बताओ बेटा, कैसे हो? जीवन कैसा चल रहा है? जो भी स्वास्थ्य या व्यक्तिगत समस्या है, निंकोच बताएं। समस्या कैसी भी हो स्थायी नहीं होती... संसार में सब परिवर्तनशील है। इसलिए चिंता न करें सब सही हो जाएगा।",
+                "आयुष्मान भव! यशस्वी भव! बेटा, मैं आचार्य प्रणव हूँ। बताएं बेटा, कैसे हो? जीवन कैसा चल रहा है? अपनी पीड़ा निसंकोच साझा करें। समस्या कैसी भी हो स्थायी नहीं होती... संसार में सब परिवर्तनशील है। इसलिए चिंता न करें सब सही हो जाएगा।",
+                "आयुष्मान भव! यशस्वी भव! बेटा, मैं आचार्य प्रणव बोल रहा हूँ। कैसे हो बेटा? जीवन कैसा चल रहा है? जो भी स्वास्थ्य या व्यक्तिगत समस्या है, निंकोच बताएं। समस्या कैसी भी हो स्थायी नहीं होती... संसार में सब परिवर्तनशील है। इसलिए चिंता न करें सब सही हो जाएगा।",
+                "आयुष्मान भव! यशस्वी भव! बेटा, मैं आचार्य प्रणव हूँ। बताओ बेटा, कैसे हो? जीवन कैसा चल रहा है? क्या कष्ट है? समस्या कैसी भी हो स्थायी नहीं होती... संसार में सब परिवर्तनशील है। इसलिए चिंता न करें सब सही हो जाएगा।",
+                "आयुष्मान भव! यशस्वी भव! बेटा, मैं हूं आचार्य प्रणव। कैसे हो बेटा? जीवन कैसा चल रहा है? जो भी समस्या है, निंकोच बताएं। समस्या कैसी भी हो स्थायी नहीं होती... संसार में सब परिवर्तनशील है। इसलिए चिंता न करें सब सही हो जाएगा।"
+            ];
+            const randomGreeting = greetings[Math.floor(Math.random() * greetings.length)];
+
             const assistantOverrides = {
-                firstMessage:
-                    'नमस्ते। मैं सेवक हूँ, वैदिक विब्स का आपका साथी। आप कैसे हैं? बोलिए, मैं आपकी कैसे मदद कर सकता हूँ?',
+                firstMessage: randomGreeting,
                 firstMessageMode: 'assistant-speaks-first' as const,
             };
 

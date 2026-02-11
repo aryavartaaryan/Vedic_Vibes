@@ -14,10 +14,9 @@ export default function MantraCard({ mantra, className }: MantraCardProps) {
         <div className={`${styles.card} ${className || ''}`}>
             <div className={styles.icon}>🕉️</div>
             <p className={styles.sanskrit}>{mantra.sanskrit}</p>
-            <p className={styles.transliteration}>{mantra.transliteration}</p>
             <div className={styles.divider}></div>
             <p className={styles.meaning}>{mantra.meaning}</p>
-            <p className={styles.usage}>Usage: {mantra.usage}</p>
+            <p className={styles.usage}>उपयोग: {mantra.usage}</p>
         </div>
     );
 }

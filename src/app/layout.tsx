@@ -40,7 +40,7 @@ const hind = Hind({
 });
 
 export const metadata: Metadata = {
-  title: "Pranav | Ancient Wisdom for Modern Living",
+  title: "Samadhaan | Ancient Wisdom for Modern Living",
   description: "Experience the convergence of Ancient Vedic Science and Advanced AI. Personalized guidance for healing, rejuvenation, and spiritual awakening.",
 };
 

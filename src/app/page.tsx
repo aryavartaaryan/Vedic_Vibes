@@ -31,11 +31,10 @@ export default function Home() {
         <div className={styles.consultationCard}>
           <h2 className={styles.consultationTitle}>Rishi Sharanam</h2>
           <p className={styles.consultationText}>
-            Enter the digital Ashram. Consult with our Vedic AI Healer to understand your Prakriti (nature),
-            find balance for your Doshas, and receive personalized guidance for a younger, healthier you.
+            Step into the future where Ancient Vedic Wisdom meets Artificial Intelligence. We are dedicated to harmonizing the profound knowledge of the Rishis with modern technology to guide humanity towards health, peace, and self-realization.
           </p>
           <Link href="/acharya-samvad" className={styles.zenButton}>
-            Acharya Samvad (आचार्य संवाद)
+            Experience the Fusion of Past & Future
           </Link>
         </div>
       </section>

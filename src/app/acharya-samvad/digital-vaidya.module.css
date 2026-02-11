@@ -17,23 +17,23 @@
     /* Shadows */
     --shadow-inner-glow: inset 0 0 30px rgba(234, 162, 33, 0.2);
     --shadow-scroll: 0 10px 30px rgba(62, 39, 35, 0.4);
+    --header-height: 64px;
 }
 
 /* --- MAIN CANVAS --- */
 .container {
     display: flex;
     flex-direction: column;
-    height: 100vh;
+    min-height: 100vh;
     width: 100vw;
     font-family: var(--font-serif);
     background-color: #2D1B15;
-    /* Dark Ashram Background */
     background-image: url("https://www.transparenttextures.com/patterns/wood-pattern.png");
     color: var(--color-ink-vedic);
     position: relative;
-    overflow: hidden;
+    overflow-x: hidden;
+    overflow-y: auto;
     align-items: center;
-    justify-content: center;
 }
 
 /* --- THE SACRED SCROLL (Main Chat Box) --- */
@@ -42,17 +42,28 @@
     z-index: 10;
     display: flex;
     flex-direction: column;
-    height: 98vh;
-    /* Floating feeling */
+    height: calc(100vh - var(--header-height) - 2rem);
+    margin: 1rem 0;
     width: 100%;
-    max-width: 450px;
-    /* SIDE BOX CONSTRAINT */
+    max-width: 500px;
     background-color: var(--color-parchment);
     background-image: url("https://www.transparenttextures.com/patterns/aged-paper.png");
     box-shadow: var(--shadow-scroll), var(--shadow-inner-glow);
     border: 2px solid var(--color-burnt-sienna);
     border-radius: 12px;
     overflow: hidden;
+}
+
+@media (max-width: 768px) {
+    .contentLayer {
+        height: auto;
+        min-height: calc(100vh - var(--header-height));
+        margin: 0;
+        border-radius: 0;
+        border-left: none;
+        border-right: none;
+        border-top: none;
+    }
 }
 
 /* --- ORNATE BORDERS (Pseudo-elements for Mandala Corners) --- */
@@ -291,18 +302,16 @@
     background: transparent;
     border: none;
     border-bottom: 2px solid var(--color-sandalwood);
-    padding: 0.5rem 3rem 0.5rem 0.5rem;
+    padding: 0.8rem 3.5rem 0.8rem 0.8rem;
     font-family: var(--font-serif);
     font-size: 1.1rem;
     color: var(--color-burnt-sienna);
     outline: none;
     border-radius: 0;
-    /* Remove default radius for hand-drawn feel */
     transition: border-color 0.3s;
     resize: none;
-    /* Prevent manual resize */
-    min-height: 40px;
-    max-height: 120px;
+    min-height: 48px;
+    max-height: 15vh;
 }
 
 .goldInput:focus {
@@ -439,6 +448,72 @@
     font-size: 0.65rem;
     color: var(--color-burnt-sienna);
     opacity: 0.6;
+}
+
+/* --- MOBILE HEADER SECTION --- */
+.mobileTitleHeader {
+    width: 100%;
+    padding: 1rem;
+    text-align: center;
+    background: rgba(244, 235, 208, 0.4);
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid rgba(139, 69, 19, 0.2);
+    display: none; /* Shown via media query */
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+    z-index: 20;
+}
+
+@media (max-width: 768px) {
+    .mobileTitleHeader {
+        display: flex;
+    }
+
+    .desktopTitleHeader {
+        display: none !important;
+    }
+
+    .chatContainer {
+        padding: 1rem 0.75rem;
+    }
+
+    .welcomeText {
+        font-size: 1.1rem;
+        padding: 0.5rem;
+    }
+
+    .vaidyaMessage {
+        font-size: 1rem;
+        padding: 0.75rem;
+    }
+
+    .inputZone {
+        padding-bottom: env(safe-area-inset-bottom, 1rem);
+        background: var(--color-parchment);
+        position: sticky;
+        bottom: 0;
+    }
+}
+
+.mobileMainTitle {
+    font-family: var(--font-sanskrit);
+    font-size: 2rem;
+    font-weight: bold;
+    background: linear-gradient(to right, #B8860B, #FFD700, #B8860B);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    margin: 0;
+}
+
+.mobileSubtitle {
+    font-family: var(--font-body);
+    font-size: 0.9rem;
+    color: #5D4037;
+    line-height: 1.4;
+    max-width: 300px;
+    margin: 0;
 }
 
 /* --- RESPONSIVE: HIDE MANTRAS ON SMALLER SCREENS --- */

@@ -17,12 +17,12 @@ export default function Footer() {
                 {/* Brand */}
                 <h2 style={{
                     fontFamily: "'Cinzel Decorative', cursive",
-                    fontSize: '2rem',
+                    fontSize: '1.5rem',
                     marginBottom: '1rem',
                     color: '#F5F5DC', /* Antique Palm */
                     letterSpacing: '2px'
                 }}>
-                    Pranav
+                    A Fusion of Artificial Intelligence and Great Knowledge of Rishis
                 </h2>
 
                 {/* Mantra */}
@@ -72,9 +72,9 @@ export default function Footer() {
                     gap: '5px',
                     color: '#F3E5AB'
                 }}>
-                    Designed and engineered by Pranav.AI for the Humanity...
+                    A Product Crafted by Research & Development of Pranav.AI
                 </div>
             </div>
-        </footer>
+        </footer >
     );
 }

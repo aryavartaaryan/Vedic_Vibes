@@ -19,7 +19,7 @@ interface Track {
 const INITIAL_PLAYLIST: Track[] = [
     {
         id: 'sahana',
-        title: 'Om Sahana Vavatu (Shanti Mantra)',
+        title: 'Om Sahana Vavatu (Shanti Mantra)', // Internal ID/Search key
         titleHi: 'ॐ सहना ववतु (शांति मंत्र)',
         src: '/audio/Om_Sahana_Vavatu_Shanti_Mantra.mp3',
         startTime: 0,
@@ -53,21 +53,42 @@ interface MantraSangrahProps {
 
 // Helper to get Hindi title
 const getHindiTitle = (filename: string): string => {
+    // Specific Long Names or Priority Mappings First
     if (filename.includes('Om_Sahana_Vavatu')) return 'ॐ सहना ववतु (शांति मंत्र)';
     if (filename.includes('Lalitha Sahasranamam')) return 'ललिता सहस्रनाम';
     if (filename.includes('vishnu_sahasranama')) return 'विष्णु सहस्रनाम';
-    if (filename.includes('MahaMrtyunjaya')) return 'महामृत्युंजय मंत्र (108x)';
+    if (filename.includes('MahaMrtyunjaya')) return 'महामृत्युंजय मंत्र (108 बार)';
     if (filename.includes('Narayana_Suktam')) return 'नारायण सूक्तम्';
     if (filename.includes('Shri_suktam')) return 'श्री सूक्तम्';
     if (filename.includes('Agnihotra_Shantipath')) return 'अग्निहोत्र शांतिपाठ';
     if (filename.includes('Chamakam')) return 'चमकम्';
     if (filename.includes('Kshama_Prarthana')) return 'क्षमा प्रार्थना';
-    if (filename.includes('Vedic_Chant')) return 'वैदिक मंत्र';
     if (filename.includes('Virija Homa Mantra')) return 'विरजा होम मंत्र';
     if (filename.includes('Ranjani - Gayatri')) return 'ललिता सहस्रनाम (रंजनी - गायत्री)';
-    if (filename.includes('Guidance')) return 'मार्गदर्शन (Guidance)';
+    if (filename.includes('Rudrashtakam')) return 'रुद्राष्टकम';
+    if (filename.includes('Shiva Tandava')) return 'शिव ताण्डव स्तोत्रम्';
+    if (filename.includes('Chinnamasta')) return 'छिन्नमस्ता स्तोत्रम्';
+    if (filename.includes('Dainik Agnihotra')) return 'दैनिक अग्निहोत्र मंत्र';
 
-    // Fallback format if no mapping found
+    // Generic Keyword Checks Last
+    if (filename.includes('Guidance')) return 'मार्गदर्शन';
+    if (filename.includes('Gayatri')) return 'गायत्री मंत्र';
+    if (filename.includes('Hanuman')) return 'हनुमान चालीसा';
+    if (filename.includes('Ganesha')) return 'गणेश मंत्र';
+    if (filename.includes('Shiva')) return 'शिव मंत्र';
+    if (filename.includes('Durga')) return 'दुर्गा मंत्र';
+    if (filename.includes('Krishna')) return 'कृष्ण मंत्र';
+    if (filename.includes('Ram')) return 'राम मंत्र';
+    if (filename.includes('Saraswati')) return 'सरस्वती मंत्र';
+    if (filename.includes('Lakshmi')) return 'लक्ष्मी मंत्र';
+    if (filename.includes('Kali')) return 'काली मंत्र';
+    if (filename.includes('Vedic_Chant')) return 'वैदिक मंत्र';
+
+    // If it contains Devanagari characters already, return it as is but trim extension
+    if (/[\u0900-\u097F]/.test(filename)) {
+        return filename.replace(/\.(mp3|wav|m4a|ogg|mp3\.mp3)$/i, '').replace(/_/g, ' ').trim();
+    }
+
     return formatTitle(filename);
 };
 
@@ -481,13 +502,13 @@ export default function MantraSangrah({ lang, startPlaying = false }: MantraSang
                                     {track.titleHi}
                                 </span>
                                 {track.isDefault && (
-                                    <span className={styles.trackBadge}>
-                                        {lang === 'hi' ? 'डिफ़ॉल्ट' : 'Default'}
+                                    <span className={track.id === 'guidance' ? styles.trackBadgeGuidance : styles.trackBadge}>
+                                        {lang === 'hi' ? 'प्रारंभिक' : 'Prarambhik'}
                                     </span>
                                 )}
                                 {track.isSpecial && (
                                     <span className={styles.trackBadge}>
-                                        {lang === 'hi' ? 'विशेष' : 'Special'}
+                                        {lang === 'hi' ? 'विशेष' : 'Vishesh'}
                                     </span>
                                 )}
                             </div>

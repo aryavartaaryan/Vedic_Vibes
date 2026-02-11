@@ -269,10 +269,10 @@ function DigitalVaidyaContent() {
                 </div>
             </div>
 
-            {/* Acharya Samvad Heading - Top Center */}
-            <div style={{
+            {/* Acharya Samvad Heading - Desktop Only (Absolutely positioned as before but hidden on mobile) */}
+            <div className={styles.desktopTitleHeader} style={{
                 position: 'absolute',
-                top: '6rem',
+                top: '5.5rem',
                 left: '50%',
                 transform: 'translateX(-50%)',
                 zIndex: 15,
@@ -341,10 +341,39 @@ function DigitalVaidyaContent() {
             </div>
 
             <div className={styles.contentLayer}>
+                {/* Mobile Specific Header (Stacked) */}
+                <div className={styles.mobileTitleHeader}>
+                    <h2 className={styles.mobileMainTitle}>आचार्य संवाद</h2>
+                    <button
+                        onClick={() => setIsVoiceCallOpen(true)}
+                        style={{
+                            display: 'inline-flex',
+                            alignItems: 'center',
+                            gap: '0.4rem',
+                            padding: '0.5rem 1.2rem',
+                            background: 'linear-gradient(135deg, #C49102, #FFD700)',
+                            color: '#1a0f05',
+                            border: 'none',
+                            borderRadius: '20px',
+                            fontFamily: 'var(--font-body)',
+                            fontSize: '0.9rem',
+                            fontWeight: 600,
+                            cursor: 'pointer',
+                            boxShadow: '0 4px 12px rgba(196, 145, 2, 0.25)',
+                        }}
+                    >
+                        <Mic size={16} />
+                        {lang === 'hi' ? 'आचार्य जी से बात करें' : 'Talk with Acharya'}
+                    </button>
+                    <p className={styles.mobileSubtitle}>
+                        आचार्य जी से अपनी समस्याओं का समाधान प्राप्त करें।
+                    </p>
+                </div>
+
                 {/* Spiritual Atmosphere: Incense Smoke Overlay */}
                 <div className={styles.incenseSmoke}></div>
 
-                {/* HEADER: MINIMAL */}
+                {/* HEADER: MINIMAL (Desktop Language Toggle etc) */}
                 <header className={styles.headerSection}>
                     <button onClick={toggleLanguage} className={styles.langToggle}>
                         {lang === 'hi' ? 'English' : 'हिन्दी'}
@@ -363,8 +392,8 @@ function DigitalVaidyaContent() {
                                 <div className={styles.welcomeMessage}>
                                     <p className={styles.welcomeText}>
                                         {lang === 'hi'
-                                            ? 'आयुष्मान भव पुत्र! मैं आचार्य प्रणव हूँ। आप चैट पर भी अपनी व्याधि बता सकते हैं, मैं समाधान करूँगा।'
-                                            : 'Ayushman Bhava! I am Acharya Pranav. Please tell me about your ailment.'}
+                                            ? 'आयुष्मान भव! यशस्वी भव! बेटा, मैं आचार्य प्रणव हूँ। बताओ बेटा, कैसे हो? जीवन कैसा चल रहा है? जो भी स्वास्थ्य या व्यक्तिगत समस्या है, निंकोच बताएं। समस्या कैसी भी हो स्थायी नहीं होती... संसार में सब परिवर्तनशील है। इसलिए चिंता न करें सब सही हो जाएगा।'
+                                            : 'Ayushman Bhav! Yashasvi Bhav! Beta, I am Acharya Pranav. How are you Beta? How is life going? Please tell me about any health or personal concerns you have without hesitation. No matter what the problem is, it is not permanent... everything in this world is changeable. So do not worry, everything will be fine.'}
                                     </p>
                                 </div>
                             )}

@@ -231,12 +231,12 @@ export default function PranicPathSection() {
                 <div className={styles.omAnchor}>🕉</div>
 
                 <SolarFlareText>
-                    Pranav Samadhaan
+                    Samadhaan
                 </SolarFlareText>
 
                 {/* Looping Subheading */}
                 <LuminescentText delay={0.2} loop>
-                    Experience the convergence of Ancient Vedic Science and Advanced AI. We provide personalized guidance for <span className={styles.keyword}>Healing</span> your body, <span className={styles.keyword}>Rejuvenating</span> your mind, and <span className={styles.keyword}>Awakening</span> your spirit through the timeless wisdom of Ayurveda and Meditation.
+                    Experience the <span style={{ color: '#FFD700', fontFamily: 'var(--font-serif)', fontStyle: 'italic', textShadow: '0 0 10px rgba(255, 215, 0, 0.5)' }}>Fusion of Artificial Intelligence & Knowledge of Rishis</span>. We provide personalized guidance for <span className={styles.keyword}>Healing</span> your body, <span className={styles.keyword}>Rejuvenating</span> your mind, and <span className={styles.keyword}>Awakening</span> your spirit through the timeless wisdom of Ayurveda and Meditation.
                 </LuminescentText>
 
                 <Link href="/dhyan-kshetra">
@@ -252,7 +252,7 @@ export default function PranicPathSection() {
                 {/* Branding Footer */}
                 <div className={styles.brandingFooter}>
                     <div className={styles.brandMain}>
-                        प्रणव.AI द्वारा निर्मित
+                        A Product Crafted by Research & Development of Pranav.AI
                     </div>
                 </div>
             </div>

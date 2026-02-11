@@ -12,7 +12,7 @@ const mantraLines = [
     "धियो यो नः प्रचोदयात्"
 ];
 
-const meaning = "We meditate on the glory of that Being who has produced this universe; may He enlighten our minds.";
+const meaning = "हम उस परमात्मा के तेज का ध्यान करते हैं, जिसने इस संसार को उत्पन्न किया है; वह हमारी बुद्धि को सत्-मार्ग की ओर प्रेरित करे।";
 
 export default function GayatriMantraSection() {
     const [isClient, setIsClient] = useState(false);
@@ -157,7 +157,7 @@ export default function GayatriMantraSection() {
             {/* Sound Interaction Tip */}
             <div className={styles.soundButton}>
                 <Volume2 size={24} />
-                <span className={styles.tooltip}>Listen to the Vibration</span>
+                <span className={styles.tooltip}>कंपन का अनुभव करें</span>
             </div>
 
         </section>
