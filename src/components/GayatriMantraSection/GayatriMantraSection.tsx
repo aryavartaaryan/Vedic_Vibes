@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
-import { motion } from 'framer-motion';
+import { motion, Variants } from 'framer-motion';
 import { Volume2 } from 'lucide-react';
 import styles from './GayatriMantraSection.module.css';
 
@@ -45,7 +45,7 @@ export default function GayatriMantraSection() {
         return () => clearInterval(interval);
     }, [isClient]);
 
-    const containerVariants = {
+    const containerVariants: Variants = {
         hidden: { opacity: 0 },
         visible: {
             opacity: 1,
@@ -63,7 +63,7 @@ export default function GayatriMantraSection() {
         }
     };
 
-    const charVariants = {
+    const charVariants: Variants = {
         hidden: { opacity: 0, y: 10, textShadow: "0 0 0 rgba(212, 175, 55, 0)" },
         visible: {
             opacity: 1,
