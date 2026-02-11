@@ -61,7 +61,7 @@ export default function Navbar() {
                 </Link>
                 <Link href="/dhyan-kshetra" className={`${styles.navLink} ${styles.dhyanLink}`}>
                     <Leaf size={16} style={{ display: 'inline', marginRight: '4px', color: '#FF9933' }} />
-                    ध्यान क्षेत्र
+                    विशेष ध्यान क्षेत्र
                 </Link>
             </div>
 
@@ -84,7 +84,7 @@ export default function Navbar() {
                         <MessageCircle size={20} /> आचार्य संवाद
                     </Link>
                     <Link href="/dhyan-kshetra" className={`${styles.mobileLink} ${styles.dhyanMobileLink}`} onClick={closeMenu}>
-                        <Leaf size={20} /> ध्यान क्षेत्र
+                        <Leaf size={20} /> विशेष ध्यान क्षेत्र
                     </Link>
                 </div>
             </div>

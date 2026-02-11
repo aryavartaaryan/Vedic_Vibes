@@ -37,7 +37,7 @@
         "mantraFooter": "“योगेन चित्तस्य पदेन वाचां...” • “अमृतकलश हस्ताय...”",
         "startNewConsultation": "नया परामर्श शुरू करें",
         "diagnoseBtn": "स्वास्थ्य सलाह के लिए आगे बढ़ें 🌿",
-        "pageTitle": "ध्यान क्षेत्र"
+        "pageTitle": "विशेष ध्यान क्षेत्र"
     },
     "en": {
         "title": "AI Vaidya",
@@ -77,6 +77,6 @@
         "mantraFooter": "“Yena chittasya...” • “Amrita kalasha...”",
         "startNewConsultation": "Start New Consultation",
         "diagnoseBtn": "Diagnose your health with Ayurveda",
-        "pageTitle": "Dhyan Kshetra"
+        "pageTitle": "Vishesh Dhyan Kshetra"
     }
 }
