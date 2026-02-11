@@ -32,25 +32,25 @@ export default function DhyanKakshaPage() {
                 if (flashRes.ok) {
                     const data = await flashRes.json();
                     // Sort to ensure consistent order if needed, or keep random/file-system order
-                    const videos = data.files.map((f: any) => {
-                        let text: string | string[] = "";
-                        if (f.name.includes('kailash') && !f.name.includes('2')) {
-                            // First video - Two sentences
-                            text = [
-                                "शिव की पवित्र ध्यान स्थली, कैलाश में आपका स्वागत है। यहाँ अनन्त शांति की अनुभूति होती है।",
-                                "आपके जीवन में एक सकारात्मक परिवर्तन की यात्रा, आज से आरम्भ हो रही है..."
-                            ];
-                        } else if (f.name.includes('kailash2')) {
-                            text = "अब आप ध्यान क्षेत्र में प्रवेश कर रहे हैं...";
-                        } else {
-                            text = "ध्यान क्षेत्र में आपका स्वागत है...";
-                        }
+                    const videos = data.files
+                        .filter((f: any) => !f.name.includes('kailash2'))
+                        .map((f: any) => {
+                            let text: string | string[] = "";
+                            if (f.name.includes('kailash') && !f.name.includes('2')) {
+                                // First video - Two sentences
+                                text = [
+                                    "शिव की पवित्र ध्यान स्थली, कैलाश में आपका स्वागत है। यहाँ अनन्त शांति की अनुभूति होती है।",
+                                    "आपके जीवन में एक सकारात्मक परिवर्तन की यात्रा, आज से आरम्भ हो रही है..."
+                                ];
+                            } else {
+                                text = "ध्यान क्षेत्र में आपका स्वागत है...";
+                            }
 
-                        return {
-                            src: f.path,
-                            text: text
-                        };
-                    });
+                            return {
+                                src: f.path,
+                                text: text
+                            };
+                        });
                     setIntroVideos(videos);
                 }
 

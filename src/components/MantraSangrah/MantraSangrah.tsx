@@ -452,7 +452,7 @@ export default function MantraSangrah({ lang, startPlaying = false }: MantraSang
             {/* Acharya Samvad - Top Right Temple Pillar */}
             <div className={styles.acharyaContainer}>
                 <Link
-                    href={`/acharya-samvad?lang=${lang}`}
+                    href={`/acharya-samvad?lang=${lang}&showFlash=true`}
                     className={styles.acharyaTrigger}
                     aria-label="Consult Acharya"
                 >

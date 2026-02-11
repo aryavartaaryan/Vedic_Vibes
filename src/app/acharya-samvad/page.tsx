@@ -9,6 +9,7 @@ import translations from '@/lib/vaidya-translations.json';
 import { useSearchParams } from 'next/navigation';
 import TypewriterMessage from '@/components/TypewriterMessage';
 import VaidyaVoiceModal from '@/components/VaidyaVoiceModal';
+import IntroVideoFlash from '@/components/IntroVideoFlash/IntroVideoFlash';
 
 interface DiagnosisResult {
     diagnosis: BilingualString;
@@ -37,6 +38,7 @@ function DigitalVaidyaContent() {
     const [result, setResult] = useState<DiagnosisResult | null>(null);
     const [lang, setLang] = useState<'en' | 'hi'>(initialLang);
     const [isVoiceCallOpen, setIsVoiceCallOpen] = useState(false);
+    const [showFlash, setShowFlash] = useState(searchParams?.get('showFlash') === 'true');
     const bottomRef = useRef<HTMLDivElement>(null);
     const debounceTimerRef = useRef<NodeJS.Timeout | null>(null);
 
@@ -340,6 +342,17 @@ function DigitalVaidyaContent() {
                 </p>
             </div>
 
+            {/* Intro Video Flash for Transition */}
+            {showFlash && (
+                <IntroVideoFlash
+                    videos={[{
+                        src: '/videos/Flash Videos/kailash2.mp4',
+                        text: "उम्मीद है मंत्रों को सुनने के बाद आपका चित्त प्रसन्न और शांत हुआ होगा.. अब आप आचार्य प्रणव से मिलने जा रहे हैं......"
+                    }]}
+                    onComplete={() => setShowFlash(false)}
+                />
+            )}
+
             <div className={styles.contentLayer}>
                 {/* Mobile Specific Header (Stacked) */}
                 <div className={styles.mobileTitleHeader}>
@@ -392,7 +405,7 @@ function DigitalVaidyaContent() {
                                 <div className={styles.welcomeMessage}>
                                     <p className={styles.welcomeText}>
                                         {lang === 'hi'
-                                            ? 'आयुष्मान भव! यशस्वी भव! बेटा, मैं आचार्य प्रणव हूँ। बताओ बेटा, कैसे हो? जीवन कैसा चल रहा है? जो भी स्वास्थ्य या व्यक्तिगत समस्या है, निंकोच बताएं। समस्या कैसी भी हो स्थायी नहीं होती... संसार में सब परिवर्तनशील है। इसलिए चिंता न करें सब सही हो जाएगा।'
+                                            ? 'आयुष्मान भव! यशस्वी भव! बेटा, मैं आचार्य प्रणव हूँ। बताओ बेटा, कैसे हो? जीवन कैसा चल रहा है? जो भी स्वास्थ्य या व्यक्तिगत समस्या है, निसंकोच बताएं। समस्या कैसी भी हो स्थायी नहीं होती... संसार में सब परिवर्तनशील है। इसलिए चिंता न करें सब सही हो जाएगा।'
                                             : 'Ayushman Bhav! Yashasvi Bhav! Beta, I am Acharya Pranav. How are you Beta? How is life going? Please tell me about any health or personal concerns you have without hesitation. No matter what the problem is, it is not permanent... everything in this world is changeable. So do not worry, everything will be fine.'}
                                     </p>
                                 </div>
