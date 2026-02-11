@@ -3,7 +3,11 @@
 /* --- ATMOSPHERE --- */
 .container {
     position: relative;
-    padding: 10rem 2rem;
+    padding: 0 2rem;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     /* Generous whitespace */
     overflow: hidden;
     /* Seamless: Start at #050A30 (Mantra section color) -> Teal */
@@ -66,10 +70,11 @@
 .omAnchor {
     position: relative;
     display: inline-block;
-    font-size: 4rem;
-    color: #D4AF37;
+    font-size: 8rem;
+    color: #FFD700;
     margin-bottom: 2rem;
     z-index: 20;
+    text-shadow: 0 0 25px rgba(255, 215, 0, 0.4);
 }
 
 .omAnchor::after {

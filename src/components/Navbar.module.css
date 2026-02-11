@@ -37,17 +37,20 @@
 }
 
 .navLink {
-    font-family: 'Cinzel Decorative', cursive;
-    /* Fusion Font for Links too */
+    font-family: var(--font-header), serif;
+    /* Clean but traditional serif for readability */
     font-weight: 600;
-    color: rgba(243, 229, 171, 0.8);
-    /* Antique Palm dim */
-    font-size: 0.9rem;
+    color: rgba(243, 229, 171, 0.9);
+    /* Antique Palm slightly brighter */
+    font-size: 1.05rem;
     transition: all 0.3s;
-    text-transform: uppercase;
-    letter-spacing: 1px;
+    letter-spacing: 0.5px;
     position: relative;
     text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    line-height: 1.2;
 }
 
 .navLink:hover {
@@ -159,4 +162,21 @@
     .searchInput:focus {
         width: 160px;
     }
+}
+
+.dhyanLink {
+    color: #FF9933 !important;
+    /* Saffron/Bhagwa */
+    font-weight: 700;
+    text-shadow: 0 0 10px rgba(255, 153, 51, 0.6);
+    background: linear-gradient(180deg, #FF9933 0%, #FFD700 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    transition: all 0.3s ease;
+}
+
+.dhyanLink:hover {
+    text-shadow: 0 0 15px rgba(255, 215, 0, 0.8);
+    transform: scale(1.05);
 }

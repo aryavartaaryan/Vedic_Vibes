@@ -1,0 +1,753 @@
+@import url('https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700&family=Noto+Serif+Devanagari:wght@400;600;700&display=swap');
+
+/* ============================================
+   GRAND VEDIC HEADER - TRI-SHAKTI LAYOUT
+   ============================================ */
+
+/* Mantra Sangrah - Top Left Temple Pillar */
+.triggerContainer {
+    position: fixed;
+    left: 24px;
+    top: 100px;
+    z-index: 1100;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 14px;
+}
+
+/* Grand Golden Sunburst Button */
+.trigger {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 88px;
+    height: 88px;
+    padding: 0;
+    background:
+        radial-gradient(circle at 50% 50%, rgba(255, 215, 0, 0.25) 0%, rgba(255, 165, 0, 0.15) 30%, rgba(20, 10, 5, 0.95) 70%),
+        conic-gradient(from 0deg, rgba(255, 215, 0, 0.1), rgba(184, 115, 51, 0.2), rgba(255, 215, 0, 0.1), rgba(184, 115, 51, 0.2), rgba(255, 215, 0, 0.1));
+    border: 3px solid rgba(255, 215, 0, 0.7);
+    border-radius: 50%;
+    color: #FFD700;
+    cursor: pointer;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow:
+        0 0 40px rgba(255, 215, 0, 0.6),
+        0 0 80px rgba(255, 165, 0, 0.3),
+        0 0 120px rgba(255, 215, 0, 0.15),
+        0 10px 40px rgba(0, 0, 0, 0.5),
+        inset 0 0 50px rgba(255, 215, 0, 0.15);
+    animation: grandGoldenPulse 2.5s ease-in-out infinite;
+}
+
+.trigger::before {
+    content: '';
+    position: absolute;
+    inset: -8px;
+    border: 2px solid rgba(255, 215, 0, 0.3);
+    border-radius: 50%;
+    animation: sunburstRing 3s ease-in-out infinite;
+}
+
+.trigger:hover {
+    transform: scale(1.15);
+    box-shadow:
+        0 0 60px rgba(255, 215, 0, 0.8),
+        0 0 100px rgba(255, 165, 0, 0.5),
+        0 0 150px rgba(255, 215, 0, 0.3),
+        0 12px 50px rgba(0, 0, 0, 0.6),
+        inset 0 0 60px rgba(255, 215, 0, 0.2);
+    border-color: rgba(255, 215, 0, 1);
+}
+
+.triggerHidden {
+    opacity: 0;
+    pointer-events: none;
+    transform: scale(0.7);
+}
+
+/* Grand Icon Inside */
+.lotusIcon {
+    font-size: 2.8rem;
+    filter: drop-shadow(0 0 15px rgba(255, 215, 0, 0.7));
+    animation: iconFloat 4s ease-in-out infinite;
+}
+
+/* Grand Label - Below Icon */
+.triggerLabel {
+    font-family: 'Noto Serif Devanagari', serif;
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: #FFD700;
+    text-align: center;
+    max-width: 140px;
+    line-height: 1.5;
+    text-shadow:
+        0 0 15px rgba(255, 215, 0, 0.6),
+        0 0 30px rgba(255, 215, 0, 0.4),
+        2px 2px 4px rgba(0, 0, 0, 0.9);
+    opacity: 0;
+    transform: translateY(10px);
+    animation: labelReveal 1.2s ease 0.8s forwards;
+}
+
+/* Grand Pulse Animation */
+@keyframes grandGoldenPulse {
+
+    0%,
+    100% {
+        box-shadow:
+            0 0 40px rgba(255, 215, 0, 0.6),
+            0 0 80px rgba(255, 165, 0, 0.3),
+            0 0 120px rgba(255, 215, 0, 0.15),
+            0 10px 40px rgba(0, 0, 0, 0.5),
+            inset 0 0 50px rgba(255, 215, 0, 0.15);
+    }
+
+    50% {
+        box-shadow:
+            0 0 60px rgba(255, 215, 0, 0.8),
+            0 0 100px rgba(255, 165, 0, 0.5),
+            0 0 150px rgba(255, 215, 0, 0.25),
+            0 10px 40px rgba(0, 0, 0, 0.5),
+            inset 0 0 70px rgba(255, 215, 0, 0.25);
+    }
+}
+
+@keyframes sunburstRing {
+
+    0%,
+    100% {
+        transform: scale(1);
+        opacity: 0.4;
+    }
+
+    50% {
+        transform: scale(1.15);
+        opacity: 0.7;
+    }
+}
+
+@keyframes iconFloat {
+
+    0%,
+    100% {
+        transform: translateY(0);
+    }
+
+    50% {
+        transform: translateY(-4px);
+    }
+}
+
+@keyframes labelReveal {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* ============================================
+   ACHARYA SAMVAD - TOP RIGHT TEMPLE PILLAR
+   ============================================ */
+
+.acharyaContainer {
+    position: fixed;
+    right: 24px;
+    top: 100px;
+    z-index: 1100;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 14px;
+}
+
+.acharyaTrigger {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 88px;
+    height: 88px;
+    padding: 0;
+    background:
+        radial-gradient(circle at 50% 50%, rgba(255, 140, 0, 0.25) 0%, rgba(184, 115, 51, 0.2) 30%, rgba(15, 8, 3, 0.95) 70%),
+        conic-gradient(from 0deg, rgba(255, 140, 0, 0.1), rgba(184, 115, 51, 0.2), rgba(255, 140, 0, 0.1), rgba(184, 115, 51, 0.2), rgba(255, 140, 0, 0.1));
+    border: 3px solid rgba(255, 140, 0, 0.7);
+    border-radius: 50%;
+    color: #FFD700;
+    cursor: pointer;
+    text-decoration: none;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow:
+        0 0 35px rgba(255, 140, 0, 0.6),
+        0 0 70px rgba(184, 115, 51, 0.3),
+        0 0 100px rgba(255, 140, 0, 0.15),
+        0 10px 40px rgba(0, 0, 0, 0.5),
+        inset 0 0 40px rgba(255, 140, 0, 0.15);
+    animation: diyaFlame 2s ease-in-out infinite;
+}
+
+.acharyaTrigger::before {
+    content: '';
+    position: absolute;
+    inset: -8px;
+    border: 2px solid rgba(255, 140, 0, 0.3);
+    border-radius: 50%;
+    animation: sunburstRing 3s ease-in-out infinite 0.5s;
+}
+
+.acharyaTrigger:hover {
+    transform: scale(1.15);
+    box-shadow:
+        0 0 50px rgba(255, 140, 0, 0.8),
+        0 0 90px rgba(184, 115, 51, 0.5),
+        0 0 130px rgba(255, 140, 0, 0.3),
+        0 12px 50px rgba(0, 0, 0, 0.6),
+        inset 0 0 50px rgba(255, 140, 0, 0.2);
+    border-color: rgba(255, 215, 0, 1);
+}
+
+.acharyaIcon {
+    font-size: 2.8rem;
+    filter: drop-shadow(0 0 12px rgba(255, 140, 0, 0.7));
+    animation: flameFlicker 2s ease-in-out infinite;
+}
+
+.acharyaLabel {
+    font-family: 'Noto Serif Devanagari', serif;
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: #FFD700;
+    text-align: center;
+    max-width: 120px;
+    line-height: 1.4;
+    text-shadow:
+        0 0 15px rgba(255, 140, 0, 0.6),
+        0 0 30px rgba(184, 115, 51, 0.4),
+        2px 2px 4px rgba(0, 0, 0, 0.9);
+    opacity: 0;
+    transform: translateY(10px);
+    animation: labelReveal 1.2s ease 1s forwards;
+}
+
+@keyframes diyaFlame {
+
+    0%,
+    100% {
+        box-shadow:
+            0 0 35px rgba(255, 140, 0, 0.6),
+            0 0 70px rgba(184, 115, 51, 0.3),
+            0 0 100px rgba(255, 140, 0, 0.15),
+            0 10px 40px rgba(0, 0, 0, 0.5),
+            inset 0 0 40px rgba(255, 140, 0, 0.15);
+    }
+
+    50% {
+        box-shadow:
+            0 0 50px rgba(255, 140, 0, 0.8),
+            0 0 90px rgba(184, 115, 51, 0.5),
+            0 0 130px rgba(255, 140, 0, 0.25),
+            0 10px 40px rgba(0, 0, 0, 0.5),
+            inset 0 0 55px rgba(255, 140, 0, 0.25);
+    }
+}
+
+@keyframes flameFlicker {
+
+    0%,
+    100% {
+        transform: translateY(0) scale(1);
+    }
+
+    25% {
+        transform: translateY(-2px) scale(1.02);
+    }
+
+    50% {
+        transform: translateY(0) scale(0.98);
+    }
+
+    75% {
+        transform: translateY(-1px) scale(1.01);
+    }
+}
+
+/* ============================================
+   FLOATING SOUND TOGGLE BUTTON
+   ============================================ */
+
+.soundToggle {
+    position: fixed;
+    right: 24px;
+    top: 230px;
+    z-index: 1100;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 56px;
+    height: 56px;
+    padding: 0;
+    background: radial-gradient(circle at 30% 30%, rgba(255, 215, 0, 0.15) 0%, rgba(20, 10, 5, 0.95) 70%);
+    border: 2px solid rgba(212, 175, 55, 0.6);
+    border-radius: 50%;
+    color: #D4AF37;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow:
+        0 0 25px rgba(255, 165, 0, 0.4),
+        0 6px 25px rgba(0, 0, 0, 0.5);
+}
+
+.soundToggle:hover {
+    transform: scale(1.12);
+    box-shadow:
+        0 0 40px rgba(255, 165, 0, 0.6),
+        0 8px 30px rgba(0, 0, 0, 0.6);
+    border-color: rgba(255, 215, 0, 0.9);
+    color: #FFD700;
+}
+
+/* ============================================
+   OVERLAY
+   ============================================ */
+
+.overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.6);
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+    z-index: 1001;
+    animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+/* ============================================
+   MENU PANEL - GLASSMORPHISM
+   ============================================ */
+
+.panel {
+    position: fixed;
+    left: 0;
+    top: 0;
+    height: 100vh;
+    width: 400px;
+    max-width: 95vw;
+    z-index: 1002;
+    display: flex;
+    flex-direction: column;
+    padding: 28px;
+
+    /* Enhanced Glassmorphism */
+    background:
+        radial-gradient(ellipse at 20% 10%, rgba(255, 215, 0, 0.1) 0%, transparent 40%),
+        radial-gradient(ellipse at 80% 90%, rgba(255, 165, 0, 0.06) 0%, transparent 40%),
+        linear-gradient(180deg, rgba(12, 6, 2, 0.97) 0%, rgba(20, 10, 5, 0.95) 100%);
+    backdrop-filter: blur(24px);
+    -webkit-backdrop-filter: blur(24px);
+
+    border-right: 1.5px solid rgba(212, 175, 55, 0.4);
+    box-shadow:
+        0 0 50px rgba(255, 165, 0, 0.2),
+        6px 0 40px rgba(0, 0, 0, 0.7),
+        inset 0 0 100px rgba(212, 175, 55, 0.04);
+
+    transform: translateX(-100%);
+    transition: transform 0.45s cubic-bezier(0.4, 0, 0.2, 1);
+    overflow-y: auto;
+}
+
+.panelOpen {
+    transform: translateX(0);
+}
+
+/* ============================================
+   HEADER
+   ============================================ */
+
+.header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 12px;
+}
+
+.headerTitle {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.headerTitle h2 {
+    font-family: 'Noto Serif Devanagari', serif;
+    font-size: 1.4rem;
+    font-weight: 700;
+    color: #FFD700;
+    margin: 0;
+    text-shadow: 0 0 12px rgba(255, 215, 0, 0.4);
+    letter-spacing: 0.5px;
+}
+
+.headerIcon {
+    color: #FF9933;
+    animation: sparkle 2.5s ease-in-out infinite;
+}
+
+@keyframes sparkle {
+
+    0%,
+    100% {
+        opacity: 0.8;
+        transform: scale(1);
+    }
+
+    50% {
+        opacity: 1;
+        transform: scale(1.15);
+    }
+}
+
+.closeBtn {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(212, 175, 55, 0.3);
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    color: #D4AF37;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.closeBtn:hover {
+    background: rgba(255, 165, 0, 0.2);
+    border-color: rgba(255, 215, 0, 0.6);
+    transform: rotate(90deg);
+}
+
+/* ============================================
+   DIVIDER
+   ============================================ */
+
+.divider {
+    height: 1px;
+    background: linear-gradient(90deg, transparent 0%, rgba(212, 175, 55, 0.5) 50%, transparent 100%);
+    margin: 18px 0;
+}
+
+/* ============================================
+   SECTION LABEL
+   ============================================ */
+
+.sectionLabel {
+    font-family: 'Noto Serif Devanagari', serif;
+    font-size: 0.9rem;
+    color: rgba(255, 215, 0, 0.75);
+    margin-bottom: 14px;
+    letter-spacing: 0.3px;
+}
+
+/* ============================================
+   PLAYLIST
+   ============================================ */
+
+.playlist {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    height: 100%;
+    /* Fill available space */
+    min-height: 0;
+    /* Allow flex compression if needed */
+    overflow-y: auto;
+    padding-right: 8px;
+    margin-bottom: 10px;
+}
+
+.playlist::-webkit-scrollbar {
+    width: 4px;
+}
+
+.playlist::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 2px;
+}
+
+.playlist::-webkit-scrollbar-thumb {
+    background: rgba(212, 175, 55, 0.4);
+    border-radius: 2px;
+}
+
+.trackItem {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 14px 18px;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(212, 175, 55, 0.2);
+    border-radius: 16px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-align: left;
+    width: 100%;
+}
+
+.trackItem:hover {
+    background: rgba(255, 165, 0, 0.1);
+    border-color: rgba(212, 175, 55, 0.5);
+    transform: translateX(6px);
+}
+
+.trackActive {
+    background: linear-gradient(135deg, rgba(255, 165, 0, 0.18) 0%, rgba(212, 175, 55, 0.12) 100%);
+    border-color: rgba(255, 215, 0, 0.65);
+    box-shadow: 0 0 20px rgba(255, 165, 0, 0.25);
+}
+
+.trackInfo {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.trackTitle {
+    font-family: 'Noto Serif Devanagari', serif;
+    font-size: 1rem;
+    color: #F5E6D3;
+    font-weight: 600;
+}
+
+.trackBadge {
+    font-family: 'Noto Serif Devanagari', serif;
+    font-size: 0.65rem;
+    color: #FF9933;
+    background: rgba(255, 153, 51, 0.15);
+    padding: 3px 10px;
+    border-radius: 12px;
+    width: fit-content;
+    font-weight: 600;
+}
+
+.trackAction {
+    color: #D4AF37;
+    opacity: 0.7;
+    transition: opacity 0.3s ease;
+}
+
+.trackItem:hover .trackAction {
+    opacity: 1;
+}
+
+/* ============================================
+   AUDIO CONTROLS - COMPACT MINI PLAYER
+   ============================================ */
+
+.controls {
+    background: rgba(10, 5, 2, 0.6);
+    backdrop-filter: blur(10px);
+    border-top: 1px solid rgba(212, 175, 55, 0.3);
+    padding: 12px 16px;
+    margin-top: auto;
+    /* Push to bottom */
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    border-radius: 12px;
+}
+
+.miniPlayBtn {
+    background: linear-gradient(135deg, #FFD700 0%, #FF9933 100%);
+    border: none;
+    border-radius: 50%;
+    width: 36px;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #1a0d05;
+    cursor: pointer;
+    box-shadow: 0 0 10px rgba(255, 165, 0, 0.4);
+    transition: transform 0.2s ease;
+    flex-shrink: 0;
+}
+
+.miniPlayBtn:hover {
+    transform: scale(1.1);
+    box-shadow: 0 0 15px rgba(255, 215, 0, 0.6);
+}
+
+.playIconOffset {
+    margin-left: 2px;
+    /* Optical centering for play icon */
+}
+
+.miniTrackInfo {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 4px;
+    overflow: hidden;
+}
+
+.miniTrackTitle {
+    font-family: 'Noto Serif Devanagari', serif;
+    font-size: 0.9rem;
+    color: #FFD700;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    font-weight: 600;
+}
+
+.miniProgressContainer {
+    width: 100%;
+    height: 4px;
+    background: rgba(255, 255, 255, 0.15);
+    border-radius: 2px;
+    cursor: pointer;
+    position: relative;
+}
+
+.miniProgressBar {
+    height: 100%;
+    background: #FF9933;
+    border-radius: 2px;
+    position: relative;
+    /* transition: width 0.1s linear; Remove transition for smoother scrubbing if handled by JS, but keep for now */
+}
+
+.miniTimeDisplay {
+    font-family: 'Noto Serif Devanagari', serif;
+    font-size: 0.75rem;
+    color: rgba(255, 255, 255, 0.6);
+    min-width: 35px;
+    text-align: right;
+}
+
+/* ============================================
+   NAVIGATION
+   ============================================ */
+
+.navigation {
+    margin-top: 10px;
+}
+
+.navLink {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    padding: 16px 24px;
+    background: linear-gradient(135deg, #B87333 0%, #8B4513 100%);
+    border: 1.5px solid rgba(212, 175, 55, 0.45);
+    border-radius: 16px;
+    color: white;
+    font-family: 'Noto Serif Devanagari', serif;
+    font-size: 1.05rem;
+    font-weight: 600;
+    text-decoration: none;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow:
+        0 6px 20px rgba(139, 69, 19, 0.45),
+        0 0 25px rgba(255, 165, 0, 0.12);
+}
+
+.navLink:hover {
+    transform: translateY(-3px);
+    box-shadow:
+        0 8px 25px rgba(139, 69, 19, 0.55),
+        0 0 35px rgba(255, 165, 0, 0.2);
+}
+
+/* ============================================
+   FOOTER
+   ============================================ */
+
+.footer {
+    margin-top: 18px;
+    text-align: center;
+    font-family: 'Noto Serif Devanagari', serif;
+    font-size: 0.85rem;
+    color: rgba(212, 175, 55, 0.55);
+    font-style: italic;
+}
+
+/* ============================================
+   RESPONSIVE
+   ============================================ */
+
+@media (max-width: 768px) {
+    .triggerContainer {
+        left: 12px;
+        top: auto;
+        bottom: 100px;
+        transform: none;
+    }
+
+    .trigger {
+        width: 60px;
+        height: 60px;
+    }
+
+    .lotusIcon {
+        font-size: 1.6rem;
+    }
+
+    .triggerLabel {
+        font-size: 0.7rem;
+        max-width: 90px;
+    }
+
+    .acharyaContainer {
+        right: 12px;
+        top: auto;
+        bottom: 100px;
+        transform: none;
+    }
+
+    .acharyaTrigger {
+        width: 60px;
+        height: 60px;
+    }
+
+    .acharyaLabel {
+        font-size: 0.7rem;
+        max-width: 80px;
+    }
+
+    .soundToggle {
+        right: 12px;
+        top: 100px;
+        width: 46px;
+        height: 46px;
+    }
+
+    .panel {
+        width: 100%;
+        max-width: 100%;
+        padding: 22px;
+    }
+}

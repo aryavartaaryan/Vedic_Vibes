@@ -10,37 +10,31 @@
 .heroSection {
     position: relative;
     width: 100%;
-    height: auto;
-    min-height: 85vh;
-    max-height: 90vh;
+    /* Reduced height significantly to shift content up */
+    min-height: 40vh;
+    padding: 2rem 0;
     display: flex;
     align-items: center;
     justify-content: center;
-    overflow: hidden;
+    overflow: visible;
     margin-bottom: 2rem;
-    background: #f9f5f0;
+    background: radial-gradient(circle at center, #fff8e1 0%, #f9f5f0 100%);
 }
 
-.heroImage {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    opacity: 0.8;
-}
+/* Removed .heroImage style entirely */
 
 .heroOverlay {
-    position: absolute;
-    inset: 0;
-    background: linear-gradient(to bottom, rgba(249, 245, 240, 0.4), rgba(249, 245, 240, 0.95));
+    position: relative;
+    /* Changed from absolute to relative since image is gone */
+    width: 100%;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
     text-align: center;
-    padding: 2rem;
-    padding-top: 4rem;
-    padding-bottom: 4rem;
-    /* Optical alignment: weighted slightly higher */
+    padding: 1rem;
+    padding-top: 2rem;
+    /* Removed large padding to shift content up */
 }
 
 .title {
@@ -359,12 +353,7 @@
 }
 
 .elementalHeroContainer {
-    display: flex;
-    justify-content: center;
-    gap: 1.5rem;
-    margin-top: 1rem;
-    margin-bottom: 0.5rem;
-    opacity: 0.9;
+    display: none;
 }
 
 .heroLangToggle {

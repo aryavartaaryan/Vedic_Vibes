@@ -24,13 +24,19 @@ function getGraphemeClusters(text: string): string[] {
 
 const TypewriterMessage: React.FC<TypewriterMessageProps> = ({ content, onComplete, onUpdate, speed = 30 }) => {
     const [displayedContent, setDisplayedContent] = useState('');
+    const [isComplete, setIsComplete] = useState(false);
 
-    const graphemes = useMemo(() => getGraphemeClusters(content), [content]);
+    // Memoize graphemes to prevent re-calculation on every render
+    const graphemes = useMemo(() => getGraphemeClusters(content || ''), [content]);
 
     useEffect(() => {
-        let i = 0;
+        // Reset state when content changes
         setDisplayedContent('');
+        setIsComplete(false);
 
+        if (!content) return;
+
+        let i = 0;
         const timer = setInterval(() => {
             if (i < graphemes.length) {
                 setDisplayedContent((prev) => prev + graphemes[i]);
@@ -38,6 +44,7 @@ const TypewriterMessage: React.FC<TypewriterMessageProps> = ({ content, onComple
                 if (onUpdate) onUpdate();
             } else {
                 clearInterval(timer);
+                setIsComplete(true);
                 if (onComplete) onComplete();
             }
         }, speed);
@@ -45,7 +52,11 @@ const TypewriterMessage: React.FC<TypewriterMessageProps> = ({ content, onComple
         return () => clearInterval(timer);
     }, [content, graphemes, speed, onComplete, onUpdate]);
 
-    return <>{displayedContent}</>;
+    if (!content) return null;
+
+    // Once typing is complete, render the full original string to ensure 
+    // perfect ligature rendering and text shaping (especially for Hindi)
+    return <>{isComplete ? content : displayedContent}</>;
 };
 
 export default TypewriterMessage;

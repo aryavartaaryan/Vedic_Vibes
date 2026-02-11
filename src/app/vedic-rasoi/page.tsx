@@ -234,16 +234,8 @@ export default function VedicRasoi() {
         <main style={{ backgroundColor: '#f9f5f0', minHeight: '100vh' }}>
             <Navbar />
 
-            {/* Rebranded Hero Section - Centralized over image */}
+            {/* Rebranded Hero Section - Centralized */}
             <section className={styles.heroSection}>
-                <Image
-                    src="/images/vedic-rasoi-hero.png"
-                    alt="The Vedic Rasoi Hero"
-                    className={styles.heroImage}
-                    width={1200}
-                    height={480}
-                    priority
-                />
                 <div className={styles.heroOverlay}>
                     {/* Absolute positioned toggle in hero */}
                     <div className={styles.heroLangToggle}>
@@ -257,7 +249,9 @@ export default function VedicRasoi() {
                         </button>
                     </div>
 
-                    <h1 className={styles.title}>The VEdic RaSoi</h1>
+                    <h1 className={styles.title}>
+                        {lang === 'hi' ? 'आयुर्वेद अनुसार भोजन परामर्श' : 'Ayurvedic Bhojana Paramarsha'}
+                    </h1>
 
                     {/* First Mantra - Below Title */}
                     <div className={styles.sacredMantraBox}>
@@ -266,8 +260,10 @@ export default function VedicRasoi() {
                             <span className={styles.mantraEnglish}>(Atharva Veda) — Let us move together, let our minds be in harmony. Food is the first of breaths.</span>
                         </div>
                     </div>
-                    <p className={styles.subtitle} style={{ fontSize: '1.4rem', marginTop: '0.5rem' }}>
-                        {lang === 'hi' ? "सामग्री डालें और हम आयुर्वेद के अनुसार रेसिपी का सुझाव देंगे।" : "Put the Ingredients and we will suggest a receipie as per Ayurveda"}
+                    <p className={styles.subtitle} style={{ fontSize: '2rem', marginTop: '1.5rem', fontWeight: 600, color: '#3E2723', textShadow: '0 2px 4px rgba(255,255,255,0.6)', lineHeight: 1.4 }}>
+                        {lang === 'hi'
+                            ? "भोजन पदार्थ डालें, हम उसकी आयुर्वेद अनुसार प्रकृति और उसकी कुछ स्वास्थ्यवर्धक रेसिपी बताएंगे।"
+                            : "Enter food ingredients, and we will reveal their Ayurvedic nature and suggest healthy recipes."}
                     </p>
 
                     {/* Elemental Icons now in Hero */}
@@ -294,7 +290,6 @@ export default function VedicRasoi() {
                     <div className={styles.tags}>
                         {ingredients.map((ing, i) => (
                             <span key={i} className={styles.tag}>
-                                <Leaf size={14} />
                                 {ing}
                                 <button onClick={() => removeIng(i)} className={styles.removeTag}>×</button>
                             </span>
@@ -309,8 +304,7 @@ export default function VedicRasoi() {
                         <button className={styles.generateButton} onClick={handleGenerate} disabled={loading}>
                             {loading ? (lang === 'hi' ? "🔮 हीलिंग मील प्रकट हो रहा है..." : "🔮 Manifesting Healing Meal...") : (
                                 <>
-                                    <Sparkles size={24} />
-                                    {lang === 'hi' ? "मेरा हीलिंग मील बनाएं" : "Create My Healing Meal"}
+                                    {lang === 'hi' ? "भोजन की मूल प्रकृति जानें" : "Know the Nature of Food"}
                                 </>
                             )}
                         </button>
@@ -350,7 +344,12 @@ export default function VedicRasoi() {
                             </button>
                         </div>
                         <p className={styles.ayurvedicAnalysis}>
-                            {getText(ayurvedicInsight.analysis)}
+                            {getText(ayurvedicInsight.analysis).split(/<br\s*\/?>/i).map((line, i) => (
+                                <span key={i}>
+                                    {line}
+                                    {i < getText(ayurvedicInsight.analysis).split(/<br\s*\/?>/i).length - 1 && <br />}
+                                </span>
+                            ))}
                         </p>
                         {ayurvedicInsight.doshaBalance && (
                             <p className={styles.ayurvedicAnalysis} style={{ fontWeight: '600', color: '#B87333' }}>

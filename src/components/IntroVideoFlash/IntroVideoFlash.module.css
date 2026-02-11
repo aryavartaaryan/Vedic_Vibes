@@ -1,0 +1,116 @@
+.overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    z-index: 9999;
+    background-color: #000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    opacity: 1;
+    transition: opacity 0.8s ease-out;
+}
+
+.overlay.fadeOut {
+    opacity: 0;
+    pointer-events: none;
+}
+
+.videoContainer {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    /* Needed for absolute positioning of text overlay */
+}
+
+.singleVideo {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.textOverlay {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 80%;
+    text-align: center;
+    z-index: 10002;
+    pointer-events: none;
+}
+
+.animatedText {
+    font-family: 'Noto Serif Devanagari', serif;
+    font-size: 3rem;
+    font-weight: 700;
+    color: #FFD700;
+    text-shadow: 0 4px 20px rgba(0, 0, 0, 0.9), 0 0 30px rgba(255, 165, 0, 0.6);
+    line-height: 1.4;
+    animation: fadeInText 0.5s ease-out;
+}
+
+@keyframes fadeInText {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.skipHint {
+    position: absolute;
+    bottom: 40px;
+    left: 50%;
+    transform: translateX(-50%);
+    padding: 12px 28px;
+    background: rgba(0, 0, 0, 0.7);
+    backdrop-filter: blur(10px);
+    border: 1.5px solid rgba(255, 215, 0, 0.4);
+    border-radius: 30px;
+    color: #FFD700;
+    font-family: 'Noto Serif Devanagari', serif;
+    font-size: 0.9rem;
+    font-weight: 500;
+    box-shadow: 0 0 20px rgba(255, 165, 0, 0.3);
+    animation: pulseFade 2s ease-in-out infinite;
+    pointer-events: none;
+    z-index: 10001;
+}
+
+@keyframes pulseFade {
+
+    0%,
+    100% {
+        opacity: 0.6;
+        transform: translateX(-50%) scale(1);
+    }
+
+    50% {
+        opacity: 1;
+        transform: translateX(-50%) scale(1.05);
+    }
+}
+
+/* Mobile responsiveness */
+@media (max-width: 768px) {
+    .skipHint {
+        bottom: 30px;
+        font-size: 0.8rem;
+        padding: 10px 24px;
+    }
+
+    .animatedText {
+        font-size: 1.8rem;
+    }
+}

@@ -56,20 +56,8 @@ export default function Footer() {
                     May all beings be happy, may all beings be free from disease.
                 </p>
 
-                {/* Links */}
-                <div style={{
-                    display: 'flex',
-                    justifyContent: 'center',
-                    gap: '2rem',
-                    marginBottom: '3rem',
-                    fontSize: '0.9rem',
-                    opacity: 0.8,
-                    fontFamily: "'Lato', sans-serif"
-                }}>
-                    <Link href="/explore" style={{ color: '#F5F5DC', textDecoration: 'none' }}>Recipes</Link>
-                    <Link href="/vedic-rasoi" style={{ color: '#F5F5DC', textDecoration: 'none' }}>The Vedic Rasoi</Link>
-                    <Link href="/digital-vaidya" style={{ color: '#F5F5DC', textDecoration: 'none' }}>Digital Vaidya</Link>
-                </div>
+                {/* Links Removed as per request */}
+                <div style={{ marginBottom: '2rem' }}></div>
 
                 {/* Copyright */}
                 <div style={{

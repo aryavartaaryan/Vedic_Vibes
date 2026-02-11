@@ -1,0 +1,132 @@
+/* Triple Container - Horizontal Layout */
+.tripleContainer {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    gap: 0;
+    width: 100%;
+    position: relative;
+}
+
+/* Center Yantra Container */
+.container {
+    position: relative;
+    width: 100%;
+    max-width: 590px;
+    /* Increased by 20% from 492px */
+    height: 590px;
+    /* Increased by 20% from 492px */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    pointer-events: none;
+    z-index: 10;
+    opacity: 1;
+    margin: 0 15px;
+}
+
+/* Side Yantra Container - Smaller than center, with spacing */
+.sideYantra {
+    position: relative;
+    width: 100%;
+    max-width: 245px;
+    /* Reduced by 20% from 306px */
+    height: 245px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    pointer-events: none;
+    z-index: 5;
+    opacity: 0.95;
+    margin: 0 120px;
+    /* Increased from 80px to ensure no collision */
+}
+
+/* Center Yantra - Static (No Rotation) */
+.yantra {
+    width: 100%;
+    height: 100%;
+    /* Animation removed for static alignment */
+    filter: drop-shadow(0 0 10px rgba(184, 134, 11, 0.4));
+}
+
+/* Side Yantras - Clockwise Rotation (opposite) */
+.yantraClockwise {
+    width: 100%;
+    height: 100%;
+    animation: clockwiseRotate 35s linear infinite;
+    filter: drop-shadow(0 0 8px rgba(184, 134, 11, 0.3));
+}
+
+/* Counter-clockwise rotation for center yantra */
+@keyframes meditativeRotate {
+    from {
+        transform: rotate(0deg);
+    }
+
+    to {
+        transform: rotate(-360deg);
+    }
+}
+
+/* Clockwise rotation for side yantras */
+@keyframes clockwiseRotate {
+    from {
+        transform: rotate(0deg);
+    }
+
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+/* Breathing pulse effect for Bindu */
+.binduPulse {
+    animation: binduPulse 8s ease-in-out infinite;
+}
+
+@keyframes binduPulse {
+
+    0%,
+    100% {
+        r: 2.5;
+        opacity: 0.9;
+    }
+
+    50% {
+        r: 4;
+        opacity: 1;
+    }
+}
+
+/* Responsive adjustments */
+@media (max-width: 1200px) {
+    .container {
+        max-width: 420px;
+        height: 420px;
+    }
+
+    .sideYantra {
+        max-width: 220px;
+        height: 220px;
+        margin: 0 -30px;
+    }
+}
+
+@media (max-width: 768px) {
+    .tripleContainer {
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .container {
+        max-width: 360px;
+        height: 360px;
+    }
+
+    .sideYantra {
+        display: none;
+        /* Hide side yantras on mobile */
+    }
+}

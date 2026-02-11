@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useEffect, useRef, useState } from 'react';
+import Link from 'next/link';
 import { motion, useInView } from 'framer-motion';
 import styles from './PranicPathSection.module.css';
 
@@ -216,7 +217,7 @@ export default function PranicPathSection() {
                 <div className={styles.omAnchor}>🕉</div>
 
                 <SolarFlareText>
-                    The Pranic Path
+                    The Vedic Way
                 </SolarFlareText>
 
                 {/* Scroll Triggered Text */}
@@ -231,13 +232,15 @@ export default function PranicPathSection() {
                     <span className={styles.activeWord}> Thrive</span>.
                 </LuminescentText>
 
-                <button
-                    className={styles.stoneSealButton}
-                    onMouseEnter={() => setIsHovered(true)}
-                    onMouseLeave={() => setIsHovered(false)}
-                >
-                    Begin Your Journey
-                </button>
+                <Link href="/dhyan-kshetra">
+                    <button
+                        className={styles.stoneSealButton}
+                        onMouseEnter={() => setIsHovered(true)}
+                        onMouseLeave={() => setIsHovered(false)}
+                    >
+                        Begin Your Journey
+                    </button>
+                </Link>
             </div>
         </section>
     );
