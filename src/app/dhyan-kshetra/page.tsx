@@ -35,10 +35,9 @@ export default function DhyanKakshaPage() {
                     const videos = data.files.map((f: any) => {
                         let text: string | string[] = "";
                         if (f.name.includes('kailash') && !f.name.includes('2')) {
-                            // First video - Two sentences
                             text = [
                                 "शिव की पवित्र ध्यान स्थली, कैलाश में आपका स्वागत है। यहाँ अनन्त शांति की अनुभूति होती है।",
-                                "आपके जीवन में एक सकारात्मक परिवर्तन की यात्रा, आज से आरम्भ हो रही है..."
+                                "अब आप चिंता मुक्त हो जाइए। हम अत्याधुनिक तकनीक और ऋषियों के प्राचीन ज्ञान के मिश्रण से आपकी समस्याओं का समाधान करेंगे।"
                             ];
                         } else if (f.name.includes('kailash2')) {
                             text = "अब आप ध्यान क्षेत्र में प्रवेश कर रहे हैं...";
