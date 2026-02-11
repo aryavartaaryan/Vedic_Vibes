@@ -428,16 +428,106 @@
   margin-top: 1rem;
 }
 
+/* Mobile Responsiveness */
+/* Mobile Responsiveness */
 @media (max-width: 768px) {
   .heroTitle {
-    font-size: 2.5rem;
+    font-size: 2.2rem;
+    /* Scaled down from 4rem */
+    padding: 0 1rem;
+    margin-bottom: 1rem;
+    line-height: 1.3;
   }
 
+  .heroSubtitle {
+    font-size: 1rem;
+    line-height: 1.6;
+    padding: 0 1rem;
+    margin-bottom: 3rem;
+    /* More breathing room before button */
+  }
+
+  .omSymbol {
+    font-size: 4rem;
+    /* Smaller OM */
+    margin-bottom: 1.5rem;
+  }
+
+  .heroContent {
+    padding: 6rem 1rem 2rem 1rem;
+    /* Adjust padding for mobile header */
+    width: 100%;
+  }
+
+  /* Adjust Archway border on mobile so it doesn't crowd content */
   .archwayFrame {
-    border-width: 20px;
+    border-width: 15px;
   }
 
+  .archwayFrame::before,
+  .archwayFrame::after {
+    width: 30px;
+    /* Thinner pillars */
+  }
+
+  /* Stack sections vertically */
   .section {
     padding: 4rem 1.5rem;
+  }
+
+  .consultationCard {
+    padding: 2rem 1.5rem;
+    /* Less internal padding */
+    width: 100%;
+  }
+
+  .consultationTitle {
+    font-size: 2rem;
+  }
+
+  .consultationText {
+    font-size: 1rem;
+    line-height: 1.6;
+  }
+
+  /* Make footer stack nicely */
+  .footer {
+    padding: 4rem 1.5rem;
+  }
+
+  .footerBrand {
+    font-size: 1.8rem;
+  }
+
+  .footerMantra {
+    font-size: 1.2rem;
+  }
+
+  /* Button improvements for touch */
+  .ctaButton {
+    padding: 1rem 2.5rem 1rem 3.5rem;
+    /* Adjust for icon */
+    font-size: 1.1rem;
+    width: 100%;
+    /* Full width on mobile */
+    max-width: 320px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .ctaButton::before {
+    left: 20px;
+  }
+}
+
+/* Small mobile devices (iPhone SE) */
+@media (max-width: 380px) {
+  .heroTitle {
+    font-size: 1.8rem;
+  }
+
+  .omSymbol {
+    font-size: 3.5rem;
   }
 }

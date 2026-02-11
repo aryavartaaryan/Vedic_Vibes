@@ -22,7 +22,7 @@ export default function Footer() {
                     color: '#F5F5DC', /* Antique Palm */
                     letterSpacing: '2px'
                 }}>
-                    VedicVibes
+                    Pranav
                 </h2>
 
                 {/* Mantra */}
@@ -64,14 +64,15 @@ export default function Footer() {
                     borderTop: '1px solid rgba(255,255,255,0.05)',
                     paddingTop: '2rem',
                     fontSize: '0.8rem',
-                    opacity: 0.5,
+                    opacity: 0.8,
                     fontFamily: "'Lato', sans-serif",
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'center',
-                    gap: '5px'
+                    gap: '5px',
+                    color: '#F3E5AB'
                 }}>
-                    Made with <Heart size={14} fill="#FF9933" color="#FF9933" /> for a Sattvic World © {new Date().getFullYear()}
+                    Designed and engineered by Pranav.AI for the Humanity...
                 </div>
             </div>
         </footer>

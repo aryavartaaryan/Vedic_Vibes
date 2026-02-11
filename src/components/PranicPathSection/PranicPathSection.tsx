@@ -231,7 +231,7 @@ export default function PranicPathSection() {
                 <div className={styles.omAnchor}>🕉</div>
 
                 <SolarFlareText>
-                    The Pranic Way
+                    Pranav Samadhaan
                 </SolarFlareText>
 
                 {/* Looping Subheading */}
@@ -245,7 +245,7 @@ export default function PranicPathSection() {
                         onMouseEnter={() => setIsHovered(true)}
                         onMouseLeave={() => setIsHovered(false)}
                     >
-                        Click to Transform Your Life
+                        Begin Your Samadhaan Journey...
                     </button>
                 </Link>
 

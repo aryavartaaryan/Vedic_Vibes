@@ -459,15 +459,7 @@ export default function MantraSangrah({ lang, startPlaying = false }: MantraSang
                         <Sparkles size={20} className={styles.headerIcon} />
                         <h2>{lang === 'hi' ? 'मंत्र संग्रह' : 'Mantra Sangrah'}</h2>
                     </div>
-                    <button
-                        className={styles.diagnoseButton}
-                        onClick={() => {
-                            window.location.href = `/digital-vaidya?lang=${lang}`;
-                        }}
-                        aria-label={lang === 'hi' ? 'आचार्य संवाद के लिए यहाँ क्लिक करें' : 'Click for Acharya Samvad'}
-                    >
-                        {lang === 'hi' ? 'आचार्य संवाद के लिए यहाँ क्लिक करें 🙏' : 'Click for Acharya Samvad 🙏'}
-                    </button>
+
                 </div>
 
                 {/* Divider */}

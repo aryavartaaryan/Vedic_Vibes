@@ -40,8 +40,8 @@ const hind = Hind({
 });
 
 export const metadata: Metadata = {
-  title: "VedicVibes | Authentic Indian Vegetarian Recipes",
-  description: "Discover authentic Indian vegetarian recipes with a modern twist and Vedic wisdom. Personalized recommendations from every region of India.",
+  title: "Pranav | Ancient Wisdom for Modern Living",
+  description: "Experience the convergence of Ancient Vedic Science and Advanced AI. Personalized guidance for healing, rejuvenation, and spiritual awakening.",
 };
 
 export default function RootLayout({
