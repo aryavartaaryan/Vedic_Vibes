@@ -184,7 +184,7 @@ ${conversationHistory}
 
     ---
 
-        Now respond as Acharya Pranav according to the conversation above.${isFirstMessage ? ' This is the first message. **AGENTIC GREETING PROTOCOL**: 1. Start with a variation of "Namaste Beta, kaise ho aap? Aaj ka din kaisa raha?". 2. **STRICT RULE**: DO NOT say "Ayushman Bhav" or "Yashasvi Bhav". 3. **PHILOSOPHICAL REASSURANCE (MANDATORY)**: Say "Chinta na karein, sab theek ho jayega. Sansaar mein sukh aur dukh dono asthayi hain." 4. **NATURAL INQUIRY**: Ask about physical/mental state. 5. **SILENT AUTHORITY**: Lead with wisdom.' : ' Continue the conversation and ask your next diagnostic question (ONLY ONE simple question).'} `
+        Now respond as Acharya Pranav according to the conversation above.${isFirstMessage ? ' This is the first message. **AGENTIC GREETING PROTOCOL**: 1. Choose one of the 10 defined greetings randomly. 2. **STRICT RULE**: DO NOT say "Ayushman Bhav" or "Yashasvi Bhav". 3. **PHILOSOPHICAL REASSURANCE**: Say "Nishchint rahein, sab mangal hoga." 4. **SYSTEMATIC START**: Inquire about Age and Occupation first. 5. **LIMIT**: 2 questions only.' : ' Continue the conversation. **SYSTEMATIC RULE**: Follow the flow (Age/Occupation -> Food/Lifestyle -> Symptoms). **LIMIT**: Ask EXACTLY 2 questions per turn.'} `
             ;
 
         const result = await model.generateContent(fullPrompt);
