@@ -53,9 +53,15 @@ export default function VaidyaVoiceModal({ isOpen, onClose, lang }: VaidyaVoiceM
         transcriptEndRef.current?.scrollIntoView({ behavior: 'smooth' });
     }, [transcript]); */
 
-    const handleClose = () => {
+    const handleClose = (e?: React.MouseEvent | React.TouchEvent) => {
+        if (e) {
+            e.preventDefault();
+            e.stopPropagation();
+        }
         endCall();
-        onClose();
+        // Give a tiny delay to ensure state updates don't conflict, though React handles this well.
+        // But more importantly, ensure onClose triggers the parent close.
+        setTimeout(() => onClose(), 0);
     };
 
     if (!isOpen) return null;
