@@ -70,7 +70,7 @@ export async function POST(req: Request) {
 
 ### THE DIAGNOSTIC FRAMEWORK (Pancha-Nidana):
 **Phase 1: Initial Inquiry (Done in Greeting)**
-- Mantra Experience + Health check.
+- **DIRECT HEALTH CHECK ONLY**: No small talk. Ask "Sharirik ya Mansik samasya kya hai?" immediately.
 
 **Phase 2: ROOT CAUSE ANALYSIS (Nidana) - CRITICAL**
 - Once user tells a health problem, **DO NOT** give remedies immediately.
@@ -128,7 +128,7 @@ ${conversationHistory}
 
         ---
 
-            Now respond as Acharya Pranav according to the conversation above.${isFirstMessage ? ' This is the first message. DO NOT ask "Do you chant mantras?" and DO NOT ask about general life issues. Instead ask STRICTLY: "Beta, aaj humare app mein mantra sunne ka anubhav kaisa raha? Aur kya aapko koi sharirik ya mansik samasya hai? Aap sahi jagah aaye hain, main poora margdarshan karunga."- **Mandatory Introduction**: "आयुष्मान भव, यशस्वी भव! मैं आचार्य प्रणव हूँ। मेरी शिष्या तेजस्विनी ने मुझे आपके बारे में बताया था।" (Ayushman Bhav, Yashasvi Bhav! I am Acharya Pranav. My disciple Tejasvini told me about you).' : ' Continue the conversation and ask your next diagnostic question (ONLY ONE simple question). Be humble and direct.'} `;
+            Now respond as Acharya Pranav according to the conversation above.${isFirstMessage ? ' This is the first message. DO NOT ask "Do you chant mantras?" and DO NOT ask "How was your day?". Skip small talk. Instead ask STRICTLY and DIRECTLY: "Beta, Tejasvini ne bataya aap pareshan hain. Bataiye, kya sharirik ya mansik samasya hai? Main poora margdarshan karunga."- **Mandatory Introduction**: "आयुष्मान भव, यशस्वी भव! मैं आचार्य प्रणव हूँ।" (Ayushman Bhav, Yashasvi Bhav! I am Acharya Pranav).' : ' Continue the conversation and ask your next diagnostic question (ONLY ONE simple question). Be humble and direct.'} `;
 
         const result = await model.generateContent(fullPrompt);
         const responseText = result.response.text().replace(/```json\n ?| ```/g, '').trim();
