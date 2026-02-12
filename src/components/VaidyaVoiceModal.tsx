@@ -153,10 +153,9 @@ export default function VaidyaVoiceModal({ isOpen, onClose, lang }: VaidyaVoiceM
                     <div ref={transcriptEndRef} />
                 </div> */}
 
-                {/* Controls */}
+                {/* Controls - Just Mute here for focus */}
                 {callState === 'active' && (
                     <div className={styles.controls}>
-                        {/* Mute button */}
                         <button
                             onClick={toggleMute}
                             className={`${styles.controlButton} ${isMuted ? styles.muted : ''}`}
@@ -164,16 +163,17 @@ export default function VaidyaVoiceModal({ isOpen, onClose, lang }: VaidyaVoiceM
                         >
                             {isMuted ? <MicOff size={24} /> : <Mic size={24} />}
                         </button>
-
-                        {/* Red Pill End Call Button */}
-                        <button onClick={handleClose} className={styles.endCallButton} aria-label="End call">
-                            <PhoneOff size={24} />
-                            <span>{lang === 'hi' ? 'संवाद समाप्त करें' : 'End Call'}</span>
-                        </button>
                     </div>
                 )}
 
-                {/* Sacred mantra footer */}
+                {/* Bottom Section: End Call & Mantra */}
+                {callState === 'active' && (
+                    <button onClick={handleClose} className={styles.endCallButton} aria-label="End call">
+                        <PhoneOff size={22} />
+                        <span>{lang === 'hi' ? 'संवाद समाप्त करें' : 'End Call'}</span>
+                    </button>
+                )}
+
                 <div className={styles.mantra}>
                     <p>ॐ धन्वन्तरये नमः</p>
                 </div>
