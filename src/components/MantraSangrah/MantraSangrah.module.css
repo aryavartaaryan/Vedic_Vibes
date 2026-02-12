@@ -802,6 +802,8 @@
         /* Prevent layout blowout */
         display: flex;
         flex-direction: column;
+        z-index: 1200;
+        /* Ensure on top of floating buttons (z-1100) */
     }
 
     .panelOpen {
