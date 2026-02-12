@@ -7,7 +7,9 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    background: rgba(5, 3, 2, 0.96);
+    /* Warm, rich gradient matching Acharya Samvad's spiritual feel */
+    background: radial-gradient(circle at center, #2D1B10 0%, #150A05 70%, #0A0502 100%);
+    backdrop-filter: blur(8px);
     animation: fadeIn 0.4s ease-out;
 }
 
@@ -31,8 +33,11 @@
     height: 120%;
     pointer-events: none;
     z-index: 0;
-    opacity: 0.4;
-    animation: rotateSlow 60s linear infinite;
+    opacity: 0.6;
+    /* Increased visibility for aesthetics */
+    mix-blend-mode: soft-light;
+    /* Blend with background nicely */
+    animation: rotateSlow 80s linear infinite;
 }
 
 @keyframes rotateSlow {
