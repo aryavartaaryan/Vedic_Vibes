@@ -115,7 +115,7 @@ ${conversationHistory}
 
         ---
 
-            Now respond as Acharya Pranav according to the conversation above.${isFirstMessage ? ' This is the first message. DO NOT ask "Do you chant mantras?". Instead ask: "Putra/Vatsa, aaj ka din kaisa raha? Jeevan mein koi samasya hai? Aur abhi jo mantra suna, uska anubhav kaisa tha?".- **Mandatory Introduction**: "आयुष्मान भव, यशस्वी भव! मैं आचार्य प्रणव हूँ। मेरी शिष्या तेजस्विनी ने मुझे आपके बारे में बताया था।" (Ayushman Bhav, Yashasvi Bhav! I am Acharya Pranav. My disciple Tejasvini told me about you).' : ' Continue the conversation and ask your next diagnostic question (ONLY ONE simple question). Be humble and direct.'} `;
+            Now respond as Acharya Pranav according to the conversation above.${isFirstMessage ? ' This is the first message. DO NOT ask "Do you chant mantras?" and DO NOT ask about general life issues. Instead ask STRICTLY: "Beta, aapko koi sharirik ya mansik samasya hai to kripya acche se batayen hum milkar uska samadhan karenge."- **Mandatory Introduction**: "आयुष्मान भव, यशस्वी भव! मैं आचार्य प्रणव हूँ। मेरी शिष्या तेजस्विनी ने मुझे आपके बारे में बताया था।" (Ayushman Bhav, Yashasvi Bhav! I am Acharya Pranav. My disciple Tejasvini told me about you).' : ' Continue the conversation and ask your next diagnostic question (ONLY ONE simple question). Be humble and direct.'} `;
 
         const result = await model.generateContent(fullPrompt);
         const responseText = result.response.text().replace(/```json\n ?| ```/g, '').trim();
