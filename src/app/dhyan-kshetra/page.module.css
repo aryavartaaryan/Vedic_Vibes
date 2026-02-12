@@ -1,0 +1,59 @@
+/* Page specific styles for Dhyan Kshetra */
+
+.titleContainer {
+    background: linear-gradient(135deg, rgba(10, 5, 2, 0.85) 0%, rgba(25, 12, 5, 0.9) 100%);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 2px solid rgba(255, 215, 0, 0.5);
+    border-radius: 20px;
+    padding: 1rem 3rem;
+    box-shadow: 0 0 40px rgba(255, 165, 0, 0.3), 0 8px 32px rgba(0, 0, 0, 0.5), inset 0 0 60px rgba(255, 215, 0, 0.05);
+    z-index: 20;
+    transition: all 0.3s ease;
+}
+
+.titleText {
+    margin: 0;
+    font-size: 3.2rem;
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    text-align: center;
+    text-shadow: 0 0 30px rgba(255, 215, 0, 0.8), 0 0 60px rgba(255, 165, 0, 0.5), 0 4px 10px rgba(0, 0, 0, 0.9);
+    background: linear-gradient(180deg, #FFD700 0%, #FF9933 50%, #FFD700 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    font-weight: 800;
+    font-family: 'Noto Serif Devanagari', serif;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .titleContainer {
+        display: none !important;
+    }
+
+    .titleText {
+        font-size: 2rem;
+        /* Scale down text size slightly */
+        /* Enhance text shadow for readability without background */
+        text-shadow: 0 0 20px rgba(0, 0, 0, 0.8), 0 0 40px rgba(255, 165, 0, 0.6);
+    }
+
+    .sriYantraContainer {
+        margin-top: 25vh !important;
+        /* Push down to center on mobile since title is gone */
+        transform: scale(0.9);
+        /* Reduced size to prevent crossing edges */
+    }
+}
+
+.sriYantraContainer {
+    position: relative;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    margin-top: -60px;
+    /* Default desktop lifting */
+    z-index: 0;
+}

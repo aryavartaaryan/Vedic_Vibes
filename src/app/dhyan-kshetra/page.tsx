@@ -4,6 +4,7 @@ import React, { useState, useEffect } from "react";
 import { Globe } from 'lucide-react';
 import styles from "../vedic-rasoi/rasoi.module.css";
 import translations from '@/lib/vaidya-translations.json';
+import pageStyles from "./page.module.css";
 import SriYantra from '@/components/SriYantra/SriYantra';
 import MantraSangrah from '@/components/MantraSangrah/MantraSangrah';
 import IntroVideoFlash from '@/components/IntroVideoFlash/IntroVideoFlash';
@@ -226,46 +227,17 @@ export default function DhyanKakshaPage() {
                 background: 'transparent' // Force transparent to see video
             }}>
 
+
+
                 {/* Page Title - Grand Temple Banner */}
-                <div style={{
-                    background: 'linear-gradient(135deg, rgba(10, 5, 2, 0.85) 0%, rgba(25, 12, 5, 0.9) 100%)',
-                    backdropFilter: 'blur(12px)',
-                    WebkitBackdropFilter: 'blur(12px)',
-                    border: '2px solid rgba(255, 215, 0, 0.5)',
-                    borderRadius: '20px',
-                    padding: '1rem 3rem',
-                    boxShadow: '0 0 40px rgba(255, 165, 0, 0.3), 0 8px 32px rgba(0, 0, 0, 0.5), inset 0 0 60px rgba(255, 215, 0, 0.05)',
-                    zIndex: 20
-                }}>
-                    <h1 style={{
-                        margin: 0,
-                        fontSize: '3.2rem',
-                        textTransform: 'uppercase',
-                        letterSpacing: '0.15em',
-                        textAlign: 'center',
-                        textShadow: '0 0 30px rgba(255, 215, 0, 0.8), 0 0 60px rgba(255, 165, 0, 0.5), 0 4px 10px rgba(0, 0, 0, 0.9)',
-                        background: 'linear-gradient(180deg, #FFD700 0%, #FF9933 50%, #FFD700 100%)',
-                        WebkitBackgroundClip: 'text',
-                        WebkitTextFillColor: 'transparent',
-                        backgroundClip: 'text',
-                        fontWeight: '800',
-                        fontFamily: "'Noto Serif Devanagari', serif"
-                    }}>
+                <div className={pageStyles.titleContainer}>
+                    <h1 className={pageStyles.titleText}>
                         {t.pageTitle}
                     </h1>
                 </div>
 
                 {/* Sri Yantra - Central Focus - Size adjusted in component CSS */}
-                <div style={{
-                    position: 'relative',
-                    width: '100%',
-                    display: 'flex',
-                    justifyContent: 'center',
-                    marginTop: '-60px', // Lifted significantly as requested
-                    zIndex: 0, // Ensure it sits behind title if overlapping
-                    // transform: 'scale(1.17)', // Reverted global scale
-                    // transformOrigin: 'top center'
-                }}>
+                <div className={pageStyles.sriYantraContainer}>
                     <SriYantra />
                 </div>
 
