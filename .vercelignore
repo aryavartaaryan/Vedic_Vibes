@@ -1,0 +1,15 @@
+# Ignore git files
+.git
+.gitignore
+
+# Ignore local env
+.env*
+
+# Ignore heavy media from FUNCTION bundles (they are static assets served from CDN/Edge)
+# Vercel automatically handles public/ folder for static serving, 
+# but sometimes identifying them explicitly helps if you have specific build steps.
+# However, usually 'standalone' mode solves the function size.
+# We will just ensure node_modules is ignored in upload if not needed (Vercel installs it).
+node_modules
+dist
+.next
