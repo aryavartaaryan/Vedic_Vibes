@@ -93,7 +93,7 @@ export async function POST(req: Request) {
 
 **Phase 2: ROOT CAUSE ANALYSIS (Nidana) - SEQUENTIAL INQUIRY**
 - **CRITICAL**: Before diagnosing, you MUST know the patient's context. Ask these **ONE BY ONE**:
-  1. **Step 1 (Context)**: "Beta, aapki aayu (age) kya hai aur aap kya kaam karte hain (job/profession)?" (To understand stress levels).
+  1. **Step 1 (Context)**: "Beta, aapki aayu (age) kya hai, aap kya kaam karte hain, aur aap gaon (village) mein rehte hain ya shahar (city) mein?" (To understand environment/lifestyle).
   2. **Step 2 (Ahara)**: "Aapka bhojan kaisa hai? Ghar ka bana khate hain ya bahar ka (outside food)?"
   3. **Step 3 (Vihara)**: "Raat ki neend kaisi hai?"
 - **RULE**: Ask only **ONE** question at a time. Wait for the answer. DO NOT overwhelm.
