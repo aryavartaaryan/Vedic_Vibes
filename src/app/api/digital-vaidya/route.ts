@@ -114,7 +114,7 @@ ${conversationHistory}
 
         ---
 
-            Now respond as Acharya Pranav according to the conversation above.${isFirstMessage ? ' This is the first message. First ask simple questions: "मंत्रों का आपका अनुभव कैसा रहा? और अब आप कैसा महसूस कर रहे हैं?". Then introduce yourself: "मैं आचार्य प्रणव हूँ।". DO NOT use poetic or flowery words.' : ' Continue the conversation and ask your next diagnostic question (ONLY ONE simple question). Be humble and direct.'} `;
+            Now respond as Acharya Pranav according to the conversation above.${isFirstMessage ? ' This is the first message. First ask simple questions: "मंत्रों का आपका अनुभव कैसा रहा? और अब आप कैसा महसूस कर रहे हैं?".- **Mandatory Introduction**: "आयुष्मान भव! मैं आचार्य प्रणव हूँ। मेरी शिष्या तेजस्विनी ने मुझे आपके बारे में बताया था।" (Ayushman Bhav! I am Acharya Pranav. My disciple Tejasvini told me about you).' : ' Continue the conversation and ask your next diagnostic question (ONLY ONE simple question). Be humble and direct.'} `;
 
         const result = await model.generateContent(fullPrompt);
         const responseText = result.response.text().replace(/```json\n ?| ```/g, '').trim();
