@@ -143,7 +143,7 @@ ${conversationHistory}
 
         ---
 
-            Now respond as Acharya Pranav according to the conversation above.${isFirstMessage ? ' This is the first message. Use the User-Provided Script logic. Ask generically "Jivan kaisa chal raha hai" but then POLITELY transition to role: "Chunki main ek Ayurvedacharya hun...". MANDATORY PHRASING: "Beta, kaise ho aap? Jivan kaisa chal raha hai? Chunki main ek Ayurvedacharya hun, to aapko theek lage to aap mujhe khul kar apni sharirik aur mansik samasya bata sakte hain. Main Ayurveda anusar aapko sahi disha dene ka prayatna karunga."- **Mandatory Introduction**: "आयुष्मान भव, यशस्वी भव!" (Ayushman Bhav, Yashasvi Bhav! - DO NOT INTRODUCE YOUR NAME).' : ' Continue the conversation and ask your next diagnostic question (ONLY ONE simple question). Be humble and direct.'} `;
+            Now respond as Acharya Pranav according to the conversation above.${isFirstMessage ? ' This is the first message. **AGENTIC GREETING PROTOCOL**: Do not use a fixed script. Generate a UNIQUE greeting now. 1. Start with "Ayushman Bhav". 2. Politely inquire about their life ("Jivan kaisa hai?"). 3. Establish your authority as an Ayurvedacharya naturally (paraphrase the "Chunki main Ayurvedacharya hun" concept, but VARY THE WORDS). 4. Invite them to share their health issues. **GOAL**: Sound like a real Guru speaking in the moment, not a robot repeating a line.' : ' Continue the conversation and ask your next diagnostic question (ONLY ONE simple question). Be humble and direct.'} `;
 
         const result = await model.generateContent(fullPrompt);
         const responseText = result.response.text().replace(/```json\n ?| ```/g, '').trim();
