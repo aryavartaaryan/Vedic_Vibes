@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useRef } from 'react';
-import { X, Mic, MicOff } from 'lucide-react';
+import { X, Mic, MicOff, PhoneOff } from 'lucide-react';
 import { useVaidyaVoiceCall } from '@/hooks/useVaidyaVoiceCall';
 import VoiceVisualizer from './VoiceVisualizer';
 import styles from './VaidyaVoiceModal.module.css';
@@ -165,32 +165,10 @@ export default function VaidyaVoiceModal({ isOpen, onClose, lang }: VaidyaVoiceM
                             {isMuted ? <MicOff size={24} /> : <Mic size={24} />}
                         </button>
 
-                        {/* Lotus disconnect button */}
-                        <button onClick={handleClose} className={styles.lotusButton} aria-label="End call">
-                            <svg viewBox="0 0 100 100" className={styles.lotusSvg}>
-                                <g className={styles.lotusPetals}>
-                                    <ellipse cx="50" cy="50" rx="8" ry="20" fill="#DC143C" opacity="0.9" />
-                                    {[0, 45, 90, 135, 180, 225, 270, 315].map((angle, i) => (
-                                        <ellipse
-                                            key={i}
-                                            cx="50"
-                                            cy="50"
-                                            rx="8"
-                                            ry="20"
-                                            fill="#DC143C"
-                                            opacity="0.8"
-                                            transform={`rotate(${angle} 50 50)`}
-                                        />
-                                    ))}
-                                </g>
-                                <circle cx="50" cy="50" r="12" fill="#8B0000" />
-                                <text x="50" y="50" textAnchor="middle" dominantBaseline="central" fill="white" fontSize="20" fontWeight="bold">
-                                    ×
-                                </text>
-                            </svg>
-                            <span className={styles.lotusLabel}>
-                                {lang === 'hi' ? 'संवाद समाप्त करें' : 'End Consultation'}
-                            </span>
+                        {/* Red Pill End Call Button */}
+                        <button onClick={handleClose} className={styles.endCallButton} aria-label="End call">
+                            <PhoneOff size={24} />
+                            <span>{lang === 'hi' ? 'संवाद समाप्त करें' : 'End Call'}</span>
                         </button>
                     </div>
                 )}
