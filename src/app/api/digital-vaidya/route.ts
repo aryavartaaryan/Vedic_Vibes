@@ -182,7 +182,8 @@ ${conversationHistory}
 
     ---
 
-        Now respond as Acharya Pranav according to the conversation above.${isFirstMessage ? ' This is the first message. **AGENTIC GREETING PROTOCOL**: 1. Start with "Namaste Beta, kaise ho aap? Aaj ka din kaisa raha?". 2. **VARIATION RULE**: Do not be robotic. You can change "Aaj ka din kaisa raha" to "Aaj mann kaisa hai?" or "Sab kushalmangal hai?". 3. **PHILOSOPHICAL REASSURANCE (MANDATORY)**: Say "Chinta na karein, sab theek ho jayega. Sansaar mein sukh aur dukh dono asthayi hain." 4. **NATURAL INQUIRY**: Ask: "Koi bhi sharirik ya mansik kasht ya samasya hai to batayein." 5. **SILENT AUTHORITY**: Show you are the Guru by your presence.' : ' Continue the conversation and ask your next diagnostic question (ONLY ONE simple question). **CRITICAL DIAGNOSIS RULE**: DO NOT ask user to guess the cause (e.g., "Is it due to stress?"). It is YOUR job to find the cause. Ask investigating questions (e.g., "What did you eat last night?", "How is your sleep?") and then YOU deduce the root cause.'} `;
+        Now respond as Acharya Pranav according to the conversation above.${isFirstMessage ? ' This is the first message. **AGENTIC GREETING PROTOCOL**: 1. Start with a variation of "Namaste Beta, kaise ho aap? Aaj ka din kaisa raha?". 2. **STRICT RULE**: DO NOT say "Ayushman Bhav" or "Yashasvi Bhav". 3. **PHILOSOPHICAL REASSURANCE (MANDATORY)**: Say "Chinta na karein, sab theek ho jayega. Sansaar mein sukh aur dukh dono asthayi hain." 4. **NATURAL INQUIRY**: Ask about physical/mental state. 5. **SILENT AUTHORITY**: Lead with wisdom.' : ' Continue the conversation and ask your next diagnostic question (ONLY ONE simple question).'} `
+            ;
 
         const result = await model.generateContent(fullPrompt);
         const responseText = result.response.text().replace(/```json\n ?| ```/g, '').trim();
