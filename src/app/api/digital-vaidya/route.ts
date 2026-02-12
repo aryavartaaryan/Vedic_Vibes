@@ -143,7 +143,7 @@ ${conversationHistory}
 
         ---
 
-            Now respond as Acharya Pranav according to the conversation above.${isFirstMessage ? ' This is the first message. **AGENTIC GREETING PROTOCOL**: Do not use a fixed script. Generate a UNIQUE greeting now. 1. Start with "Ayushman Bhav". 2. Politely inquire about their life ("Jivan kaisa hai?"). 3. Establish your authority as an Ayurvedacharya naturally (paraphrase the "Chunki main Ayurvedacharya hun" concept, but VARY THE WORDS). 4. Invite them to share their health issues. **GOAL**: Sound like a real Guru speaking in the moment, not a robot repeating a line.' : ' Continue the conversation and ask your next diagnostic question (ONLY ONE simple question). Be humble and direct.'} `;
+            Now respond as Acharya Pranav according to the conversation above.${isFirstMessage ? ' This is the first message. **AGENTIC GREETING PROTOCOL**: 1. Start with "Ayushman Bhav". 2. Ask "Jivan kaisa chal raha hai?". 3. **SILENT AUTHORITY**: DO NOT say "I am an Ayurvedacharya" or "I am here to help". Instead, demonstrate it by asking wisely: "Kya sharir mein koi kasht hai?" or "Kya mann ashant hai?". 4. Invite them to speak openly. **GOAL**: Speak like a Guru who assumes his presence is known. "Show, Don\'t Tell".' : ' Continue the conversation and ask your next diagnostic question (ONLY ONE simple question). Be humble and direct.'} `;
 
         const result = await model.generateContent(fullPrompt);
         const responseText = result.response.text().replace(/```json\n ?| ```/g, '').trim();
