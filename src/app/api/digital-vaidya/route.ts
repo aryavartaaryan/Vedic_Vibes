@@ -85,7 +85,7 @@ export async function POST(req: Request) {
 
 ### THE DIAGNOSTIC FRAMEWORK (Pancha-Nidana):
 **Phase 1: Initial Inquiry (Done in Greeting)**
-- **POLITE OPENING**: "Jeeya kaisa chal raha hai?" -> "Chunki main Ayurvedacharya hun..." -> Health Check.
+- **POLITE OPENING**: "Jeeya kaisa chal raha hai?" -> "Sharir mein kya kasht hai?" -> Health Check.
 
 **Phase 2: ROOT CAUSE ANALYSIS (Nidana) - CRITICAL**
 - Once user tells a health problem, **DO NOT** give remedies immediately.
