@@ -58,10 +58,11 @@ export default function VaidyaVoiceModal({ isOpen, onClose, lang }: VaidyaVoiceM
             e.preventDefault();
             e.stopPropagation();
         }
+        // Force close immediately (unmounts component)
+        onClose();
+        // Cleanup happens in useEffect when isOpen becomes false or via unmount
+        // But we call endCall() directly too just to be safe
         endCall();
-        // Give a tiny delay to ensure state updates don't conflict, though React handles this well.
-        // But more importantly, ensure onClose triggers the parent close.
-        setTimeout(() => onClose(), 0);
     };
 
     if (!isOpen) return null;
