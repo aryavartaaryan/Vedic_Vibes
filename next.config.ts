@@ -7,9 +7,7 @@ const nextConfig: NextConfig = {
   typescript: {
     ignoreBuildErrors: true, // Only if user wants to bypass TS errors, but usually safer to fix. User asked for quick fix.
   },
-  eslint: {
-    ignoreDuringBuilds: true,
-  },
+
   experimental: {
     // optimizePackageImports: ['lucide-react', 'framer-motion'],
   }
