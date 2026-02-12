@@ -13,7 +13,7 @@ const SriYantraSVG = ({ className }: { className?: string }) => (
                 </feMerge>
             </filter>
         </defs>
-        <g fill="none" strokeWidth="0.4">
+        <g fill="none" stroke="#000000" strokeWidth="0.4">
             {/* Bhupura (Bhupur) - Traditional 3-layered square structure with gates */}
             <path d="M10 10 L190 10 L190 190 L10 190 Z" />
             <path d="M25 25 L175 25 L175 175 L25 175 Z" />
