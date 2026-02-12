@@ -69,16 +69,31 @@ export default function VaidyaVoiceModal({ isOpen, onClose, lang }: VaidyaVoiceM
 
     return (
         <div className={styles.overlay}>
+            {/* Background Effects: Sri Yantra Pulse */}
+            <div className={styles.sriYantraLayer}>
+                <svg viewBox="0 0 100 100" fill="none" stroke="#C49102" strokeWidth="0.5" style={{ width: '100%', height: '100%', opacity: 0.15 }}>
+                    <circle cx="50" cy="50" r="48" opacity="0.3" />
+                    <circle cx="50" cy="50" r="40" opacity="0.4" />
+                    <path d="M50 2 L90 50 L50 98 L10 50 Z" opacity="0.3" />
+                    <path d="M50 10 L85 50 L50 90 L15 50 Z" opacity="0.3" />
+                    <circle cx="50" cy="50" r="5" fill="#C49102" opacity="0.2" />
+                </svg>
+            </div>
+            <div className={styles.ambientGlow} />
+            <div className={styles.particles} />
+
+            <div className={styles.closeButtonContainer}>
+                {/* Close button */}
+                <button onClick={handleClose} className={styles.closeButton} aria-label="Close">
+                    <X size={24} />
+                </button>
+            </div>
+
             {/* Sacred background */}
             <div className={styles.background} />
 
             {/* Content */}
             <div className={styles.content}>
-                {/* Close button */}
-                <button onClick={handleClose} className={styles.closeButton} aria-label="Close">
-                    <X size={24} />
-                </button>
-
                 {/* Header */}
                 <div className={styles.header}>
                     <h2 className={styles.headerTitle}>

@@ -21,6 +21,30 @@
     }
 }
 
+/* Sri Yantra Layer */
+.sriYantraLayer {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 120%;
+    height: 120%;
+    pointer-events: none;
+    z-index: 0;
+    opacity: 0.4;
+    animation: rotateSlow 60s linear infinite;
+}
+
+@keyframes rotateSlow {
+    from {
+        transform: translate(-50%, -50%) rotate(0deg);
+    }
+
+    to {
+        transform: translate(-50%, -50%) rotate(360deg);
+    }
+}
+
 /* Sacred background with Sri Yantra hint */
 .background {
     position: absolute;
