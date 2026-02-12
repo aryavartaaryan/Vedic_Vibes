@@ -795,6 +795,10 @@
         border-radius: 32px 32px 0 0;
         padding: 24px 20px;
         box-shadow: 0 -10px 40px rgba(0, 0, 0, 0.8);
+        overflow: hidden;
+        /* Prevent layout blowout */
+        display: flex;
+        flex-direction: column;
     }
 
     .panelOpen {
@@ -812,15 +816,18 @@
         height: 4px;
         background: rgba(212, 175, 55, 0.4);
         border-radius: 2px;
+        pointer-events: none;
+        /* Ensure no interaction interference */
     }
 
     .header {
-        position: sticky;
-        top: 0;
-        background: inherit;
+        position: relative;
+        /* Remove sticky inside flex */
         z-index: 10;
         padding-bottom: 12px;
         margin-bottom: 0;
+        flex-shrink: 0;
+        /* Keep header strictly sized */
     }
 
     .headerTitle h2 {
@@ -829,42 +836,38 @@
 
     .divider {
         margin: 12px 0 20px;
+        flex-shrink: 0;
     }
 
     .playlist {
-        padding-bottom: 80px;
-        /* Space for mini-player */
-    }
-
-    .trackItem {
-        padding: 16px;
-        border-radius: 14px;
-        margin-bottom: 4px;
-    }
-
-    .trackTitle {
-        font-size: 1.05rem;
-    }
-
-    .trackBadge {
-        font-size: 0.7rem;
-        padding: 2px 8px;
+        padding-bottom: 20px;
+        /* Reduced excess padding since controls are separate flex item */
+        overscroll-behavior: contain;
+        /* Prevent scroll chaining/locking */
+        -webkit-overflow-scrolling: touch;
+        /* Smooth scroll */
     }
 
     /* Fixed Controls at Bottom on Mobile */
     .controls {
-        position: sticky;
-        bottom: 0;
-        left: 0;
-        right: 0;
+        position: relative;
+        /* Stickiness not needed in flex column */
+        bottom: auto;
+        left: auto;
+        right: auto;
         margin-top: auto;
         border-radius: 16px;
         padding: 14px;
-        background: rgba(15, 8, 3, 0.9);
+        background: rgba(15, 8, 3, 0.95);
+        /* Slightly more opaque */
         box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.4);
+        flex-shrink: 0;
+        /* Don't shrink controls */
+        z-index: 20;
     }
 
     .footer {
         padding-bottom: 10px;
+        flex-shrink: 0;
     }
 }

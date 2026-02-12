@@ -13,7 +13,7 @@ const SriYantraSVG = ({ className }: { className?: string }) => (
                 </feMerge>
             </filter>
         </defs>
-        <g fill="none" stroke="rgba(255, 255, 255, 0.5)" strokeWidth="0.4" filter="url(#silverGlow)">
+        <g fill="none" stroke="#000000" strokeWidth="0.4">
             {/* Bhupura (Bhupur) - Traditional 3-layered square structure with gates */}
             <path d="M10 10 L190 10 L190 190 L10 190 Z" />
             <path d="M25 25 L175 25 L175 175 L25 175 Z" />
@@ -62,17 +62,17 @@ const SriYantraSVG = ({ className }: { className?: string }) => (
 
             {/* High Precision 9 Interlocking Triangles Structure */}
             {/* Downward Triangles (5) */}
-            <path d="M100 155 L145 70 L55 70 Z" strokeWidth="0.7" opacity="0.9" /> {/* T1 */}
-            <path d="M100 142 L135 85 L65 85 Z" strokeWidth="0.6" opacity="0.8" /> {/* T2 */}
-            <path d="M100 130 L125 95 L75 95 Z" strokeWidth="0.5" opacity="0.7" /> {/* T3 */}
-            <path d="M100 120 L115 102 L85 102 Z" strokeWidth="0.4" opacity="0.6" /> {/* T4 */}
-            <path d="M100 108 L108 108 L100 115 L92 108 Z" strokeWidth="0.3" opacity="0.5" /> {/* T5 */}
+            <path d="M100 155 L145 70 L55 70 Z" strokeWidth="0.7" /> {/* T1 */}
+            <path d="M100 142 L135 85 L65 85 Z" strokeWidth="0.6" /> {/* T2 */}
+            <path d="M100 130 L125 95 L75 95 Z" strokeWidth="0.5" /> {/* T3 */}
+            <path d="M100 120 L115 102 L85 102 Z" strokeWidth="0.4" /> {/* T4 */}
+            <path d="M100 108 L108 108 L100 115 L92 108 Z" strokeWidth="0.3" /> {/* T5 */}
 
             {/* Upward Triangles (4) */}
-            <path d="M100 45 L145 130 L55 130 Z" strokeWidth="0.7" opacity="0.9" /> {/* T6 */}
-            <path d="M100 58 L135 115 L65 115 Z" strokeWidth="0.6" opacity="0.8" /> {/* T7 */}
-            <path d="M100 70 L125 105 L75 105 Z" strokeWidth="0.5" opacity="0.7" /> {/* T8 */}
-            <path d="M100 82 L115 97 L85 97 Z" strokeWidth="0.4" opacity="0.6" /> {/* T9 */}
+            <path d="M100 45 L145 130 L55 130 Z" strokeWidth="0.7" /> {/* T6 */}
+            <path d="M100 58 L135 115 L65 115 Z" strokeWidth="0.6" /> {/* T7 */}
+            <path d="M100 70 L125 105 L75 105 Z" strokeWidth="0.5" /> {/* T8 */}
+            <path d="M100 82 L115 97 L85 97 Z" strokeWidth="0.4" /> {/* T9 */}
 
             {/* Bindu */}
             <circle cx="100" cy="100" r="1.5" fill="white" />

@@ -392,8 +392,8 @@ function DigitalVaidyaContent() {
                                 <div className={styles.welcomeMessage}>
                                     <p className={styles.welcomeText}>
                                         {lang === 'hi'
-                                            ? 'आयुष्मान भव! बेटा, कैलाश की उन पवित्र ध्वनियों ने आपके हृदय के किन तारों को छुआ? मंत्रों और स्तोत्रों को सुनकर कैसा दिव्य अनुभव हुआ? क्या मन में शांति की लहर उठी? शारीरिक और मानसिक कल्याण के लिए मैं आपको प्रतिदिन हमारे इस एप्लिकेशन के मंत्रों के साथ ध्यान करने की सलाह देता हूँ। अब बताओ बेटा, कैसे हो? जीवन की यात्रा कैसी चल रही है? जो भी कष्ट या समस्या है, खुलकर बताएं। चिंता न करें, सब सही हो जाएगा।'
-                                            : 'Ayushman Bhav! Beta, which strings of your heart did those sacred sounds of Kailash touch? What divine experience did you have listening to the mantras and stotras? Did a wave of peace arise in your mind? For your physical and mental well-being, I recommend that you meditate daily using the mantras in our application. Now tell me beta, how are you? How is the journey of life going? Please tell me about any health or personal concerns you have openly. Do not worry, everything will be fine.'}
+                                            ? 'आयुष्मान भव! बेटा, मंत्रों का आपका अनुभव कैसा रहा और अब आप कैसा महसूस कर रहे हैं? मैं आचार्य प्रणव हूँ।'
+                                            : 'Ayushman Bhav! Beta, how was your experience with the mantras and how are you feeling now? I am Acharya Pranav.'}
                                     </p>
                                 </div>
                             )}
