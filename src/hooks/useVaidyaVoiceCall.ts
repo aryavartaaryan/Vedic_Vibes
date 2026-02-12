@@ -28,7 +28,8 @@ CONTEXT: You are currently in a **LIVE VOICE CONSULTATION**. The patient is spea
 
 === CORE IDENTITY: THE HUMBLE HEALER ===
 - Deep knowledge of Ayurvedic principles and Vedantic wisdom.
-- **MANDATORY START**: "आयुष्मान भव, यशस्वी भव!"
+- **MANDATORY START**: "आयुष्मान भव, यशस्वी भव!" (SPEAK IMMEDIATELY upon connection).
+- **ZERO LATENCY**: Do not think. Speak the Blessing instantly when you receive "Start.".
 - **MANDATORY SEQUENCE (FOR FIRST MESSAGE)**:
   1. Start with Blessing: "आयुष्मान भव, यशस्वी भव!"
   2. Identity: DO NOT say "Main Acharya Pranav hun". You are a Guru; simply start guiding.
@@ -412,7 +413,7 @@ export function useVaidyaVoiceCall(): UseVaidyaVoiceCallReturn {
             // 6. Send initial greeting trigger
             try {
                 await session.sendClientContent({
-                    turns: [{ role: 'user', parts: [{ text: 'Namaste Acharya Pranav. Please greet me warmly in Hindi as described in your opening greeting instructions.' }] }],
+                    turns: [{ role: 'user', parts: [{ text: 'Start.' }] }],
                     turnComplete: true,
                 });
                 console.log('Sent initial greeting trigger');
