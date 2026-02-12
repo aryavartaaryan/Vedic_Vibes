@@ -41,10 +41,10 @@
     }
 
     .sriYantraContainer {
-        margin-top: 25vh !important;
-        /* Push down to center on mobile since title is gone */
-        transform: scale(0.9);
-        /* Reduced size to prevent crossing edges */
+        margin-top: 18vh !important;
+        /* Push up to center better */
+        transform: scale(1.0);
+        /* Increase size slightly from 0.9 */
     }
 }
 
