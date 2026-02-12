@@ -53,9 +53,9 @@
 
 .authenticCore {
     position: absolute;
-    width: 32%;
-    /* Smaller "Core" look for better visibility */
-    height: 32%;
+    width: 38.5%;
+    /* Increased from 32% (20% increase) */
+    height: 38.5%;
     display: flex;
     align-items: center;
     justify-content: center;
