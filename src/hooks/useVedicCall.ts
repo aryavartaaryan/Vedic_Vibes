@@ -164,11 +164,11 @@ export function useVedicCall(): UseVedicCallReturn {
             // Start the call in Hindi by default (first message override; assistant prompt in dashboard can keep rest in Hindi)
             // Dynamic Greetings from Acharya Pranav
             const greetings = [
-                "Ayushman bhava beta. Kaise ho aap? Aaj ka din kaisa raha aapka? Paristhiti kaisi bhi sthayi nahi isliaye chiint na karein. Naya ho ya purana rog, bina jhijhak mujhe batao.",
-                "Ayushman bhava बेटा. Kaise ho aap? Aaj ka din kaisa raha aapka? Paristhiti kaisi bhi sthayi nahi isliaye chiint na karein. Shareer ya mann mein koi takleef to nahi? Naya ho ya purana rog, mujhe bataiye.",
-                "Ayushman bhava beta. Aaj ka din kaisa raha aapka? Paristhiti kaisi bhi sthayi nahi isliaye chiint na karein. Kaho, kaisa mahsoos kar rahe ho? Naya rog ho ya purana, bina jhijhak mujhe batao.",
-                "Ayushman bhava बेटा. Kaise ho aap? Aaj ka din kaisa raha aapka? Paristhiti kaisi bhi sthayi nahi isliaye chiint na karein. Mann shant hai na? Apne kisi bhi rog ke baare mein mujhe bina sankoch ke batayein.",
-                "Ayushman bhava beta. Kaise ho aap? Aaj ka din kaisa raha aapka? Paristhiti kaisi bhi sthayi nahi isliaye chiint na karein. Shareer swasth hai na? Naya ho ya purana rog, bina jhijhak mujhe batayein."
+                "Ayushman bhava beta. Kaise ho aap? Aaj ka din kaisa raha aapka? Paristhiti kaisi bhi ho, sthayi nahi hoti; isliye chinta na karein. Naya ho ya purana rog, bina jhijhak mujhe batao.",
+                "Ayushman bhava बेटा. Kaise ho aap? Aaj ka din kaisa raha aapka? Paristhiti kaisi bhi ho, sthayi nahi hoti; isliye chinta na karein. Shareer ya mann mein koi takleef to nahi? Naya ho ya purana rog, mujhe bataiye.",
+                "Ayushman bhava beta. Aaj ka din kaisa raha aapka? Paristhiti kaisi bhi ho, sthayi nahi hoti; isliye chinta na karein. Kaho, kaisa mahsoos kar rahe ho? Naya rog ho ya purana, bina jhijhak mujhe batao.",
+                "Ayushman bhava बेटा. Kaise ho aap? Aaj ka din kaisa raha aapka? Paristhiti kaisi bhi ho, sthayi nahi hoti; isliye chinta na karein. Mann shant hai na? Apne kisi bhi rog ke baare mein mujhe bina sankoch ke batayein.",
+                "Ayushman bhava beta. Kaise ho aap? Aaj ka din kaisa raha aapka? Paristhiti kaisi bhi ho, sthayi nahi hoti; isliye chinta na karein. Shareer swasth hai na? Naya ho ya purana rog, bina jhijhak mujhe batayein."
             ];
             const randomGreeting = greetings[Math.floor(Math.random() * greetings.length)];
 
