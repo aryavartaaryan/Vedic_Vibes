@@ -41,14 +41,12 @@
     }
 
     .sriYantraContainer {
-        margin-top: 22vh !important;
-        /* Balanced position between faces and icons */
-        width: 80% !important;
-        /* Prevent hitting edges (80% of screen) */
-        margin-left: auto;
-        margin-right: auto;
+        margin-top: 25vh !important;
+        width: 100% !important;
+        display: flex !important;
+        justify-content: center !important;
+        align-items: center !important;
         transform: none;
-        /* Reset scale to rely on width */
     }
 }
 

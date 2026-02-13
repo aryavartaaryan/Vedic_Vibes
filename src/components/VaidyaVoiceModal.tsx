@@ -100,7 +100,7 @@ export default function VaidyaVoiceModal({ isOpen, onClose, lang }: VaidyaVoiceM
                         {lang === 'hi' ? 'आचार्य संवाद — वाणी परामर्श' : 'Acharya Samvad — Voice Consultation'}
                     </h2>
                     <p className={styles.headerSubtitle}>
-                        {lang === 'hi' ? 'आचार्य प्रणव से सीधे बात करें' : 'Speak directly with Acharya Pranav'}
+                        {lang === 'hi' ? 'आचार्य प्रणव से सीधे बात करें — परिस्थिति कैसी भी स्थायी नहीं इसलिए चिंता न करें।' : 'Speak directly with Acharya Pranav — every situation is temporary, so do not worry.'}
                     </p>
                 </div>
 

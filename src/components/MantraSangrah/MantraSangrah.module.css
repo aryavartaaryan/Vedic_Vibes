@@ -166,7 +166,10 @@
     display: flex;
     flex-direction: column;
     align-items: center;
+    justify-content: center;
     gap: 14px;
+    width: 100px;
+    /* Fixed width for label bounding */
 }
 
 .acharyaTrigger {
@@ -728,15 +731,19 @@
 @media (max-width: 768px) {
     .triggerContainer {
         left: 20px;
+        bottom: 155px;
+        /* Fixed anchor for the button position */
         top: auto;
-        bottom: 120px;
         transform: none;
-        gap: 8px;
+        gap: 10px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
     }
 
     .trigger {
-        width: 64px;
-        height: 64px;
+        width: 62px;
+        height: 62px;
         border-width: 2px;
     }
 
@@ -745,22 +752,33 @@
     }
 
     .triggerLabel {
+        position: absolute;
+        top: 70px;
+        /* Positioned exactly below the button center */
         font-size: 0.75rem;
         max-width: 100px;
         font-weight: 600;
+        margin: 0;
+        opacity: 1;
+        transform: none;
+        animation: none;
     }
 
     .acharyaContainer {
         right: 20px;
+        bottom: 155px;
+        /* Identical bottom anchor for symmetry */
         top: auto;
-        bottom: 120px;
         transform: none;
-        gap: 8px;
+        gap: 10px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
     }
 
     .acharyaTrigger {
-        width: 64px;
-        height: 64px;
+        width: 62px;
+        height: 62px;
         border-width: 2px;
     }
 
@@ -769,9 +787,16 @@
     }
 
     .acharyaLabel {
+        position: absolute;
+        top: 70px;
+        /* Identical top offset for symmetry */
         font-size: 0.75rem;
         max-width: 90px;
         font-weight: 600;
+        margin: 0;
+        opacity: 1;
+        transform: none;
+        animation: none;
     }
 
     .soundToggle {

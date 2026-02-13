@@ -392,8 +392,8 @@ function DigitalVaidyaContent() {
                                 <div className={styles.welcomeMessage}>
                                     <p className={styles.welcomeText}>
                                         {lang === 'hi'
-                                            ? 'आयुष्मान भव! बेटा, मंत्रों का आपका अनुभव कैसा रहा और अब आप कैसा महसूस कर रहे हैं? मैं आचार्य प्रणव हूँ।'
-                                            : 'Ayushman Bhav! Beta, how was your experience with the mantras and how are you feeling now? I am Acharya Pranav.'}
+                                            ? 'आयुष्मान भव! परिस्थिति कैसी भी स्थायी नहीं इसलिए चिंता न करें। बेटा, मंत्रों का आपका अनुभव कैसा रहा और अब आप कैसा महसूस कर रहे हैं? मैं आचार्य प्रणव हूँ।'
+                                            : 'Ayushman Bhav! Every situation is temporary, so do not worry. Beta, how was your experience with the mantras and how are you feeling now? I am Acharya Pranav.'}
                                     </p>
                                 </div>
                             )}

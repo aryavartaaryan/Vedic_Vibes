@@ -164,11 +164,11 @@ export function useVedicCall(): UseVedicCallReturn {
             // Start the call in Hindi by default (first message override; assistant prompt in dashboard can keep rest in Hindi)
             // Dynamic Greetings from Acharya Pranav
             const greetings = [
-                "आयुष्मान भव! बेटा, जीवन कैसा चल रहा है? याद रखें, समय सदा एक सा नहीं रहता। बुरा वक्त भी बादल की तरह छंट जाएगा। आप अपनी समस्या बताएं।",
-                "कल्याण हो! बेटा, आज मन कैसा है? संसार में सुख और दुःख तो धूप-छांव की तरह हैं, आते-जाते रहते हैं। आप चिंता मुक्त होकर अपनी बात कहें।",
-                "यशस्वी भव! बेटा, धैर्य सबसे बड़ा मित्र है। यह कठिन समय भी बीत जाएगा, जैसे रात के बाद सवेरा होता है। आपके शरीर या मन में क्या कष्ट है?",
-                "आयुष्मान भव! बेटा, जीवन में उतार-चढ़ाव तो नदी की लहरों समान हैं। इनसे घबराना नहीं चाहिए। मुझे बताएं, अभी आपको क्या सता रहा है?",
-                "कल्याण हो! बेटा, समय बड़ा बलवान है और यह भी बदल जाएगा। मन को स्थिर रखें। कोई शारीरिक या मानसिक पीड़ा हो, तो खुलकर साझा करें।"
+                "Ayushman bhava beta. Kaise ho aap? Aaj ka din kaisa raha aapka? Paristhiti kaisi bhi sthayi nahi isliaye chiint na karein. Naya ho ya purana rog, bina jhijhak mujhe batao.",
+                "Ayushman bhava बेटा. Kaise ho aap? Aaj ka din kaisa raha aapka? Paristhiti kaisi bhi sthayi nahi isliaye chiint na karein. Shareer ya mann mein koi takleef to nahi? Naya ho ya purana rog, mujhe bataiye.",
+                "Ayushman bhava beta. Aaj ka din kaisa raha aapka? Paristhiti kaisi bhi sthayi nahi isliaye chiint na karein. Kaho, kaisa mahsoos kar rahe ho? Naya rog ho ya purana, bina jhijhak mujhe batao.",
+                "Ayushman bhava बेटा. Kaise ho aap? Aaj ka din kaisa raha aapka? Paristhiti kaisi bhi sthayi nahi isliaye chiint na karein. Mann shant hai na? Apne kisi bhi rog ke baare mein mujhe bina sankoch ke batayein.",
+                "Ayushman bhava beta. Kaise ho aap? Aaj ka din kaisa raha aapka? Paristhiti kaisi bhi sthayi nahi isliaye chiint na karein. Shareer swasth hai na? Naya ho ya purana rog, bina jhijhak mujhe batayein."
             ];
             const randomGreeting = greetings[Math.floor(Math.random() * greetings.length)];
 
