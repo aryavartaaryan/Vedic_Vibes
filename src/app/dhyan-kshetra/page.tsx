@@ -241,12 +241,12 @@ export default function DhyanKakshaPage() {
         }
     };
 
-    // Auto-rotate ambient slides: 11s for images (cinematic), 30s for videos
+    // Auto-rotate ambient slides: 7s for images (cinematic), 30s for videos
     React.useEffect(() => {
         if (!startBackgroundLoop || ambientSlides.length === 0) return;
 
         const currentSlide = activeBuffer === 'A' ? currentSlideA : currentSlideB;
-        const duration = currentSlide?.type === 'image' ? 11000 : 30000;
+        const duration = currentSlide?.type === 'image' ? 7000 : 30000;
 
         const interval = setInterval(() => {
             console.log(`[Ambient] Rotating random slide after ${duration}ms...`);
@@ -508,11 +508,15 @@ export default function DhyanKakshaPage() {
                         }}
                         style={{
                             display: currentItem.type === 'video' ? 'block' : 'none',
+                            position: 'absolute',
+                            top: 0,
+                            left: 0,
                             width: '100%',
                             height: '100%',
                             objectFit: 'cover',
                             objectPosition: 'center',
-                            transition: 'opacity 1s ease-in-out'
+                            transition: 'opacity 1s ease-in-out',
+                            zIndex: 10
                         }}
                     />
 

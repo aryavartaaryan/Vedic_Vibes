@@ -455,8 +455,8 @@ export default function MantraSangrah({
 
         // isPaused (prop) is for video/mantra turn coordination
         // isSessionPaused is for manual overrides
-        if (isPaused && !startPlaying && !forceTrackId) {
-            console.log("[MantraSangrah] Pausing because it's video turn.");
+        if (isSessionPaused || (isPaused && !startPlaying && !forceTrackId)) {
+            console.log("[MantraSangrah] Pausing audio (Session Paused or Video Turn).");
             audio.pause();
         } else if (!isPaused && audio.paused && isPlaying && !isSessionPaused) {
             // Resume if sequence moved back to mantra turn

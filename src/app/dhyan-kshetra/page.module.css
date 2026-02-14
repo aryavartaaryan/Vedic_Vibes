@@ -22,19 +22,19 @@
 
 /* Cinematic Ambient Slide Animations (Ken Burns Style) */
 .ambientCinematic1 {
-    animation: cinematicPath1 13s ease-in-out infinite alternate;
+    animation: cinematicPath1 4.3s ease-in-out infinite alternate;
 }
 
 .ambientCinematic2 {
-    animation: cinematicPath2 13s ease-in-out infinite alternate;
+    animation: cinematicPath2 4.3s ease-in-out infinite alternate;
 }
 
 .ambientCinematic3 {
-    animation: cinematicPath3 13s ease-in-out infinite alternate;
+    animation: cinematicPath3 4.3s ease-in-out infinite alternate;
 }
 
 .ambientCinematic4 {
-    animation: cinematicPath4 13s ease-in-out infinite alternate;
+    animation: cinematicPath4 4.3s ease-in-out infinite alternate;
 }
 
 @keyframes cinematicPath1 {
@@ -43,13 +43,13 @@
     }
 
     100% {
-        transform: scale(1.15) translate(-2%, -2%);
+        transform: scale(1.15) translate(-4%, -4%);
     }
 }
 
 @keyframes cinematicPath2 {
     0% {
-        transform: scale(1.15) translate(2%, 2%);
+        transform: scale(1.15) translate(4%, 4%);
     }
 
     100% {
@@ -59,21 +59,21 @@
 
 @keyframes cinematicPath3 {
     0% {
-        transform: scale(1) translate(-2%, 2%);
+        transform: scale(1) translate(-4%, 4%);
     }
 
     100% {
-        transform: scale(1.15) translate(2%, -2%);
+        transform: scale(1.15) translate(4%, -4%);
     }
 }
 
 @keyframes cinematicPath4 {
     0% {
-        transform: scale(1.15) translate(2%, -2%);
+        transform: scale(1.15) translate(4%, -4%);
     }
 
     100% {
-        transform: scale(1) translate(-2%, 2%);
+        transform: scale(1) translate(-4%, 4%);
     }
 }
 
@@ -106,7 +106,8 @@
     }
 
     .sriYantraContainer {
-        margin-top: 35vh !important;
+        margin-top: 45vh !important;
+        /* Lowered from 35vh */
         width: 100% !important;
         display: flex !important;
         justify-content: center !important;
@@ -143,9 +144,9 @@
     width: 100%;
     display: flex;
     justify-content: center;
-    margin-top: 40px;
-    /* Default desktop lifting */
-    z-index: 0;
+    margin-top: 100px;
+    /* Lowered from 40px */
+    z-index: 5;
 }
 
 .enterButton {
