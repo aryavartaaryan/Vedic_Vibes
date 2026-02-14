@@ -364,7 +364,7 @@ export default function DhyanKakshaPage() {
                         onClick={() => setHasStarted(true)}
                         className={pageStyles.enterButton}
                     >
-                        Enter / प्रवेश करें
+                        प्रवेश करें
                     </button>
 
                     <style jsx>{`
