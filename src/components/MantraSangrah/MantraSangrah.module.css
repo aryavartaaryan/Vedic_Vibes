@@ -4,10 +4,10 @@
    GRAND VEDIC HEADER - TRI-SHAKTI LAYOUT
    ============================================ */
 
-/* Mantra Sangrah - Now on the RIGHT side */
+/* Mantra Sangrah - Back on the LEFT side with symmetrical offset */
 .triggerContainer {
     position: fixed;
-    right: 40px;
+    left: 32px;
     top: 376px;
     z-index: 1100;
     display: flex;
@@ -159,10 +159,10 @@
    ACHARYA SAMVAD - TOP RIGHT TEMPLE PILLAR
    ============================================ */
 
-/* Acharya Samvad - Now on the LEFT side */
+/* Acharya Samvad - Back on the RIGHT side with symmetrical offset */
 .acharyaContainer {
     position: fixed;
-    left: 40px;
+    right: 32px;
     top: 376px;
     z-index: 1100;
     display: flex;
