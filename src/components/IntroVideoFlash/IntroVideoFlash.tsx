@@ -105,6 +105,7 @@ export default function IntroVideoFlash({ videos, onComplete }: IntroVideoFlashP
             // Normalize to array
             const textSegments = Array.isArray(currentVideo.text) ? currentVideo.text : [currentVideo.text];
 
+            let segmentIdx = 0;
             for (const segment of textSegments) {
                 if (!isMounted.current) break;
                 if (!segment || segment.trim() === '') continue;
@@ -118,14 +119,16 @@ export default function IntroVideoFlash({ videos, onComplete }: IntroVideoFlashP
 
                 if (!isMounted.current) break;
 
-                // 3. Wait for exactly 5 seconds as requested
-                await new Promise(r => setTimeout(r, 5000));
+                // 3. Wait for 5 seconds, but 8 seconds for the very first mantra segment
+                const waitTime = (currentIndex === 0 && segmentIdx === 0) ? 8000 : 5000;
+                await new Promise(r => setTimeout(r, waitTime));
 
                 if (!isMounted.current) break;
 
                 // 4. Fade out text
                 setShowText(false);
                 await new Promise(r => setTimeout(r, 1000)); // Wait for fade out
+                segmentIdx++;
             }
 
             // AFTER ALL TEXT IS DONE: Allow video to proceed if it was waiting

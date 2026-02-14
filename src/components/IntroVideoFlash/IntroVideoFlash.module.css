@@ -48,11 +48,12 @@
 
 .animatedText {
     font-family: 'Noto Serif Devanagari', serif;
-    font-size: 3rem;
+    font-size: clamp(1.4rem, 4vw, 2.6rem);
     font-weight: 700;
     color: #FFD700;
+    white-space: pre-line;
     text-shadow: 0 4px 20px rgba(0, 0, 0, 0.9), 0 0 30px rgba(255, 165, 0, 0.6);
-    line-height: 1.4;
+    line-height: 1.35;
     animation: fadeInText 0.5s ease-out;
 }
 
