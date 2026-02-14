@@ -95,7 +95,7 @@ export default function IntroVideoFlash({ videos, onComplete, onFadeOutStart }: 
                 setShowText(true);
                 setDisplayedText(segment);
 
-                const waitTime = (currentIndex === 0 && (segmentIdx === 0 || segmentIdx === 1)) ? 7000 : 5000;
+                const waitTime = (currentIndex === 0 && (segmentIdx === 0 || segmentIdx === 1)) ? 10000 : 5000;
                 await new Promise(r => setTimeout(r, waitTime));
 
                 if (!isMounted.current) break;
@@ -198,7 +198,16 @@ export default function IntroVideoFlash({ videos, onComplete, onFadeOutStart }: 
             {/* Text Overlay */}
             {showText && (
                 <div className={styles.textOverlay}>
-                    <p className={styles.animatedText}>{displayedText}</p>
+                    {displayedText.includes('🕉') ? (
+                        <div className={styles.omIconContainer}>
+                            <img src="/images/vedic_om.png" alt="Vedic Om" className={styles.omIcon} />
+                            <p className={styles.animatedText}>
+                                {displayedText.replace('🕉', '').trim()}
+                            </p>
+                        </div>
+                    ) : (
+                        <p className={styles.animatedText}>{displayedText}</p>
+                    )}
                 </div>
             )}
 
