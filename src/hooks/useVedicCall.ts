@@ -164,11 +164,11 @@ export function useVedicCall(): UseVedicCallReturn {
             // Start the call in Hindi by default (first message override; assistant prompt in dashboard can keep rest in Hindi)
             // Dynamic Greetings from Acharya Pranav
             const greetings = [
-                "Ayushman bhava beta. Kaise ho aap? Aapka jivan kaisa chal raha hai? Paristhiti kaisi bhi ho, sthayi nahi hoti; isliye chinta na karein. Naya ho ya purana rog, bina jhijhak mujhe batao.",
-                "Ayushman bhava बेटा. Kaise ho aap? Aapka jivan kaisa raha aapka? Paristhiti kaisi bhi ho, sthayi nahi hoti; isliye chinta na karein. Shareer ya mann mein koi takleef to nahi? Naya ho ya purana rog, mujhe bataiye.",
-                "Ayushman bhava beta. Aapka jivan kaisa chal raha hai? Paristhiti kaisi bhi ho, sthayi nahi hoti; isliye chinta na karein. Kaho, kaisa mahsoos kar rahe ho? Naya rog ho ya purana, bina jhijhak mujhe batao.",
-                "Ayushman bhava बेटा. Kaise ho aap? Aapka jivan kaisa raha aapka? Paristhiti kaisi bhi ho, sthayi nahi hoti; isliye chinta na karein. Mann shant hai na? Apne kisi bhi rog ke baare mein mujhe bina sankoch ke batayein.",
-                "Ayushman bhava beta. Kaise ho aap? Aapka jivan kaisa raha aapka? Paristhiti kaisi bhi ho, sthayi nahi hoti; isliye chinta na karein. Shareer swasth hai na? Naya ho ya purana rog, bina jhijhak mujhe batayein."
+                "Ayushman bhava beta. Kaise ho aap? Aapka jivan kaisa chal raha hai? Paristhiti kaisi bhi ho, sthayi nahi hoti; isliye chinta na karein. Shareer mein ya mann mein koi kasht to nahi hai? Aapko naya purana koi bhi rog ho, bina jhijhak mujhe batao, main aapka poora margdarshan karunga Ayurveda ke anusaar.",
+                "Ayushman bhava बेटा. Kaise ho aap? Aapka jivan kaisa chal raha hai? Paristhiti kaisi bhi ho, sthayi nahi hoti; isliye chinta na karein. Shareer ya mann mein koi kasht to nahi? Aapko naya purana koi bhi rog ho, bina jhijhak mujhe batao, main aapka poora margdarshan karunga Ayurveda ke anusaar.",
+                "Ayushman bhava beta. Aapka jivan kaisa chal raha hai? Paristhiti kaisi bhi ho, sthayi nahi hoti; isliye chinta na karein. Kaho, kaisa mahsoos kar rahe ho? Aapko naya purana koi bhi rog ho, bina jhijhak mujhe batao, main aapka poora margdarshan karunga Ayurveda ke anusaar.",
+                "Ayushman bhava बेटा. Kaise ho aap? Aapka jivan kaisa chal raha hai? Paristhiti kaisi bhi ho, sthayi nahi hoti; isliye chinta na karein. Mann shant hai na? Shareer ya mann mein koi kasht to nahi? Bina sankoch ke batayein, main aapka Ayurveda ke anusaar margdarshan karunga.",
+                "Ayushman bhava beta. Kaise ho aap? Aapka jivan kaisa chal raha hai? Paristhiti kaisi bhi ho, sthayi nahi hoti; isliye chinta na karein. Shareer swasth hai na? Aapko naya purana koi bhi rog ho, bina jhijhak mujhe batayein, main aapka poora margdarshan karunga."
             ];
             const randomGreeting = greetings[Math.floor(Math.random() * greetings.length)];
 
