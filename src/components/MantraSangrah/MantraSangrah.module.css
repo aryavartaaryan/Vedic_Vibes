@@ -4,16 +4,17 @@
    GRAND VEDIC HEADER - TRI-SHAKTI LAYOUT
    ============================================ */
 
-/* Mantra Sangrah - Top Left Temple Pillar */
+/* Mantra Sangrah - Now on the RIGHT side */
 .triggerContainer {
     position: fixed;
-    left: 24px;
+    right: 40px;
     top: 376px;
     z-index: 1100;
     display: flex;
     flex-direction: column;
     align-items: center;
     gap: 14px;
+    width: 150px;
 }
 
 /* Grand Golden Sunburst Button */
@@ -82,7 +83,7 @@
     font-weight: 700;
     color: #FFD700;
     text-align: center;
-    max-width: 140px;
+    width: 100%;
     line-height: 1.5;
     text-shadow:
         0 0 15px rgba(255, 215, 0, 0.6),
@@ -158,9 +159,10 @@
    ACHARYA SAMVAD - TOP RIGHT TEMPLE PILLAR
    ============================================ */
 
+/* Acharya Samvad - Now on the LEFT side */
 .acharyaContainer {
     position: fixed;
-    right: 24px;
+    left: 40px;
     top: 376px;
     z-index: 1100;
     display: flex;
@@ -168,8 +170,7 @@
     align-items: center;
     justify-content: center;
     gap: 14px;
-    width: 100px;
-    /* Fixed width for label bounding */
+    width: 150px;
 }
 
 .acharyaTrigger {
@@ -230,7 +231,7 @@
     font-weight: 700;
     color: #FFD700;
     text-align: center;
-    max-width: 120px;
+    width: 100%;
     line-height: 1.4;
     text-shadow:
         0 0 15px rgba(255, 140, 0, 0.6),

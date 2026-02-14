@@ -106,22 +106,23 @@ export default function IntroVideoFlash({ videos, onComplete }: IntroVideoFlashP
                 if (!segment || segment.trim() === '') continue;
 
                 // 1. Prepare segment
-                const words = segment.split(' ').filter(w => w.trim() !== '');
                 setDisplayedText('');
                 setShowText(true);
 
-                // 2. Show full segment for better readability
-                setDisplayedText(segment);
-                setShowText(true);
-
-                // Wait while visible (adjust time based on segment length)
-                const readingTime = Math.max(3000, segment.length * 50);
-                await new Promise(r => setTimeout(r, readingTime));
+                // 2. Typing Effect: Show characters one by one
+                for (let i = 0; i <= segment.length; i++) {
+                    if (!isMounted.current) break;
+                    setDisplayedText(segment.substring(0, i));
+                    // Faster for longer segments, slower for shorter
+                    const charDelay = segment.length > 50 ? 40 : 80;
+                    await new Promise(r => setTimeout(r, charDelay));
+                }
 
                 if (!isMounted.current) break;
 
-                // 3. Keep text visible for a moment
-                await new Promise(r => setTimeout(r, 2000));
+                // Wait while visible (adjust time based on segment length)
+                const readingTime = Math.max(3000, segment.length * 30);
+                await new Promise(r => setTimeout(r, readingTime));
 
                 if (!isMounted.current) break;
 

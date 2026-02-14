@@ -477,13 +477,14 @@ export default function MantraSangrah({
         if (externalPlaylist && currentIndex !== undefined) {
             const track = externalPlaylist[currentIndex];
             if (track && track.type === 'video') {
-                // BUG FIX: Only auto-close if we haven't already auto-closed for THIS index
-                // This allows the user to manually reopen it.
+                // If the menu is open and we haven't auto-closed for THIS video yet, close it.
                 if (isOpen && lastAutoClosedIndex.current !== currentIndex) {
                     console.log(`[MantraSangrah] Auto-closing menu for video index ${currentIndex}.`);
                     setIsOpen(false);
-                    lastAutoClosedIndex.current = currentIndex;
                 }
+
+                // ALWAYS mark this index as "handled" for auto-close, so manual reopening by user works.
+                lastAutoClosedIndex.current = currentIndex;
 
                 // CLEAR internal library selection to let sequential controls take over
                 if (currentTrack) {
@@ -677,7 +678,8 @@ export default function MantraSangrah({
                                         className={`${styles.trackItem} ${isActive ? styles.trackActive : ''}`}
                                         onClick={() => {
                                             onSelectIndex?.(index);
-                                            if (isVideo) setIsOpen(false); // Close on video selection
+                                            // Only auto-close if selecting a DIFFERENT video
+                                            if (isVideo && index !== currentIndex) setIsOpen(false);
                                         }}
                                     >
                                         <div className={styles.trackInfo}>
