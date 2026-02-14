@@ -63,6 +63,7 @@ interface MantraSangrahProps {
     videoDuration?: number;
     onVideoSeek?: (time: number) => void;
     onVideoToggle?: () => void;
+    sessionActive?: boolean;
 }
 
 // Helper to get Hindi title
@@ -122,7 +123,8 @@ export default function MantraSangrah({
     videoTime,
     videoDuration,
     onVideoSeek,
-    onVideoToggle
+    onVideoToggle,
+    sessionActive = false
 }: MantraSangrahProps) {
     const [isOpen, setIsOpen] = useState(false);
     const [playlist, setPlaylist] = useState<Track[]>(INITIAL_PLAYLIST);
@@ -457,12 +459,14 @@ export default function MantraSangrah({
 
         // isPaused (prop) is for video/mantra turn coordination
         // isSessionPaused is for manual overrides
-        if (isSessionPaused || (isPaused && !startPlaying && !forceTrackId)) {
-            console.log("[MantraSangrah] Pausing audio (Session Paused or Video Turn).");
-            audio.pause();
-        } else if (!isPaused && audio.paused && !isSessionPaused) {
+        if (!sessionActive || isSessionPaused || (isPaused && !startPlaying && !forceTrackId)) {
+            if (!audio.paused) {
+                console.log("[MantraSangrah] Session inactive or paused. Silencing audio.");
+                audio.pause();
+            }
+        } else if (!isPaused && audio.paused && !isSessionPaused && sessionActive) {
             // Resume if sequence moved back to mantra turn or manually unpaused
-            console.log("[MantraSangrah] Attempting to resume playback.");
+            console.log("[MantraSangrah] Attempting to resume playback (Session Active).");
             audio.play().catch(err => {
                 if (err && typeof err === 'object' && 'name' in err && err.name === 'AbortError') {
                     // Silent
@@ -471,7 +475,7 @@ export default function MantraSangrah({
                 }
             });
         }
-    }, [isPaused, isSessionPaused, startPlaying, forceTrackId]);
+    }, [isPaused, isSessionPaused, startPlaying, forceTrackId, sessionActive]);
 
 
     // AUTO-CLOSE MENU & SYNC: When a video starts or sequence changes

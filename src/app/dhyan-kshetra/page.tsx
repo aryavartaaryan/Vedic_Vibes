@@ -108,7 +108,7 @@ export default function DhyanKakshaPage() {
                 video.load();
             }
 
-            if (isSessionPaused) {
+            if (isSessionPaused || isMantraPlaying) {
                 video.pause();
             } else {
                 console.log(`[Playback] Triggering video: ${currentItem.titleHi}`);
@@ -127,7 +127,7 @@ export default function DhyanKakshaPage() {
             // Ensure video turn is PAUSED when it's mantra turn
             video.pause();
         }
-    }, [currentIndex, currentItem.src, currentItem.type, isMuted, isSessionPaused, startBackgroundLoop]);
+    }, [currentIndex, currentItem.src, currentItem.type, isMuted, isSessionPaused, isMantraPlaying, startBackgroundLoop]);
 
 
 
@@ -157,19 +157,28 @@ export default function DhyanKakshaPage() {
                 if (flashRes.ok) {
                     const data = await flashRes.json();
                     const videos = data.files
-                        .filter((f: any) => !f.name.toLowerCase().includes('sahna') && !f.name.toLowerCase().includes('bhavatu'))
+                        .filter((f: any) => {
+                            const name = f.name.toLowerCase();
+                            // Robust filter for Sahana Bhavatu (Shanti Mantra)
+                            return !name.includes('sahana') &&
+                                !name.includes('bhavatu') &&
+                                !name.includes('sahna') &&
+                                !name.includes('shanti_mantra');
+                        })
                         .map((f: any) => {
                             let text: string | string[] = "";
                             if (f.name.includes('kailash') && !f.name.includes('2')) {
                                 text = [
                                     "🕉\n\nॐ असतो मा सद्गमय ।\nतमसो मा ज्योतिर्गमय ।\nमृत्योर्मा अमृतं गमय ।\nॐ शान्तिः शान्तिः शान्तिः ॥\n\nशुक्ल यजुर्वेद",
                                     "हे परमात्मा!\nहमें असत्य से सत्य की ओर ले चलो।\nअज्ञान रूपी अंधकार से ज्ञान के प्रकाश की ओर ले चलो।\nमृत्यु और भय से अमरत्व एवं आत्मिक शांति की ओर ले चलो।\n\n\nॐ शांति शांति शांति।\n\nहमारे मन में शांति हो,\nहमारे आसपास शांति हो,\nसंपूर्ण सृष्टि में शांति हो।",
-                                    "शिव की पवित्र ध्यान स्थली, कैलाश में आपका स्वागत है। यहाँ अनन्त शांति की अनुभूति होती है।",
-                                    "अब आप चिंता मुक्त हो जाइए। हम अत्याधुनिक तकनीक और ऋषियों के प्राचीन ज्ञान के मिश्रण से आपकी समस्याओं का समाधान करेंगे।"
+                                    "शिव की पवित्र ध्यान स्थली, कैलाश में आपका स्वागत है। यहाँ अनन्त शांति की अनुभूति होती है।"
                                 ];
                             }
                             else if (f.name.includes('kailash2')) {
-                                text = "अब आप विशेष ध्यान क्षेत्र में प्रवेश कर रहे हैं...";
+                                text = [
+                                    "अब आप चिंता मुक्त हो जाइए। हम अत्याधुनिक तकनीक और ऋषियों के प्राचीन ज्ञान के मिश्रण से आपकी समस्याओं का समाधान करेंगे।",
+                                    "अब आप विशेष ध्यान क्षेत्र में प्रवेश कर रहे हैं..."
+                                ];
                             } else {
                                 text = "विशेष ध्यान क्षेत्र में आपका स्वागत है...";
                             }
@@ -445,14 +454,12 @@ export default function DhyanKakshaPage() {
                 forceTrackId={forceMantraId}
                 isPaused={currentItem.type === 'video'}
                 isSessionPaused={isSessionPaused}
+                sessionActive={!showIntro}
                 onPlayingChange={(playing) => {
+                    setIsMantraPlaying(playing);
                     // Reset session pause if manually starting a mantra from library
                     if (playing && isSessionPaused) {
                         setIsSessionPaused(false);
-                    }
-                    // IF a library mantra starts playing, ensure we pause the VIDEO sequence
-                    if (playing && currentItem.type === 'video') {
-                        setIsSessionPaused(true);
                     }
                 }}
                 onTrackEnded={() => {

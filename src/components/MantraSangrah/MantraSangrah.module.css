@@ -8,7 +8,7 @@
 .triggerContainer {
     position: fixed;
     left: 12px;
-    top: 420px;
+    top: 500px;
     z-index: 1100;
     display: flex;
     flex-direction: column;
@@ -164,7 +164,7 @@
 .acharyaContainer {
     position: fixed;
     right: 12px;
-    top: 420px;
+    top: 500px;
     z-index: 1100;
     display: flex;
     flex-direction: column;
