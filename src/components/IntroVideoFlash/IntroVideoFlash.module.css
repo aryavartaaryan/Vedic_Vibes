@@ -52,10 +52,10 @@
 
 .textOverlay {
     position: absolute;
-    top: 50%;
+    top: 45%;
     left: 50%;
     transform: translate(-50%, -50%);
-    width: 80%;
+    width: 85%;
     text-align: center;
     z-index: 10002;
     pointer-events: none;
@@ -190,6 +190,7 @@
     }
 
     .animatedText {
-        font-size: 1.8rem;
+        font-size: 1.5rem;
+        line-height: 1.4;
     }
 }

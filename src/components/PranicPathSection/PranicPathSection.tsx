@@ -228,7 +228,9 @@ export default function PranicPathSection() {
             </motion.div>
 
             <div className={styles.contentWrapper}>
-                <div className={styles.omAnchor}>🕉</div>
+                <div className={styles.auroraContainer}>
+                    <img src="/images/home_vedic_om.png" className={styles.vedicOmHero} alt="Sacred Om" />
+                </div>
 
                 <h1 className={styles.title}>
                     Pranav Samadhaan

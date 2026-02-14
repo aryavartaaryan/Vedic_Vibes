@@ -260,6 +260,29 @@
   animation: fadeUp 2s ease-out 1.2s forwards;
 }
 
+.zenButton {
+  display: inline-block;
+  padding: 1.2rem 3rem;
+  background: linear-gradient(135deg, rgba(139, 0, 0, 0.9) 0%, rgba(227, 97, 18, 0.9) 100%);
+  color: #FFD700;
+  font-family: 'Cinzel Decorative', cursive;
+  font-weight: 700;
+  font-size: 1.1rem;
+  border-radius: 50px;
+  border: 1.5px solid rgba(212, 175, 55, 0.5);
+  box-shadow: 0 5px 20px rgba(227, 97, 18, 0.3);
+  transition: all 0.4s ease;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.zenButton:hover {
+  transform: translateY(-3px) scale(1.03);
+  box-shadow: 0 8px 30px rgba(255, 215, 0, 0.4);
+  border-color: #FFD700;
+  color: #fff;
+}
+
 @keyframes fadeUp {
   to {
     opacity: 1;
@@ -367,22 +390,39 @@
 }
 
 .consultationCard {
-  background: var(--color-antique-palm);
-  color: var(--color-temple-red);
+  background: rgba(255, 255, 255, 0.04);
+  backdrop-filter: blur(15px);
+  -webkit-backdrop-filter: blur(15px);
+  border: 1px solid rgba(212, 175, 55, 0.3);
+  color: var(--color-antique-palm);
   padding: 4rem;
-  border-radius: 4px;
+  border-radius: 20px;
   text-align: center;
-  box-shadow: var(--shadow-candle);
+  box-shadow: 0 0 50px rgba(0, 0, 0, 0.4), inset 0 0 30px rgba(212, 175, 55, 0.05);
+  position: relative;
+  overflow: hidden;
+}
+
+.consultationCard::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(212, 175, 55, 0.6), transparent);
 }
 
 /* New class for consultation title */
 .consultationTitle {
   font-family: 'Cinzel Decorative', cursive;
-  font-size: 3rem;
-  color: var(--color-temple-red);
-  /* Or a suitable color from your palette */
+  font-size: 3.5rem;
+  background: linear-gradient(135deg, #FFDB58 0%, #E36112 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
   margin-bottom: 1.5rem;
-  text-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+  text-shadow: 0 2px 20px rgba(227, 97, 18, 0.3);
 }
 
 .footer {
