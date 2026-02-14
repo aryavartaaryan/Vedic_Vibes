@@ -392,8 +392,8 @@ function DigitalVaidyaContent() {
                                 <div className={styles.welcomeMessage}>
                                     <p className={styles.welcomeText}>
                                         {lang === 'hi'
-                                            ? 'आयुष्मान भव! परिस्थिति कैसी भी हो, स्थायी नहीं होती। इसलिए चिंता न करें। बेटा, मंत्रों का आपका अनुभव कैसा रहा और अब आप कैसा महसूस कर रहे हैं? मैं आचार्य प्रणव हूँ।'
-                                            : 'Ayushman Bhav! Every situation is temporary, so do not worry. Beta, how was your experience with the mantras and how are you feeling now? I am Acharya Pranav.'}
+                                            ? 'आयुष्मान भव! कैसे हो आप? आपका जीवन कैसा चल रहा है? आपकी परिस्थिति कैसी भी हो, वो स्थायी नहीं है; इसलिए चिंता नहीं चिंतन करें और आनंद में रहें। शरीर में या मन में कोई कष्ट तो नहीं है? आपको नया पुराना कोई भी रोग हो, बिना झिझक मुझे बता सकते हो, मैं आपका अपने आयुर्वेद के ज्ञान अनुसार पूरा मार्गदर्शन करूँगा।'
+                                            : 'Ayushman bhava! How are you? How is your life going? Whatever your situation may be, it is not permanent; therefore, do not worry, but contemplate (chintan) and remain in bliss. Is there any suffering in your body or mind? Whatever ailment you have, new or old, you can tell me without hesitation; I will guide you completely according to my knowledge of Ayurveda.'}
                                     </p>
                                 </div>
                             )}
