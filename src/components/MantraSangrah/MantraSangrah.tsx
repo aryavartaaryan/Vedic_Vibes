@@ -49,6 +49,20 @@ const formatTitle = (filename: string): string => {
 interface MantraSangrahProps {
     lang: 'en' | 'hi';
     startPlaying?: boolean;
+    forceTrackId?: string | null;
+    isPaused?: boolean;
+    isSessionPaused?: boolean;
+    onTrackEnded?: (trackId: string) => void;
+    onPlayingChange?: (isPlaying: boolean) => void;
+    externalPlaylist?: any[];
+    currentIndex?: number;
+    onSelectIndex?: (index: number) => void;
+    onMutedChange?: (isMuted: boolean) => void;
+    videoProgress?: number;
+    videoTime?: number;
+    videoDuration?: number;
+    onVideoSeek?: (time: number) => void;
+    onVideoToggle?: () => void;
 }
 
 // Helper to get Hindi title
@@ -92,14 +106,38 @@ const getHindiTitle = (filename: string): string => {
     return formatTitle(filename);
 };
 
-export default function MantraSangrah({ lang, startPlaying = false }: MantraSangrahProps) {
+export default function MantraSangrah({
+    lang: langProp,
+    startPlaying = false,
+    forceTrackId,
+    isPaused,
+    onTrackEnded,
+    externalPlaylist,
+    currentIndex,
+    onSelectIndex,
+    onMutedChange,
+    isSessionPaused = false,
+    onPlayingChange,
+    videoProgress,
+    videoTime,
+    videoDuration,
+    onVideoSeek,
+    onVideoToggle
+}: MantraSangrahProps) {
     const [isOpen, setIsOpen] = useState(false);
     const [playlist, setPlaylist] = useState<Track[]>(INITIAL_PLAYLIST);
     const [currentTrack, setCurrentTrack] = useState<Track | null>(null);
     const [isPlaying, setIsPlaying] = useState(false);
     const [isMuted, setIsMuted] = useState(false);
     const [progress, setProgress] = useState(0);
+    const [lang, setLangState] = useState(langProp);
     const [duration, setDuration] = useState(0);
+
+    // Sync with prop if needed
+    useEffect(() => {
+        setLangState(langProp);
+    }, [langProp]);
+
 
     // Fetch dynamic playlist
     useEffect(() => {
@@ -119,7 +157,7 @@ export default function MantraSangrah({ lang, startPlaying = false }: MantraSang
                             let titleHi = getHindiTitle(file.name);
                             let isSpecial = false;
                             let isDefault = false;
-                            let id = `track-${index}`;
+                            let id = file.path;
 
                             // Identify specific tracks
                             if (file.name.includes('Guidance')) {
@@ -167,10 +205,12 @@ export default function MantraSangrah({ lang, startPlaying = false }: MantraSang
                         remainingTracks.sort((a, b) => a.title.localeCompare(b.title));
 
                         // Order: Guidance -> Sahana -> Lalitha -> Vishnu -> Others
-                        if (guidanceTrack) orderedTracks.push(guidanceTrack);
-
+                        if (guidanceTrack) {
+                            guidanceTrack.isDefault = true;
+                            orderedTracks.push(guidanceTrack);
+                        }
                         if (sahanaTrack) {
-                            sahanaTrack.isDefault = true; // Sahana remains default start if Guidance isn't auto-started
+                            if (!guidanceTrack) sahanaTrack.isDefault = true;
                             orderedTracks.push(sahanaTrack);
                         }
                         if (lalithaTrack) {
@@ -199,7 +239,13 @@ export default function MantraSangrah({ lang, startPlaying = false }: MantraSang
     // Refs for state access inside event listeners
     const audioRef = useRef<HTMLAudioElement | null>(null);
     const currentTrackRef = useRef<Track | null>(null);
-    const playlistRef = useRef<Track[]>([]); // New ref to access fresh playlist in callbacks
+    const playlistRef = useRef<Track[]>([]);
+    const onTrackEndedRef = useRef(onTrackEnded);
+
+    // Keep refs updated
+    useEffect(() => {
+        onTrackEndedRef.current = onTrackEnded;
+    }, [onTrackEnded]);
 
     // Keep refs updated
     useEffect(() => {
@@ -218,15 +264,30 @@ export default function MantraSangrah({ lang, startPlaying = false }: MantraSang
         currentTrackRef.current = track;
 
         audio.src = track.src;
-        audio.currentTime = track.startTime;
+        audio.currentTime = track.startTime || 0; // Fallback if startTime is missing
         setProgress(0);
 
         try {
             await audio.play();
             setIsPlaying(true);
-        } catch (err) {
-            console.error("Playback failed:", err);
-            setIsPlaying(false);
+        } catch (err: any) {
+            if (err && typeof err === 'object' && 'name' in err && err.name === 'AbortError') {
+                console.log("Mantra play request was interrupted (AbortError), ignoring.");
+            } else if (err && typeof err === 'object' && 'name' in err && err.name === 'NotAllowedError') {
+                console.warn("Autoplay blocked (NotAllowedError). Muting and retrying...");
+                audio.muted = true;
+                setIsMuted(true);
+                try {
+                    await audio.play();
+                    setIsPlaying(true);
+                } catch (muteErr) {
+                    console.error("Muted playback also failed:", muteErr);
+                    setIsPlaying(false);
+                }
+            } else {
+                console.error("Mantra playback failed:", err);
+                setIsPlaying(false);
+            }
         }
     };
 
@@ -251,22 +312,20 @@ export default function MantraSangrah({ lang, startPlaying = false }: MantraSang
 
         const handleEnded = () => {
             const current = currentTrackRef.current;
-            const currentPlaylist = playlistRef.current; // Use ref for fresh state
+            const currentPlaylist = playlistRef.current;
 
+            if (onTrackEndedRef.current && current) {
+                console.log(`Mantra ${current.id} ended. Notifying parent.`);
+                onTrackEndedRef.current(current.id);
+                return;
+            }
 
-
-            // Sequential Playback Logic
+            // Fallback to internal sequential logic if no parent listener
             const currentIdx = currentPlaylist.findIndex(t => t.id === current?.id);
-            console.log("Current Index:", currentIdx);
-
             if (currentIdx !== -1 && currentIdx < currentPlaylist.length - 1) {
-                // Play next track
                 const nextTrack = currentPlaylist[currentIdx + 1];
-                console.log(`Playing next: ${nextTrack.title}`);
                 playTrack(nextTrack);
             } else {
-                // End of playlist. Loop back to first mantra
-                console.log('Playlist ended. Looping back to first mantra.');
                 const firstMantra = currentPlaylist[0];
                 if (firstMantra) playTrack(firstMantra);
             }
@@ -274,15 +333,18 @@ export default function MantraSangrah({ lang, startPlaying = false }: MantraSang
 
         const handlePlay = () => {
             setIsPlaying(true);
+            onPlayingChange?.(true);
         };
 
         const handlePause = () => {
             setIsPlaying(false);
+            onPlayingChange?.(false);
         };
 
         const handleError = (e: Event) => {
             console.error('Audio error:', e);
             setIsPlaying(false);
+            onPlayingChange?.(false);
         };
 
         // Add event listeners
@@ -323,36 +385,86 @@ export default function MantraSangrah({ lang, startPlaying = false }: MantraSang
                 console.log("startPlaying triggered. Playing Guidance...");
 
                 try {
-                    // Force unmute
                     audio.muted = false;
                     setIsMuted(false);
 
-                    // 1. Play Guidance Audio
                     const guidanceTrack: Track = {
                         id: 'guidance',
                         title: 'Guidance',
                         titleHi: 'मार्गदर्शन',
-                        src: '/audio/Guidance.wav', // Ensure case matches file system
+                        src: '/audio/Guidance.wav',
                         startTime: 0
                     };
 
-                    // We manually set this because playTrack might be async/complex
-                    setCurrentTrack(guidanceTrack);
-                    currentTrackRef.current = guidanceTrack;
-
-                    audio.src = guidanceTrack.src;
-                    await audio.play();
-
+                    playTrack(guidanceTrack);
                 } catch (err) {
-                    console.log('Guidance Play failed, falling back to playlist:', err);
-                    // Fallback to Sahana if guidance fails
+                    console.log('Guidance Play failed:', err);
                     const firstMantra = playlist[0];
-                    playTrack(firstMantra);
+                    if (firstMantra) playTrack(firstMantra);
                 }
             };
             playSequence();
         }
     }, [startPlaying]);
+
+    useEffect(() => {
+        if (forceTrackId && audioRef.current) {
+            // Search in both internal and external playlists
+            const allTracks = [...(playlist || []), ...(externalPlaylist || [])];
+            const track = allTracks.find(t => t.id === forceTrackId || t.src === forceTrackId);
+
+            if (track) {
+                // GUARD: If this track is already loaded, don't restart it (which resets currentTime)
+                // We check the source directly to avoid resets on re-render
+                const isSameSrc = audioRef.current.src.includes(encodeURI(track.src));
+                if (isSameSrc) {
+                    if (audioRef.current.paused && !isPaused && !isSessionPaused) {
+                        console.log(`[MantraSangrah] Track already loaded but paused, resuming instead of restarting.`);
+                        audioRef.current.play().catch(() => { });
+                    } else {
+                        console.log(`[MantraSangrah] Track ${track.title} already active, skipping redundant restart.`);
+                    }
+                    return;
+                }
+
+                console.log(`Forcing track from parent: ${track.title} (ID/Src: ${forceTrackId})`);
+                // Ensure track has all required fields for playTrack
+                const normalizedTrack: Track = {
+                    ...track,
+                    id: track.id || track.src,
+                    title: track.title || formatTitle(track.src),
+                    titleHi: track.titleHi || track.title || formatTitle(track.src),
+                    src: track.src,
+                    startTime: track.startTime || 0
+                };
+                playTrack(normalizedTrack);
+            } else {
+                console.warn(`Could not find forced track: ${forceTrackId}`);
+            }
+        }
+    }, [forceTrackId, playlist, externalPlaylist]);
+
+    useEffect(() => {
+        const audio = audioRef.current;
+        if (!audio) return;
+
+        // isPaused (prop) is for video/mantra turn coordination
+        // isSessionPaused is for manual overrides
+        if (isPaused && !startPlaying && !forceTrackId) {
+            console.log("[MantraSangrah] Pausing because it's video turn.");
+            audio.pause();
+        } else if (!isPaused && audio.paused && isPlaying && !isSessionPaused) {
+            // Resume if sequence moved back to mantra turn
+            console.log("[MantraSangrah] Resuming mantra turn.");
+            audio.play().catch(err => {
+                if (err && typeof err === 'object' && 'name' in err && err.name === 'AbortError') {
+                    // Silent
+                } else {
+                    console.warn("Resume play failed:", err);
+                }
+            });
+        }
+    }, [isPaused, isSessionPaused, isPlaying, startPlaying, forceTrackId]);
 
     const selectTrack = async (track: Track) => {
         const audio = audioRef.current;
@@ -363,8 +475,12 @@ export default function MantraSangrah({ lang, startPlaying = false }: MantraSang
             if (audio.paused) {
                 try {
                     await audio.play();
-                } catch (err) {
-                    console.log('Play failed:', err);
+                } catch (err: any) {
+                    if (err && typeof err === 'object' && 'name' in err && err.name === 'AbortError') {
+                        // Silent
+                    } else {
+                        console.log('Play failed:', err);
+                    }
                 }
             } else {
                 audio.pause();
@@ -390,8 +506,12 @@ export default function MantraSangrah({ lang, startPlaying = false }: MantraSang
         if (audio.paused) {
             try {
                 await audio.play();
-            } catch (err) {
-                console.log('Playback failed:', err);
+            } catch (err: any) {
+                if (err && typeof err === 'object' && 'name' in err && err.name === 'AbortError') {
+                    // Silent
+                } else {
+                    console.log('Playback failed:', err);
+                }
             }
         } else {
             audio.pause();
@@ -406,9 +526,20 @@ export default function MantraSangrah({ lang, startPlaying = false }: MantraSang
         const newMutedState = !audio.muted;
         audio.muted = newMutedState;
         setIsMuted(newMutedState);
-    }, []);
+        if (onMutedChange) onMutedChange(newMutedState);
+    }, [onMutedChange]);
 
     const handleProgressClick = (e: React.MouseEvent<HTMLDivElement>) => {
+        const isVideo = !!externalPlaylist && currentIndex !== undefined && externalPlaylist[currentIndex]?.type === 'video';
+
+        if (isVideo && onVideoSeek && videoDuration) {
+            const rect = e.currentTarget.getBoundingClientRect();
+            const clickX = e.clientX - rect.left;
+            const percentage = clickX / rect.width;
+            onVideoSeek(percentage * videoDuration);
+            return;
+        }
+
         if (!audioRef.current || !duration) return;
 
         const rect = e.currentTarget.getBoundingClientRect();
@@ -495,76 +626,168 @@ export default function MantraSangrah({ lang, startPlaying = false }: MantraSang
 
                 {/* Playlist Scroll Area */}
                 <div className={styles.playlist}>
-                    <p className={styles.sectionLabel}>
-                        {lang === 'hi' ? '🙏 दिव्य मंत्र चुनें' : '🙏 Select Divine Mantra'}
-                    </p>
                     <div className={styles.trackList}>
-                        {playlist.map((track) => (
-                            <button
-                                key={track.id}
-                                className={`${styles.trackItem} ${currentTrack?.id === track.id ? styles.trackActive : ''}`}
-                                onClick={() => selectTrack(track)}
-                            >
-                                <div className={styles.trackInfo}>
-                                    <span className={styles.trackTitle}>
-                                        {track.titleHi}
-                                    </span>
-                                    <div className={styles.badgeContainer}>
-                                        {track.isDefault && (
-                                            <span className={track.id === 'guidance' ? styles.trackBadgeGuidance : styles.trackBadge}>
-                                                {lang === 'hi' ? 'प्रारंभिक' : 'Prarambhik'}
-                                            </span>
-                                        )}
-                                        {track.isSpecial && (
-                                            <span className={styles.trackBadge}>
-                                                {lang === 'hi' ? 'विशेष' : 'Vishesh'}
-                                            </span>
-                                        )}
-                                    </div>
-                                </div>
-                                <div className={styles.trackAction}>
-                                    {currentTrack?.id === track.id && isPlaying ? (
-                                        <Pause size={20} />
-                                    ) : (
-                                        <Play size={20} />
-                                    )}
-                                </div>
-                            </button>
-                        ))}
+                        {/* SECTION 1: Meditation Sequence (If provided) */}
+                        {externalPlaylist && (
+                            <div className={styles.sectionGroup}>
+                                <p className={styles.categoryLabel}>
+                                    {lang === 'hi' ? '🧘 साधना क्रम' : '🧘 Meditation Sequence'}
+                                </p>
+                                {externalPlaylist.map((track: any, index: number) => {
+                                    const isActive = currentIndex === index;
+                                    return (
+                                        <button
+                                            key={`seq-${track.id || index}`}
+                                            className={`${styles.trackItem} ${isActive ? styles.trackActive : ''}`}
+                                            onClick={() => onSelectIndex?.(index)}
+                                        >
+                                            <div className={styles.trackInfo}>
+                                                <div className={styles.trackTitleContainer}>
+                                                    {track.type === 'video' ? <span className={styles.mediaIcon}>📽️</span> : <span className={styles.mediaIcon}>🎵</span>}
+                                                    <span className={styles.trackTitle}>
+                                                        {track.titleHi}
+                                                    </span>
+                                                </div>
+                                                <div className={styles.badgeContainer}>
+                                                    {track.type === 'video' ? (
+                                                        <span className={styles.trackBadgeVideo}>
+                                                            {lang === 'hi' ? 'दर्शन' : 'Darshan'}
+                                                        </span>
+                                                    ) : (
+                                                        <span className={styles.trackBadge}>
+                                                            {lang === 'hi' ? 'मंत्र' : 'Mantra'}
+                                                        </span>
+                                                    )}
+                                                </div>
+                                            </div>
+                                            <div className={styles.trackAction}>
+                                                {isActive && (track.type === 'video' ? !isSessionPaused : (isPlaying && !isSessionPaused)) ? (
+                                                    <Pause size={18} />
+                                                ) : (
+                                                    <Play size={18} />
+                                                )}
+                                            </div>
+                                        </button>
+                                    );
+                                })}
+                                <div className={styles.sectionDivider} />
+                            </div>
+                        )}
+
+                        {/* SECTION 2: Full Collection */}
+                        <div className={styles.sectionGroup}>
+                            <p className={styles.categoryLabel}>
+                                {lang === 'hi' ? '🎼 मंत्र संग्रह (पूर्ण)' : '🎼 Mantra Collection (Full)'}
+                            </p>
+                            {playlist
+                                .filter(track => {
+                                    // Hide if this track is already in the meditation sequence (externalPlaylist)
+                                    if (!externalPlaylist) return true;
+                                    return !externalPlaylist.some((extItem: any) =>
+                                        extItem.id === track.id || extItem.src === track.id
+                                    );
+                                })
+                                .map((track) => {
+                                    // If we are in sequential mode, check if this specific audio path matches currentTrack
+                                    const isActive = currentTrack?.id === track.id;
+                                    return (
+                                        <button
+                                            key={`lib-${track.id}`}
+                                            className={`${styles.trackItem} ${isActive ? styles.trackActive : ''}`}
+                                            onClick={() => selectTrack(track)}
+                                        >
+                                            <div className={styles.trackInfo}>
+                                                <div className={styles.trackTitleContainer}>
+                                                    <span className={styles.mediaIcon}>🪷</span>
+                                                    <span className={styles.trackTitle}>
+                                                        {track.titleHi}
+                                                    </span>
+                                                </div>
+                                                <div className={styles.badgeContainer}>
+                                                    {track.isDefault && (
+                                                        <span className={track.id === 'guidance' ? styles.trackBadgeGuidance : styles.trackBadge}>
+                                                            {lang === 'hi' ? 'प्रारंभिक' : 'Prarambhik'}
+                                                        </span>
+                                                    )}
+                                                    {track.isSpecial && (
+                                                        <span className={styles.trackBadge}>
+                                                            {lang === 'hi' ? 'विशेष' : 'Vishesh'}
+                                                        </span>
+                                                    )}
+                                                </div>
+                                            </div>
+                                            <div className={styles.trackAction}>
+                                                {isActive && isPlaying ? (
+                                                    <Pause size={18} />
+                                                ) : (
+                                                    <Play size={18} />
+                                                )}
+                                            </div>
+                                        </button>
+                                    );
+                                })}
+                        </div>
                     </div>
                 </div>
 
-                {/* Audio Controls - Compact Mini Player */}
-                {currentTrack && (
+                {/* Unified Media Controls - Compact Mini Player */}
+                {(currentTrack || (externalPlaylist && currentIndex !== undefined)) && (
                     <div className={styles.controls}>
                         {/* Compact Layout: [PlayBtn] [Title+Progress] [Time] */}
 
-                        <button
-                            className={styles.miniPlayBtn}
-                            onClick={togglePlayPause}
-                        >
-                            {isPlaying ? <Pause size={22} /> : <Play size={22} className={styles.playIconOffset} />}
-                        </button>
+                        {/* Derive current display item from either library track or sequence index */}
+                        {(() => {
+                            const isSequenceItem = !!externalPlaylist && currentIndex !== undefined && !currentTrack;
+                            const activeItem = isSequenceItem ? externalPlaylist[currentIndex] : currentTrack;
+                            const isVideo = activeItem?.type === 'video';
 
-                        <div className={styles.miniTrackInfo}>
-                            <span className={styles.miniTrackTitle}>
-                                {currentTrack.titleHi}
-                            </span>
+                            // Control State
+                            const isPausedNow = isVideo ? isSessionPaused : (isSequenceItem ? isSessionPaused : isPaused);
+                            const currentlyPlaying = !isPausedNow;
 
-                            <div
-                                className={styles.miniProgressContainer}
-                                onClick={handleProgressClick}
-                            >
-                                <div
-                                    className={styles.miniProgressBar}
-                                    style={{ width: `${progress}%` }}
-                                />
-                            </div>
-                        </div>
+                            // UI Values
+                            const displayProgress = isVideo ? (videoProgress || 0) : progress;
+                            const displayTime = isVideo ? (videoTime || 0) : (audioRef.current?.currentTime || 0);
 
-                        <div className={styles.miniTimeDisplay}>
-                            <span>{formatTime(audioRef.current?.currentTime || 0)}</span>
-                        </div>
+                            return (
+                                <>
+                                    <button
+                                        className={styles.miniPlayBtn}
+                                        onClick={() => {
+                                            if (isVideo && onVideoToggle) {
+                                                onVideoToggle();
+                                            } else if (isSequenceItem) {
+                                                onSelectIndex?.(currentIndex);
+                                            } else {
+                                                togglePlayPause();
+                                            }
+                                        }}
+                                    >
+                                        {currentlyPlaying ? <Pause size={22} /> : <Play size={22} className={styles.playIconOffset} />}
+                                    </button>
+
+                                    <div className={styles.miniTrackInfo}>
+                                        <span className={styles.miniTrackTitle}>
+                                            {activeItem?.titleHi || activeItem?.title}
+                                        </span>
+
+                                        <div
+                                            className={styles.miniProgressContainer}
+                                            onClick={handleProgressClick}
+                                        >
+                                            <div
+                                                className={styles.miniProgressBar}
+                                                style={{ width: `${displayProgress}%` }}
+                                            />
+                                        </div>
+                                    </div>
+
+                                    <div className={styles.miniTimeDisplay}>
+                                        <span>{formatTime(displayTime)}</span>
+                                    </div>
+                                </>
+                            );
+                        })()}
                     </div>
                 )}
 

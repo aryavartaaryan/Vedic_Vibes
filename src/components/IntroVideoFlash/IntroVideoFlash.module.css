@@ -84,7 +84,7 @@
     font-weight: 500;
     box-shadow: 0 0 20px rgba(255, 165, 0, 0.3);
     animation: pulseFade 2s ease-in-out infinite;
-    pointer-events: none;
+    pointer-events: auto;
     z-index: 10001;
 }
 
@@ -100,6 +100,30 @@
         opacity: 1;
         transform: translateX(-50%) scale(1.05);
     }
+}
+
+.unmuteBtn {
+    background: #FFD700;
+    border: none;
+    color: #000;
+    font-family: inherit;
+    font-size: 1.1rem;
+    font-weight: 800;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 10px 24px;
+    border-radius: 40px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    box-shadow: 0 0 15px rgba(255, 215, 0, 0.6);
+    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.unmuteBtn:hover {
+    transform: scale(1.1);
+    box-shadow: 0 0 25px rgba(255, 215, 0, 0.9);
 }
 
 /* Mobile responsiveness */

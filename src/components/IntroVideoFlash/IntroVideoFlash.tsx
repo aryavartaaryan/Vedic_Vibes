@@ -17,36 +17,73 @@ export default function IntroVideoFlash({ videos, onComplete }: IntroVideoFlashP
     const [isPlaying, setIsPlaying] = useState(true);
     const [isFadingOut, setIsFadingOut] = useState(false);
 
-    // Text animation state
-    const [displayedText, setDisplayedText] = useState('');
-    const [showText, setShowText] = useState(false);
-
-    // We use a key to force re-mounting of video element when switching sources
+    const isMounted = useRef(true);
     const videoRef = useRef<HTMLVideoElement>(null);
-
+    const [showText, setShowText] = useState(false);
+    const [displayedText, setDisplayedText] = useState('');
+    const [isMuted, setIsMuted] = useState(false);
     const currentVideo = videos[currentIndex];
+
+    useEffect(() => {
+        isMounted.current = true;
+        return () => {
+            isMounted.current = false;
+        };
+    }, []);
 
     useEffect(() => {
         if (!currentVideo) return;
 
         const attemptPlay = async () => {
             const videoEl = videoRef.current;
-            if (!videoEl) return;
+            if (!videoEl || !isMounted.current) return;
 
             try {
+                // FORCE unmuted on every new video load
+                console.log(`[Intro] Attempting unmuted play for video ${currentIndex + 1}`);
+                videoEl.muted = false;
                 videoEl.volume = 1.0;
-                videoEl.muted = false; // Force unmuted
+                setIsMuted(false);
+
+                // Reset to beginning to ensure we start from 0 with sound
                 videoEl.currentTime = 0;
+
                 await videoEl.play();
-                console.log(`Playing video ${currentIndex + 1} with sound`);
-            } catch (err) {
-                console.warn(`Autoplay with sound failed for video ${currentIndex + 1}:`, err);
+                if (isMounted.current) {
+                    console.log(`[Intro] Success: Playing video ${currentIndex + 1} with sound`);
+                }
+            } catch (err: any) {
+                if (err && typeof err === 'object' && 'name' in err && err.name === 'AbortError') {
+                    console.log(`[Intro] Playback interrupt for video ${currentIndex + 1}, ignoring.`);
+                    return;
+                }
+
+                if (err && typeof err === 'object' && 'name' in err && err.name === 'NotAllowedError') {
+                    console.warn(`[Intro] Autoplay with sound failed for video ${currentIndex + 1}. Muting and retrying...`);
+                    try {
+                        if (videoEl && isMounted.current) {
+                            videoEl.muted = true;
+                            setIsMuted(true);
+                            await videoEl.play();
+                            console.log(`[Intro] Playing video ${currentIndex + 1} muted (fallback)`);
+                            return;
+                        }
+                    } catch (muteErr) {
+                        console.error("[Intro] Muted playback also failed:", muteErr);
+                    }
+                }
+
+                console.warn(`[Intro] Autoplay failed for video ${currentIndex + 1}:`, err);
                 try {
-                    videoEl.muted = true;
-                    await videoEl.play();
-                    console.log(`Playing video ${currentIndex + 1} muted (fallback)`);
-                } catch (mutedErr) {
-                    console.error(`Video playback failed completely for video ${currentIndex + 1}:`, mutedErr);
+                    if (videoEl && isMounted.current) {
+                        videoEl.muted = true;
+                        setIsMuted(true);
+                        await videoEl.play();
+                    }
+                } catch (mutedErr: any) {
+                    if (mutedErr && typeof mutedErr === 'object' && 'name' in mutedErr && mutedErr.name !== 'AbortError') {
+                        console.error(`[Intro] Video playback failed completely:`, mutedErr);
+                    }
                 }
             }
         };
@@ -59,12 +96,13 @@ export default function IntroVideoFlash({ videos, onComplete }: IntroVideoFlashP
 
         // Handle Text Animation
         const runTextAnimation = async () => {
-            if (!currentVideo.text) return;
+            if (!currentVideo.text || !isMounted.current) return;
 
             // Normalize to array
             const textSegments = Array.isArray(currentVideo.text) ? currentVideo.text : [currentVideo.text];
 
             for (const segment of textSegments) {
+                if (!isMounted.current) break;
                 if (!segment || segment.trim() === '') continue;
 
                 // 1. Prepare segment
@@ -74,12 +112,17 @@ export default function IntroVideoFlash({ videos, onComplete }: IntroVideoFlashP
 
                 // 2. Animate words
                 for (let i = 0; i < words.length; i++) {
+                    if (!isMounted.current) break;
                     setDisplayedText(prev => prev ? `${prev} ${words[i]}` : words[i]);
                     await new Promise(r => setTimeout(r, 600)); // 600ms per word
                 }
 
+                if (!isMounted.current) break;
+
                 // 3. Keep text visible for a moment
                 await new Promise(r => setTimeout(r, 2000));
+
+                if (!isMounted.current) break;
 
                 // 4. Fade out text
                 setShowText(false);
@@ -88,11 +131,6 @@ export default function IntroVideoFlash({ videos, onComplete }: IntroVideoFlashP
         };
 
         const animationPromise = runTextAnimation();
-
-        // Cleanup function (no easy way to cancel async loop, but component unmount will stop state updates eventually or effect will be cleaned up)
-        // ideally we use an AbortController or a ref to cancel, but for simplicity we rely on React ignoring state updates on unmount in newer versions
-        // or we check a `mounted` flag inside the loop. Let's add simple mount check.
-        // Actually for simplicity, the loop runs.
 
         return () => {
             // Cleanup if needed
@@ -159,6 +197,7 @@ export default function IntroVideoFlash({ videos, onComplete }: IntroVideoFlashP
                         ref={videoRef}
                         className={styles.singleVideo}
                         playsInline
+                        muted={false}
                         preload="auto"
                         style={{
                             objectFit: currentVideo.objectFit || 'cover',
@@ -178,9 +217,26 @@ export default function IntroVideoFlash({ videos, onComplete }: IntroVideoFlashP
                 </div>
             )}
 
-            {/* Skip hint */}
+            {/* Skip and Unmute hints */}
             <div className={styles.skipHint}>
-                <span>🕉️ Click anywhere to skip</span>
+                {isMuted ? (
+                    <button
+                        className={styles.unmuteBtn}
+                        onClick={(e) => {
+                            e.stopPropagation();
+                            const videoEl = videoRef.current;
+                            if (videoEl) {
+                                videoEl.muted = false;
+                                setIsMuted(false);
+                                videoEl.play().catch(() => { });
+                            }
+                        }}
+                    >
+                        🔊 Click to Unmute
+                    </button>
+                ) : (
+                    <span>🕉️ Click anywhere to skip</span>
+                )}
             </div>
         </div>
     );

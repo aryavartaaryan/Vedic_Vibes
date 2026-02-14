@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import { Globe } from 'lucide-react';
 import styles from "../vedic-rasoi/rasoi.module.css";
 import translations from '@/lib/vaidya-translations.json';
@@ -9,11 +9,127 @@ import SriYantra from '@/components/SriYantra/SriYantra';
 import MantraSangrah from '@/components/MantraSangrah/MantraSangrah';
 import IntroVideoFlash from '@/components/IntroVideoFlash/IntroVideoFlash';
 
+// Move static videoList outside to prevent re-renders from recreating it
+const VIDEO_LIST: string[] = [
+    "https://ik.imagekit.io/aup4wh6lq/Most%20powerful%20Maheshvara%20Su%CC%84tram%20_%20the%20primal%20sound%20of%20creation.%E0%A4%AE%E0%A4%BE%E0%A4%B9%E0%A5%87%E0%A4%B6%E0%A5%8D%E0%A4%B5%E0%A4%B0%20%E0%A4%B8%E0%A5%82%E0%A4%A4%E0%A5%8D%E0%A4%B0%E0%A4%AE%E0%A5%8D%20_%20%E0%A4%9C%E0%A4%BF%E0%A4%B8%E0%A4%B8%E0%A5%87%20%E0%A4%B8%E0%A4%AE%E0%A5%8D%E0%A4%AA%E0%A5%82%E0%A4%B0%E0%A5%8D%E0%A4%A3.mp4",
+    "https://ik.imagekit.io/aup4wh6lq/Just%20feel%20the%20energy%20____Follow%20@fmccreators%20for%20more_%E0%A4%B9%E0%A4%B0%20%E0%A4%B9%E0%A4%B0%20%E0%A4%AE%E0%A4%B9%E0%A4%BE%E0%A4%A6%E0%A5%87%E0%A4%B5%20__%E0%A4%9C%E0%A4%AF%20%E0%A4%B6%E0%A4%82%E0%A4%95%E0%A4%B0%20___Do%20like.mp4",
+    "https://ik.imagekit.io/aup4wh6lq/%E0%A4%86%E0%A4%AA%20%E0%A4%B8%E0%A4%AD%E0%A5%80%20%E0%A4%95%E0%A5%8B%20%E0%A4%A8%E0%A4%B5%20%E0%A4%B5%E0%A4%B0%E0%A5%8D%E0%A4%B7%20%E0%A4%95%E0%A5%80%20%E0%A4%B9%E0%A4%BE%E0%A4%B0%E0%A5%8D%E0%A4%A6%E0%A4%BF%E0%A4%95%20%E0%A4%AC%E0%A4%A7%E0%A4%BE%E0%A4%88%20%E0%A4%8F%E0%A4%B5%E0%A4%82%20%E0%A4%B6%E0%A5%81%E0%A4%AD%E0%A4%95%E0%A4%BE%E0%A4%AE%E0%A4%A8%E0%A4%BE%E0%A4%8F%E0%A4%81_%E0%A4%B9%E0%A4%B0%20%E0%A4%B9%E0%A4%B0%20%E0%A4%AE%E0%A4%B9%E0%A4%BE%E0%A4%A6%E0%A5%87%E0%A4%B5____.mp4",
+    "https://ik.imagekit.io/aup4wh6lq/The%20_Lord%20who%20is%20half%20woman_%20signifies%20the%20perfect%20synthesis%20of%20masculine%20and%20feminine%20energies,.mp4",
+    "https://ik.imagekit.io/aup4wh6lq/Shiv%20Swarnamala%20Stuti%20_%E2%9D%A4%EF%B8%8F%20I%20Verse%20-%207%20_.Follow%20@aumm_namah_shivay%20for%20more%20%E2%9D%A4%EF%B8%8F%20.._mahadev%20_shiv.mp4",
+    "https://ik.imagekit.io/aup4wh6lq/Most%20people%20don_t%20realize%20it,%20but%20sound%20has%20the%20power%20to%20heal%20-%20or%20harm.%20There_s%20a%20reason%20why%20an.mp4",
+    "/videos/mahashivratri_darshan.mp4"
+];
+
 export default function DhyanKakshaPage() {
     const [lang, setLang] = useState<'en' | 'hi'>('hi');
     const [showIntro, setShowIntro] = useState(true);
-    const [startBackgroundLoop, setStartBackgroundLoop] = useState(false); // New state to control background loop
+    const [hasStarted, setHasStarted] = useState(false); // NEW: Track user activation
+    const [startBackgroundLoop, setStartBackgroundLoop] = useState(false);
     const [playMantra, setPlayMantra] = useState(false);
+    const [currentIndex, setCurrentIndex] = useState(0);
+    const [isMantraPlaying, setIsMantraPlaying] = useState(false);
+    const [forceMantraId, setForceMantraId] = useState<string | null>(null);
+    const [isMuted, setIsMuted] = useState(false);
+    const [isSessionPaused, setIsSessionPaused] = useState(false);
+    const [introVideos, setIntroVideos] = useState<{ src: string, text?: string | string[] }[]>([]);
+    const [slideVideos, setSlideVideos] = useState<string[]>([]);
+    const [videoProgress, setVideoProgress] = useState(0);
+    const [videoTime, setVideoTime] = useState(0);
+    const [videoDuration, setVideoDuration] = useState(0);
+    const sequentialVideoRef = React.useRef<HTMLVideoElement>(null);
+
+    const playlist = useMemo(() => {
+        return [
+            { type: "mantra", id: "guidance", src: "/audio/Guidance.wav", title: "Guidance", titleHi: "दर्शन और मार्गदर्शन" },
+            { type: "mantra", id: "/audio/Om_Sahana_Vavatu_Shanti_Mantra.mp3", src: "/audio/Om_Sahana_Vavatu_Shanti_Mantra.mp3", title: "Om Sahana Vavatu", titleHi: "ॐ सहना ववतु" },
+            { type: "video", id: "v1", src: VIDEO_LIST[0], title: "Maheshvara Sutram", titleHi: "महेश्वर सूत्रम्", trimEnd: 5 },
+            { type: "mantra", id: "/audio/Lalitha Sahasranamam I Manojna & Pradanya - Om Voices Junior I The names of Goddess Lalitha Devi [zNYj8GrXEQk].mp3", src: "/audio/Lalitha Sahasranamam I Manojna & Pradanya - Om Voices Junior I The names of Goddess Lalitha Devi [zNYj8GrXEQk].mp3", title: "Lalitha Sahasranamam", titleHi: "ललिता सहस्रनाम" },
+            { type: "video", id: "v2", src: VIDEO_LIST[1], title: "Shiv Shakti Energy", titleHi: "शिव शक्ति ऊर्जा" },
+            { type: "mantra", id: "/audio/vishnu_sahasranama.mp3.mp3", src: "/audio/vishnu_sahasranama.mp3.mp3", title: "Vishnu Sahasranama", titleHi: "विष्णु सहस्रनाम" },
+            { type: "video", id: "v3", src: VIDEO_LIST[2], title: "Mahadev Nav Varsh", titleHi: "महादेव नव वर्ष" },
+            { type: "mantra", id: "/audio/Challakere_Brothers_vedic_chanting_-_Shri_suktam_(mp3.pm).mp3", src: "/audio/Challakere_Brothers_vedic_chanting_-_Shri_suktam_(mp3.pm).mp3", title: "Shri Suktam", titleHi: "श्री सूक्तम्" },
+            { type: "video", id: "v4", src: VIDEO_LIST[3], title: "Ardhanarishwara", titleHi: "अर्धनारीश्वर स्वरूप" },
+            { type: "mantra", id: "/audio/Anant_-_a_collection_of_vedic_chants_-_05._Narayana_Suktam_(mp3.pm).mp3", src: "/audio/Anant_-_a_collection_of_vedic_chants_-_05._Narayana_Suktam_(mp3.pm).mp3", title: "Narayana Suktam", titleHi: "नारायण सूक्तम्" },
+            { type: "video", id: "v5", src: VIDEO_LIST[4], title: "Shiv Swarnamala", titleHi: "शिव स्वर्णमाला स्तुति" },
+            { type: "mantra", id: "/audio/Challakere_Brothers_vedic_chanting_-_MahaMrtyunjaya_mantrah_108_times_(mp3.pm).mp3", src: "/audio/Challakere_Brothers_vedic_chanting_-_MahaMrtyunjaya_mantrah_108_times_(mp3.pm).mp3", title: "MahaMrtyunjaya", titleHi: "महामृत्युंजय मंत्र" },
+            { type: "video", id: "v6", src: VIDEO_LIST[5], title: "Sound Healing", titleHi: "नाद चिकित्सा" },
+            { type: "mantra", id: "/audio/Shiva Tandava Stotram (All 18 Slokas)  Vande Guru Paramparaam  'Shiva-Bhakta' Ravana.mp3", src: "/audio/Shiva Tandava Stotram (All 18 Slokas)  Vande Guru Paramparaam  'Shiva-Bhakta' Ravana.mp3", title: "Shiva Tandava", titleHi: "शिव ताण्डव स्तोत्रम्" },
+            { type: "video", id: "v7", src: VIDEO_LIST[6], title: "Mahashivratri Special", titleHi: "महाशिवरात्रि दर्शन" }
+        ];
+    }, []);
+
+    const currentItem = playlist[currentIndex];
+
+    const handleSelectIndex = (index: number) => {
+        if (index === currentIndex) {
+            // TOGGLE PLAY/PAUSE
+            setIsSessionPaused(!isSessionPaused);
+            return;
+        }
+
+        console.log(`Manual selection: Index ${index}`, playlist[index]);
+
+        // Reset unified video control bar state
+        setVideoProgress(0);
+        setVideoTime(0);
+        setVideoDuration(0);
+
+        setCurrentIndex(index);
+        setIsSessionPaused(false);
+
+        if (playlist[index].type === 'mantra') {
+            // STOP active video if any
+            if (sequentialVideoRef.current) {
+                sequentialVideoRef.current.pause();
+            }
+            setForceMantraId(playlist[index].id || null);
+            setIsMantraPlaying(true);
+        } else {
+            // STOP active audio
+            setIsMantraPlaying(false);
+            setForceMantraId(null);
+        }
+    };
+
+    const goNext = () => {
+        handleSelectIndex((currentIndex + 1) % playlist.length);
+    };
+
+    // Effect to handle sequential video playback robustly
+    useEffect(() => {
+        const video = sequentialVideoRef.current;
+        if (!video || !startBackgroundLoop) return;
+
+        if (currentItem.type === 'video') {
+            // Ensure source is synced and loaded if it changed
+            if (!video.src.includes(currentItem.src)) {
+                console.log(`[Video Sync] Loading source: ${currentItem.titleHi}`);
+                video.src = currentItem.src;
+                video.load();
+            }
+
+            if (isSessionPaused) {
+                video.pause();
+            } else {
+                console.log(`[Playback] Triggering video: ${currentItem.titleHi}`);
+                video.muted = isMuted;
+                video.play().catch(err => {
+                    if (err && typeof err === 'object' && 'name' in err && err.name === 'AbortError') {
+                        console.log("Video play request was interrupted (AbortError), ignoring.");
+                    } else {
+                        console.warn("Video play failed, attempting muted fallback:", err);
+                        video.muted = true;
+                        video.play().catch(() => { });
+                    }
+                });
+            }
+        } else if (currentItem.type === 'mantra') {
+            // Ensure video turn is PAUSED when it's mantra turn
+            video.pause();
+        }
+    }, [currentIndex, currentItem.src, currentItem.type, isMuted, isSessionPaused, startBackgroundLoop]);
+
+
 
     const t = translations[lang];
 
@@ -21,8 +137,7 @@ export default function DhyanKakshaPage() {
         setLang(prev => prev === 'en' ? 'hi' : 'en');
     };
 
-    const [introVideos, setIntroVideos] = useState<{ src: string, text?: string | string[] }[]>([]);
-    const [slideVideos, setSlideVideos] = useState<string[]>([]);
+
 
     // Fetch Videos on Mount
     useEffect(() => {
@@ -59,8 +174,15 @@ export default function DhyanKakshaPage() {
                 if (slideRes.ok) {
                     const data = await slideRes.json();
                     const paths = data.files.map((f: any) => f.path);
-                    console.log("Loaded slide videos:", paths);
+                    console.log("Loaded slide videos for sequential and loop:", paths);
                     setSlideVideos(paths);
+
+                    // IF no slide is set yet, pick one now so we are ready
+                    if (paths.length > 0) {
+                        const randomVideoPath = paths[Math.floor(Math.random() * paths.length)];
+                        const randomStart = Math.floor(Math.random() * 4) * 15;
+                        setCurrentSlide({ src: randomVideoPath, start: randomStart });
+                    }
                 }
             } catch (error) {
                 console.error("Failed to fetch videos:", error);
@@ -85,57 +207,178 @@ export default function DhyanKakshaPage() {
     const pickRandomSlide = () => {
         if (slideVideos.length === 0) return;
 
-        const randomVideoPath = slideVideos[Math.floor(Math.random() * slideVideos.length)];
-        // Random start time: 0, 15, 30, 45 (safe offsets for most background loops)
+        // Try to pick a DIFFERENT video than current one if possible
+        let nextVideoPath = slideVideos[Math.floor(Math.random() * slideVideos.length)];
+        if (slideVideos.length > 1 && currentSlide && nextVideoPath === currentSlide.src) {
+            // Pick another one
+            const otherVideos = slideVideos.filter(v => v !== currentSlide.src);
+            nextVideoPath = otherVideos[Math.floor(Math.random() * otherVideos.length)];
+        }
+
         const randomStart = Math.floor(Math.random() * 4) * 15;
 
-        console.log("Picking new slide:", randomVideoPath);
-        setCurrentSlide({ src: randomVideoPath, start: randomStart });
+        console.log("[Ambient] Picking new slide:", nextVideoPath);
+        setCurrentSlide({ src: nextVideoPath, start: randomStart });
     };
 
     // Auto-rotate slides every 30 seconds
     React.useEffect(() => {
         if (!startBackgroundLoop || slideVideos.length === 0) return;
 
-        const interval = setInterval(pickRandomSlide, 30000); // 30 seconds
+        const interval = setInterval(() => {
+            console.log("[Ambient] Interval rotation triggered.");
+            pickRandomSlide();
+        }, 30000); // 30 seconds
 
         return () => clearInterval(interval);
-    }, [startBackgroundLoop, slideVideos]);
+    }, [startBackgroundLoop, slideVideos, currentSlide]); // Depend on currentSlide for the "different" check
 
     // Apply slide settings to video element
     React.useEffect(() => {
-        if (videoRef.current && currentSlide) {
-            const video = videoRef.current;
-            // Use the full path directly as it comes from API with leading slash
-            // Check if src is different to avoid reloading same video if logic overlaps
-            // Use encodeURI to handle spaces in filenames
+        const video = videoRef.current;
+        if (video && currentSlide && currentItem.type === 'mantra' && startBackgroundLoop) {
             const toPlay = encodeURI(currentSlide.src);
 
-            if (!video.src.endsWith(toPlay)) {
+            console.log("[Ambient] Applying src:", toPlay);
+            if (!video.src.includes(toPlay)) {
                 video.src = toPlay;
             }
             video.currentTime = currentSlide.start;
-            video.play().catch(e => console.log("Background autoplay prevented:", e));
+
+            // Use a proper play attempt with retry
+            const playAmbient = async () => {
+                try {
+                    video.muted = true; // Ambient always muted
+                    await video.play();
+                } catch (e) {
+                    if (e && typeof e === 'object' && 'name' in e && e.name === 'AbortError') {
+                        // Silent
+                    } else {
+                        console.log("[Ambient] Autoplay prevented, retrying in 1s...", e);
+                        setTimeout(() => video.play().catch(() => { }), 1000);
+                    }
+                }
+            };
+            playAmbient();
         }
-    }, [currentSlide]);
+    }, [currentSlide, currentItem.type, startBackgroundLoop]);
 
 
     return (
-        <main style={{
-            backgroundColor: startBackgroundLoop ? 'transparent' : '#f9f5f0',
-            minHeight: '100vh',
-            overflowX: 'hidden',
-            transition: 'background-color 1s ease'
-        }}>
+        <main
+            className={pageStyles.container}
+            style={{
+                background: 'transparent', // Let video show through
+                minHeight: '100vh',
+                position: 'relative',
+                overflow: 'hidden'
+            }}
+        >
+            {/* SPLASH SCREEN FOR USER ACTIVATION (Audio restriction fix) */}
+            {!hasStarted && (
+                <div style={{
+                    position: 'fixed',
+                    inset: 0,
+                    zIndex: 9999,
+                    background: 'radial-gradient(circle at center, #1a0f05 0%, #0a0502 100%)',
+                    display: 'flex',
+                    flexDirection: 'column',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    gap: '2rem',
+                    textAlign: 'center',
+                    padding: '2rem'
+                }}>
+                    <div style={{
+                        width: '120px',
+                        height: '120px',
+                        borderRadius: '50%',
+                        background: 'rgba(212, 175, 55, 0.1)',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        boxShadow: '0 0 40px rgba(184, 134, 11, 0.2)',
+                        border: '1px solid rgba(212, 175, 55, 0.3)',
+                        animation: 'pulse 3s infinite ease-in-out'
+                    }}>
+                        <span style={{ fontSize: '3rem' }}>🕉️</span>
+                    </div>
 
-            {/* Intro Video Flash */}
-            {showIntro && (
+                    <div style={{ maxWidth: '600px' }}>
+                        <h1 style={{
+                            color: '#FFD700',
+                            fontFamily: "'Playfair Display', serif",
+                            fontSize: '2.5rem',
+                            marginBottom: '1rem',
+                            textShadow: '0 0 20px rgba(255, 215, 0, 0.3)'
+                        }}>
+                            Dhyan Kshetra
+                        </h1>
+                        <p style={{
+                            color: 'rgba(255, 255, 255, 0.8)',
+                            fontSize: '1.2rem',
+                            lineHeight: '1.6',
+                            fontFamily: "'Noto Serif Devanagari', serif"
+                        }}>
+                            Prepare for a divine meditation experience.<br />
+                            दिव्य ध्यान अनुभव के लिए तैयार रहें।
+                        </p>
+                    </div>
+
+                    <button
+                        onClick={() => setHasStarted(true)}
+                        style={{
+                            padding: '1.2rem 3rem',
+                            fontSize: '1.2rem',
+                            fontWeight: '600',
+                            color: '#0a0502',
+                            background: 'linear-gradient(135deg, #FFD700 0%, #B8860B 100%)',
+                            border: 'none',
+                            borderRadius: '50px',
+                            cursor: 'pointer',
+                            boxShadow: '0 10px 30px rgba(0, 0, 0, 0.5), 0 0 20px rgba(212, 175, 55, 0.4)',
+                            transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
+                            fontFamily: 'inherit',
+                            marginTop: '1rem'
+                        }}
+                        onMouseEnter={(e) => {
+                            e.currentTarget.style.transform = 'scale(1.05) translateY(-2px)';
+                            e.currentTarget.style.boxShadow = '0 15px 40px rgba(0, 0, 0, 0.6), 0 0 30px rgba(212, 175, 55, 0.6)';
+                        }}
+                        onMouseLeave={(e) => {
+                            e.currentTarget.style.transform = 'scale(1)';
+                            e.currentTarget.style.boxShadow = '0 10px 30px rgba(0, 0, 0, 0.5), 0 0 20px rgba(212, 175, 55, 0.4)';
+                        }}
+                    >
+                        Enter / प्रवेश करें
+                    </button>
+
+                    <style jsx>{`
+                        @keyframes pulse {
+                            0% { transform: scale(1); opacity: 0.8; }
+                            50% { transform: scale(1.05); opacity: 1; border-color: rgba(212, 175, 55, 0.6); }
+                            100% { transform: scale(1); opacity: 0.8; }
+                        }
+                    `}</style>
+                </div>
+            )}
+
+            {/* INTRO VIDEO FLASH (Now activates after user interaction) */}
+            {showIntro && hasStarted && (
                 <IntroVideoFlash
                     videos={introVideos}
                     onComplete={() => {
+                        console.log("Intro complete. Starting Margdarshan...");
                         setShowIntro(false);
-                        setStartBackgroundLoop(true); // Start background loop only after intro
-                        setPlayMantra(true);
+                        setStartBackgroundLoop(true);
+                        setIsSessionPaused(false);
+
+                        // Explicitly trigger Margdarshan (playlist[0])
+                        const firstItem = playlist[0];
+                        if (firstItem && firstItem.type === 'mantra') {
+                            setForceMantraId(firstItem.id || null);
+                            setIsMantraPlaying(true);
+                        }
                     }}
                 />
             )}
@@ -171,36 +414,116 @@ export default function DhyanKakshaPage() {
             </button>
 
             {/* Mantra Sangrah - Divine Audio Player */}
-            <MantraSangrah lang={lang} startPlaying={playMantra} />
+            <MantraSangrah
+                lang={lang}
+                startPlaying={false}
+                forceTrackId={forceMantraId}
+                isPaused={currentItem.type === 'video'}
+                isSessionPaused={isSessionPaused}
+                onPlayingChange={(playing) => {
+                    // IF a library mantra starts playing, ensure we pause the VIDEO sequence
+                    if (playing && currentItem.type === 'video') {
+                        setIsSessionPaused(true);
+                    }
+                }}
+                onTrackEnded={() => {
+                    if (currentItem.type === 'mantra') {
+                        goNext();
+                    }
+                }}
+                externalPlaylist={playlist}
+                currentIndex={currentIndex}
+                onSelectIndex={handleSelectIndex}
+                onMutedChange={setIsMuted}
+                // Video Control Props
+                videoProgress={videoProgress}
+                videoTime={videoTime}
+                videoDuration={videoDuration}
+                onVideoSeek={(time) => {
+                    if (sequentialVideoRef.current) {
+                        sequentialVideoRef.current.currentTime = time;
+                    }
+                }}
+                onVideoToggle={() => {
+                    if (sequentialVideoRef.current) {
+                        if (isSessionPaused) {
+                            sequentialVideoRef.current.play().catch(() => { });
+                            setIsSessionPaused(false);
+                        } else {
+                            sequentialVideoRef.current.pause();
+                            setIsSessionPaused(true);
+                        }
+                    }
+                }}
+            />
 
-            {/* Background Layer with Random Video Slides - Only show if playing */}
-            {startBackgroundLoop && currentSlide && (
+            {/* BACKGROUND LAYERS */}
+            {startBackgroundLoop && (
                 <div style={{
-                    position: 'fixed',
+                    position: 'absolute',
                     top: 0,
                     left: 0,
-                    width: '100%',
-                    height: '100%',
-                    zIndex: 0,
-                    backgroundColor: '#000' // Prevent white flash
+                    width: '100vw',
+                    height: '100vh',
+                    zIndex: 1,
+                    pointerEvents: 'none'
                 }}>
+                    {/* LAYER 1: Meditation Sequence Video (Darshans) */}
                     <video
-                        ref={videoRef}
-                        autoPlay
-                        muted
+                        ref={sequentialVideoRef}
                         playsInline
-                        preload="auto"
-                        onEnded={pickRandomSlide} // Generate next random slide on end
-                        className="fade-in"
+                        onEnded={goNext}
+                        onError={(e) => {
+                            const error = (e.currentTarget.error);
+                            console.error(`[Sequential Video Error] Code ${error?.code}: ${error?.message}`, currentItem.src);
+                        }}
+                        onTimeUpdate={(e) => {
+                            const video = e.currentTarget;
+
+                            // Update unified control bar state
+                            if (video.duration > 0) {
+                                setVideoTime(video.currentTime);
+                                setVideoDuration(video.duration);
+                                setVideoProgress((video.currentTime / video.duration) * 100);
+                            }
+
+                            const trim = (currentItem as any).trimEnd;
+                            if (trim && video.currentTime > 0 && video.duration > 0) {
+                                if (video.duration - video.currentTime <= trim) {
+                                    console.log(`[Trimming] Early transition for ${currentItem.id}`);
+                                    goNext();
+                                }
+                            }
+                        }}
                         style={{
+                            display: currentItem.type === 'video' ? 'block' : 'none',
                             width: '100%',
                             height: '100%',
                             objectFit: 'cover',
-                            objectPosition: 'top center', // Focus on top of video as requested
-                            // No filters for full brightness
+                            objectPosition: 'center',
                             transition: 'opacity 1s ease-in-out'
                         }}
                     />
+
+                    {/* LAYER 2: Ambient Background Loop (During Mantras) */}
+                    {currentSlide && (
+                        <video
+                            ref={videoRef}
+                            autoPlay
+                            muted
+                            playsInline
+                            onEnded={pickRandomSlide}
+                            style={{
+                                display: currentItem.type === 'mantra' ? 'block' : 'none',
+                                width: '100%',
+                                height: '100%',
+                                objectFit: 'cover',
+                                objectPosition: 'top center',
+                                transition: 'opacity 1s ease-in-out',
+                                backgroundColor: '#000' // FALLBACK to prevent white screen
+                            }}
+                        />
+                    )}
                 </div>
             )}
 
