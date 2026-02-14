@@ -263,19 +263,19 @@ export default function DhyanKakshaPage() {
         }
     };
 
+    const isAgnihotra = useMemo(() => {
+        const title = currentItem.titleHi.toLowerCase() + currentItem.title.toLowerCase();
+        return title.includes('अग्निहोत्र') ||
+            title.includes('agnihotra') ||
+            title.includes('शान्ति') ||
+            title.includes('shanti');
+    }, [currentItem]);
+
     // Auto-rotate ambient slides: 3s for images (Agnihotra), 30s for videos
     React.useEffect(() => {
         if (!startBackgroundLoop || ambientSlides.length === 0) return;
 
         const currentSlide = activeBuffer === 'A' ? currentSlideA : currentSlideB;
-
-        // Robust check for Agnihotra or Shanti sessions
-        const title = currentItem.titleHi.toLowerCase() + currentItem.title.toLowerCase();
-        const isAgnihotra = title.includes('अग्निहोत्र') ||
-            title.includes('agnihotra') ||
-            title.includes('शान्ति') ||
-            title.includes('shanti');
-
         const effectiveDuration = (currentSlide?.type === 'image') ? 3000 : 30000;
 
         console.log(`[Ambient] Timer set for ${effectiveDuration}ms (${currentSlide?.type}). Agnihotra Mode: ${isAgnihotra}`);
@@ -286,7 +286,7 @@ export default function DhyanKakshaPage() {
         }, effectiveDuration);
 
         return () => clearInterval(interval);
-    }, [startBackgroundLoop, ambientSlides.length, activeBuffer, currentSlideA?.src, currentSlideB?.src, currentItem.id]);
+    }, [startBackgroundLoop, ambientSlides.length, activeBuffer, currentSlideA?.src, currentSlideB?.src, isAgnihotra]);
 
     // Handle media synchronization on the buffers
     React.useEffect(() => {
@@ -579,7 +579,7 @@ export default function DhyanKakshaPage() {
                                     muted
                                     playsInline
                                     onCanPlayThrough={() => activeBuffer === 'B' && setActiveBuffer('A')}
-                                    onEnded={() => activeBuffer === 'A' && pickRandomSlide()}
+                                    onEnded={() => activeBuffer === 'A' && pickRandomSlide(isAgnihotra)}
                                     style={{
                                         ...ambientLayerStyle,
                                         opacity: activeBuffer === 'A' ? 1 : 0,
@@ -611,7 +611,7 @@ export default function DhyanKakshaPage() {
                                     muted
                                     playsInline
                                     onCanPlayThrough={() => activeBuffer === 'A' && setActiveBuffer('B')}
-                                    onEnded={() => activeBuffer === 'B' && pickRandomSlide()}
+                                    onEnded={() => activeBuffer === 'B' && pickRandomSlide(isAgnihotra)}
                                     style={{
                                         ...ambientLayerStyle,
                                         opacity: activeBuffer === 'B' ? 1 : 0,
