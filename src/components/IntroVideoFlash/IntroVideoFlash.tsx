@@ -204,7 +204,7 @@ export default function IntroVideoFlash({ videos, onComplete, onFadeOutStart }: 
                 <div className={styles.textOverlay}>
                     {displayedText.includes('🕉') ? (
                         <div className={styles.omIconContainer}>
-                            <img src="/images/vedic_om.png" alt="Vedic Om" className={styles.omIcon} />
+                            <img src="/images/elegant_om_v2.png" alt="Vedic Om" className={styles.omIcon} />
                             <p className={styles.animatedText}>
                                 {displayedText.replace('🕉', '').trim()}
                             </p>

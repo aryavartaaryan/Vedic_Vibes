@@ -155,11 +155,12 @@
 }
 
 .omIcon {
-    width: 250px;
-    height: 250px;
+    width: 280px;
+    height: 280px;
     object-fit: contain;
-    filter: drop-shadow(0 0 30px rgba(255, 215, 0, 0.8));
-    animation: omPulse 3s ease-in-out infinite;
+    mix-blend-mode: screen;
+    filter: drop-shadow(0 0 15px rgba(255, 215, 0, 0.4));
+    animation: omPulse 4s ease-in-out infinite;
 }
 
 @keyframes omPulse {
@@ -167,20 +168,20 @@
     0%,
     100% {
         transform: scale(1);
-        filter: drop-shadow(0 0 30px rgba(255, 215, 0, 0.8));
+        filter: drop-shadow(0 0 20px rgba(255, 215, 0, 0.6));
     }
 
     50% {
-        transform: scale(1.05);
-        filter: drop-shadow(0 0 50px rgba(255, 215, 0, 1));
+        transform: scale(1.03);
+        filter: drop-shadow(0 0 35px rgba(255, 215, 0, 0.8));
     }
 }
 
 /* Mobile responsiveness */
 @media (max-width: 768px) {
     .omIcon {
-        width: 180px;
-        height: 180px;
+        width: 150px;
+        height: 150px;
     }
 
     .skipHint {
