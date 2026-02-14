@@ -113,18 +113,12 @@ export default function IntroVideoFlash({ videos, onComplete }: IntroVideoFlashP
                 setDisplayedText('');
                 setShowText(true);
 
-                // 2. Typing Effect: Show characters one by one
-                for (let i = 0; i <= segment.length; i++) {
-                    if (!isMounted.current) break;
-                    setDisplayedText(segment.substring(0, i));
-                    // Slowed down even more: 300ms for short, 200ms for long segments
-                    const charDelay = segment.length > 50 ? 200 : 300;
-                    await new Promise(r => setTimeout(r, charDelay));
-                }
+                // 2. Simple Appearance: Show whole segment immediately
+                setDisplayedText(segment);
 
                 if (!isMounted.current) break;
 
-                // 3. Wait for 5 seconds after complete appearance
+                // 3. Wait for exactly 5 seconds as requested
                 await new Promise(r => setTimeout(r, 5000));
 
                 if (!isMounted.current) break;
