@@ -62,14 +62,13 @@ export default function IntroVideoFlash({ videos, onComplete }: IntroVideoFlashP
         }
     };
 
-    // Video Playback Trigger
+    // Play active buffer when index changes
     useEffect(() => {
-        if (!isPlaying) return;
         const activeVideoEl = bufferA.active ? videoRefA.current : videoRefB.current;
         if (activeVideoEl) {
             attemptPlay(activeVideoEl, currentIndex);
         }
-    }, [currentIndex, bufferA.active, isPlaying]);
+    }, [currentIndex, bufferA.active, bufferB.active]);
 
     // Text Animation Effect
     useEffect(() => {
@@ -96,8 +95,7 @@ export default function IntroVideoFlash({ videos, onComplete }: IntroVideoFlashP
                 setShowText(true);
                 setDisplayedText(segment);
 
-                // Wait for display: 10s for first two significant segments of first video, 5s for others
-                const waitTime = (currentIndex === 0 && (segmentIdx === 0 || segmentIdx === 1)) ? 10000 : 5000;
+                const waitTime = (currentIndex === 0 && (segmentIdx === 0 || segmentIdx === 1)) ? 7000 : 5000;
                 await new Promise(r => setTimeout(r, waitTime));
 
                 if (!isMounted.current) break;
@@ -119,50 +117,34 @@ export default function IntroVideoFlash({ videos, onComplete }: IntroVideoFlashP
         };
 
         runTextAnimation();
-    }, [currentIndex, videos]); // Depend on videos to ensure currentVideo is up-to-date
+    }, [currentIndex]);
 
     const handleEnded = () => {
         if (!textDone.current) return;
 
         const nextIndex = currentIndex + 1;
         if (nextIndex < videos.length) {
-            // Swap buffers
+            // Swap buffers and indices
             if (bufferA.active) {
-                // Currently A is active, swap to B
                 setBufferA(prev => ({ ...prev, active: false }));
                 setBufferB(prev => ({ ...prev, active: true }));
-                // Buffer A is now inactive, preload the video AFTER B (index + 2)
                 setTimeout(() => {
-                    const preloadIndex = currentIndex + 2;
-                    if (preloadIndex < videos.length) {
-                        setBufferA(prev => ({ ...prev, src: videos[preloadIndex].src }));
-                    } else {
-                        setBufferA(prev => ({ ...prev, src: null })); // Clear src if no more videos
+                    const preloadIndex = nextIndex + 1;
+                    if (isMounted.current && preloadIndex < videos.length) {
+                        setBufferA({ src: videos[preloadIndex].src, active: false });
                     }
-                }, 500);
+                }, 1000);
             } else {
-                // Currently B is active, swap to A
                 setBufferB(prev => ({ ...prev, active: false }));
                 setBufferA(prev => ({ ...prev, active: true }));
-                // Buffer B is now inactive, preload the video AFTER A (index + 2)
                 setTimeout(() => {
-                    const preloadIndex = currentIndex + 2;
-                    if (preloadIndex < videos.length) {
-                        setBufferB(prev => ({ ...prev, src: videos[preloadIndex].src }));
-                    } else {
-                        setBufferB(prev => ({ ...prev, src: null })); // Clear src if no more videos
+                    const preloadIndex = nextIndex + 1;
+                    if (isMounted.current && preloadIndex < videos.length) {
+                        setBufferB({ src: videos[preloadIndex].src, active: false });
                     }
-                }, 500);
+                }, 1000);
             }
-
             setCurrentIndex(nextIndex);
-
-            // Play the NEW active buffer immediately
-            // The state update for active buffer might not be immediate, so we infer the next active ref
-            const nextVideoEl = bufferA.active ? videoRefB.current : videoRefA.current;
-            if (nextVideoEl) {
-                attemptPlay(nextVideoEl, nextIndex);
-            }
         } else {
             setIsFadingOut(true);
             setTimeout(() => {
@@ -189,13 +171,6 @@ export default function IntroVideoFlash({ videos, onComplete }: IntroVideoFlashP
             onClick={handleSkip}
         >
             <div className={styles.videoContainer}>
-                {/* Divine OM Background for first segments */}
-                {currentIndex === 0 && (
-                    <div className={`${styles.divineBg} ${showText ? styles.visible : styles.hidden}`}>
-                        <img src="/divine_om_bg.png" alt="Divine Om" className={styles.bgImage} />
-                    </div>
-                )}
-
                 {/* Buffer A */}
                 <video
                     ref={videoRefA}
@@ -224,11 +199,6 @@ export default function IntroVideoFlash({ videos, onComplete }: IntroVideoFlashP
             {/* Text Overlay */}
             {showText && (
                 <div className={styles.textOverlay}>
-                    {currentIndex === 0 && (displayedText.includes('शुक्ल यजुर्वेद') || displayedText.includes('हे परमात्मा')) && (
-                        <div className={styles.omHeader}>
-                            <span className={styles.bigOm}>🕉️</span>
-                        </div>
-                    )}
                     <p className={styles.animatedText}>{displayedText}</p>
                 </div>
             )}
