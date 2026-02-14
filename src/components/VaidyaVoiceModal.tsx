@@ -104,7 +104,7 @@ export default function VaidyaVoiceModal({ isOpen, onClose, lang }: VaidyaVoiceM
                     </p>
                 </div>
 
-                {/* Status indicator */}
+                {/* Status indicator & Termination UI */}
                 <div className={styles.statusContainer}>
                     {callState === 'connecting' && (
                         <div className={styles.status}>
@@ -124,24 +124,32 @@ export default function VaidyaVoiceModal({ isOpen, onClose, lang }: VaidyaVoiceM
                         </div>
                     )}
 
-                    {callState === 'disconnected' && (
-                        <div className={styles.status}>
-                            <p>{lang === 'hi' ? 'संवाद समाप्त' : 'Consultation Ended'}</p>
-                            <button onClick={handleClose} className={styles.reconnectButton}>
-                                {lang === 'hi' ? 'संवाद समाप्त करें' : 'End Consultation'}
-                            </button>
-                        </div>
-                    )}
-
-                    {callState === 'error' && (
-                        <div className={styles.status}>
-                            <p className={styles.errorText}>
-                                {lang === 'hi' ? 'संपर्क त्रुटि' : 'Connection Error'}
+                    {(callState === 'disconnected' || callState === 'error') && (
+                        <div className={styles.terminationView}>
+                            <div className={styles.terminationIcon}>
+                                {callState === 'error' ? '⚠️' : '✨'}
+                            </div>
+                            <h3 className={styles.terminationTitle}>
+                                {callState === 'error'
+                                    ? (lang === 'hi' ? 'संपर्क में त्रुटि आई' : 'Connection Error')
+                                    : (lang === 'hi' ? 'संवाद सफलतापूर्वक संपन्न' : 'Consultation Completed')}
+                            </h3>
+                            <p className={styles.terminationText}>
+                                {callState === 'error'
+                                    ? (error || (lang === 'hi' ? 'कृपया पुनः प्रयास करें' : 'Please try again later'))
+                                    : (lang === 'hi' ? 'आचार्य के सुझावों का पालन करें। स्वस्थ रहें।' : 'Follow Acharya\'s guidance. Stay healthy.')}
                             </p>
-                            {error && <p className={styles.errorDetail}>{error}</p>}
-                            <button onClick={startCall} className={styles.reconnectButton}>
-                                {lang === 'hi' ? 'पुनः प्रयास करें' : 'Try Again'}
-                            </button>
+
+                            <div className={styles.terminationActions}>
+                                {callState === 'error' && (
+                                    <button onClick={startCall} className={styles.retryButton}>
+                                        {lang === 'hi' ? 'पुनः प्रयास करें' : 'Try Again'}
+                                    </button>
+                                )}
+                                <button onClick={handleClose} className={styles.returnButton}>
+                                    {lang === 'hi' ? 'मुख्य स्क्रीन पर वापस जाएं' : 'Return to Main Screen'}
+                                </button>
+                            </div>
                         </div>
                     )}
                 </div>

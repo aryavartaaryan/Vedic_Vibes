@@ -246,6 +246,113 @@
     box-shadow: 0 4px 16px rgba(196, 145, 2, 0.4);
 }
 
+/* Termination View (Post-Call) */
+.terminationView {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem;
+    background: rgba(196, 145, 2, 0.05);
+    border: 1px solid rgba(196, 145, 2, 0.2);
+    border-radius: 20px;
+    width: 90%;
+    max-width: 400px;
+    animation: scaleIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    z-index: 100;
+}
+
+@keyframes scaleIn {
+    from {
+        transform: scale(0.85);
+        opacity: 0;
+    }
+
+    to {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+.terminationIcon {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+}
+
+.terminationTitle {
+    font-family: var(--font-header), serif;
+    font-size: 1.5rem;
+    color: #FFD700;
+    margin: 0;
+    text-align: center;
+}
+
+.terminationText {
+    font-family: var(--font-body), serif;
+    font-size: 1rem;
+    color: rgba(244, 235, 208, 0.8);
+    text-align: center;
+    margin: 0.8rem 0 1.5rem;
+    line-height: 1.5;
+}
+
+.terminationActions {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    gap: 1rem;
+}
+
+.returnButton {
+    background: linear-gradient(135deg, #C49102, #FFD700);
+    color: #1a0f05;
+    border: none;
+    padding: 1rem;
+    border-radius: 12px;
+    font-family: var(--font-body), serif;
+    font-size: 1.1rem;
+    font-weight: 700;
+    cursor: pointer;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+    transition: all 0.3s ease;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+}
+
+.returnButton:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 25px rgba(196, 145, 2, 0.5);
+}
+
+.retryButton {
+    background: transparent;
+    color: #FFD700;
+    border: 1.5px solid #C49102;
+    padding: 0.8rem;
+    border-radius: 12px;
+    font-family: var(--font-body), serif;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.retryButton:hover {
+    background: rgba(196, 145, 2, 0.1);
+}
+
+@media (max-width: 768px) {
+    .terminationView {
+        width: 100%;
+        padding: 1.5rem;
+    }
+
+    .returnButton {
+        padding: 1.2rem;
+        font-size: 1.2rem;
+        /* Even larger for mobile tap targets */
+    }
+}
+
 /* Visualizer area with Om circle */
 .visualizerContainer {
     display: flex;
