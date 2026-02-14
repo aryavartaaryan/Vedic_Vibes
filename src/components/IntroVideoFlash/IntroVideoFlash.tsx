@@ -113,8 +113,8 @@ export default function IntroVideoFlash({ videos, onComplete }: IntroVideoFlashP
                 for (let i = 0; i <= segment.length; i++) {
                     if (!isMounted.current) break;
                     setDisplayedText(segment.substring(0, i));
-                    // Slowed down: 120ms per character for shorter, 80ms for longer
-                    const charDelay = segment.length > 50 ? 80 : 120;
+                    // Slowed down by another 50%: 240ms per character for shorter, 160ms for longer
+                    const charDelay = segment.length > 50 ? 160 : 240;
                     await new Promise(r => setTimeout(r, charDelay));
                 }
 
