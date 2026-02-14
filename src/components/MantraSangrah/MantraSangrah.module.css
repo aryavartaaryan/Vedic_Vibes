@@ -7,7 +7,7 @@
 /* Mantra Sangrah - Back on the LEFT side with symmetrical offset */
 .triggerContainer {
     position: fixed;
-    left: 32px;
+    left: 20px;
     top: 376px;
     z-index: 1100;
     display: flex;
@@ -162,7 +162,7 @@
 /* Acharya Samvad - Back on the RIGHT side with symmetrical offset */
 .acharyaContainer {
     position: fixed;
-    right: 32px;
+    right: 20px;
     top: 376px;
     z-index: 1100;
     display: flex;
