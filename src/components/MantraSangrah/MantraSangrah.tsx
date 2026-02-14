@@ -511,17 +511,11 @@ export default function MantraSangrah({
         // If clicking the already selected track, toggle play/pause
         if (currentTrack?.id === track.id) {
             if (audio.paused) {
-                try {
-                    await audio.play();
-                } catch (err: any) {
-                    if (err && typeof err === 'object' && 'name' in err && err.name === 'AbortError') {
-                        // Silent
-                    } else {
-                        console.log('Play failed:', err);
-                    }
-                }
+                audio.play().catch(() => { });
+                setIsPlaying(true);
             } else {
                 audio.pause();
+                setIsPlaying(false);
             }
             return;
         }
@@ -669,7 +663,7 @@ export default function MantraSangrah({
                         <div className={styles.sectionGroup}>
                             {/* 1. Sequence Items (Videos + Audio in their playback order) */}
                             {externalPlaylist && externalPlaylist.map((track, index) => {
-                                const isActive = currentIndex === index && (!currentTrack || track.type === 'video');
+                                const isActive = currentIndex === index;
                                 const isVideo = track.type === 'video';
 
                                 return (
