@@ -10,11 +10,11 @@ interface VideoConfig {
 interface IntroVideoFlashProps {
     videos: VideoConfig[];
     onComplete: () => void;
+    onFadeOutStart?: () => void;
 }
 
-export default function IntroVideoFlash({ videos, onComplete }: IntroVideoFlashProps) {
+export default function IntroVideoFlash({ videos, onComplete, onFadeOutStart }: IntroVideoFlashProps) {
     const [currentIndex, setCurrentIndex] = useState(0);
-    const [isPlaying, setIsPlaying] = useState(true);
     const [isFadingOut, setIsFadingOut] = useState(false);
 
     const isMounted = useRef(true);
@@ -146,9 +146,9 @@ export default function IntroVideoFlash({ videos, onComplete }: IntroVideoFlashP
             }
             setCurrentIndex(nextIndex);
         } else {
+            onFadeOutStart?.();
             setIsFadingOut(true);
             setTimeout(() => {
-                setIsPlaying(false);
                 onComplete();
             }, 1000);
         }
@@ -156,14 +156,13 @@ export default function IntroVideoFlash({ videos, onComplete }: IntroVideoFlashP
 
     const handleSkip = () => {
         console.log('User skipped intro');
+        onFadeOutStart?.();
         setIsFadingOut(true);
         setTimeout(() => {
-            setIsPlaying(false);
             onComplete();
         }, 800);
     };
 
-    if (!isPlaying) return null;
 
     return (
         <div

@@ -249,7 +249,7 @@ export default function DhyanKakshaPage() {
         if (!startBackgroundLoop || ambientSlides.length === 0) return;
 
         const currentSlide = activeBuffer === 'A' ? currentSlideA : currentSlideB;
-        const duration = currentSlide?.type === 'image' ? 7000 : 30000;
+        const duration = currentSlide?.type === 'image' ? 3000 : 30000;
 
         const interval = setInterval(() => {
             console.log(`[Ambient] Rotating random slide after ${duration}ms...`);
@@ -381,6 +381,10 @@ export default function DhyanKakshaPage() {
             {showIntro && hasStarted && (
                 <IntroVideoFlash
                     videos={introVideos}
+                    onFadeOutStart={() => {
+                        console.log("[Intro] Fade out started, initiating background early...");
+                        setStartBackgroundLoop(true);
+                    }}
                     onComplete={() => {
                         console.log("Intro complete. Starting Margdarshan...");
                         setShowIntro(false);

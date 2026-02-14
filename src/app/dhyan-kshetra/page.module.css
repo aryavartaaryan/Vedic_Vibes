@@ -21,19 +21,19 @@
 
 /* Cinematic Ambient Slide Animations (Ken Burns Style) */
 .ambientCinematic1 {
-    animation: cinematicPath1 8.6s ease-in-out infinite alternate;
+    animation: cinematicPath1 5.4s ease-in-out infinite alternate;
 }
 
 .ambientCinematic2 {
-    animation: cinematicPath2 8.6s ease-in-out infinite alternate;
+    animation: cinematicPath2 5.4s ease-in-out infinite alternate;
 }
 
 .ambientCinematic3 {
-    animation: cinematicPath3 8.6s ease-in-out infinite alternate;
+    animation: cinematicPath3 5.4s ease-in-out infinite alternate;
 }
 
 .ambientCinematic4 {
-    animation: cinematicPath4 8.6s ease-in-out infinite alternate;
+    animation: cinematicPath4 5.4s ease-in-out infinite alternate;
 }
 
 @keyframes cinematicPath1 {
