@@ -87,7 +87,8 @@ export default function IntroVideoFlash({ videos, onComplete }: IntroVideoFlashP
                 setShowText(true);
                 setDisplayedText(segment);
 
-                const waitTime = (currentIndex === 0 && (segmentIdx === 0 || segmentIdx === 1)) ? 7000 : 5000;
+                // Wait for display: 10s for first two significant segments of first video, 5s for others
+                const waitTime = (currentIndex === 0 && (segmentIdx === 0 || segmentIdx === 1)) ? 10000 : 5000;
                 await new Promise(r => setTimeout(r, waitTime));
 
                 if (!isMounted.current) break;
@@ -179,6 +180,13 @@ export default function IntroVideoFlash({ videos, onComplete }: IntroVideoFlashP
             onClick={handleSkip}
         >
             <div className={styles.videoContainer}>
+                {/* Divine OM Background for first segments */}
+                {currentIndex === 0 && (
+                    <div className={`${styles.divineBg} ${showText ? styles.visible : styles.hidden}`}>
+                        <img src="/divine_om_bg.png" alt="Divine Om" className={styles.bgImage} />
+                    </div>
+                )}
+
                 {/* Buffer A */}
                 <video
                     ref={videoRefA}
@@ -207,6 +215,11 @@ export default function IntroVideoFlash({ videos, onComplete }: IntroVideoFlashP
             {/* Text Overlay */}
             {showText && (
                 <div className={styles.textOverlay}>
+                    {currentIndex === 0 && (displayedText.includes('शुक्ल यजुर्वेद') || displayedText.includes('हे परमात्मा')) && (
+                        <div className={styles.omHeader}>
+                            <span className={styles.bigOm}>🕉️</span>
+                        </div>
+                    )}
                     <p className={styles.animatedText}>{displayedText}</p>
                 </div>
             )}
