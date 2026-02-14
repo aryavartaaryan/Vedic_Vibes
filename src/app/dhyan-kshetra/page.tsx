@@ -161,7 +161,7 @@ export default function DhyanKakshaPage() {
                         if (f.name.includes('kailash') && !f.name.includes('2')) {
                             text = [
                                 "🕉\n\nॐ असतो मा सद्गमय ।\nतमसो मा ज्योतिर्गमय ।\nमृत्योर्मा अमृतं गमय ।\nॐ शान्तिः शान्तिः शान्तिः ॥\n\nशुक्ल यजुर्वेद",
-                                "हे परमात्मा!\nहमें असत्य से सत्य की ओर ले चलो।\nअज्ञान रूपी अंधकार से ज्ञान के प्रकाश की ओर ले चलो।\nमृत्यु और भय से अमरत्व एवं आत्मिक शांति की ओर ले चलो।\n\n\n\nॐ शांति शांति शांति।\nहमारे मन में शांति हो,\nहमारे आसपास शांति हो,\nसंपूर्ण सृष्टि में शांति हो।",
+                                "हे परमात्मा!\nहमें असत्य से सत्य की ओर ले चलो।\nअज्ञान रूपी अंधकार से ज्ञान के प्रकाश की ओर ले चलो।\nमृत्यु और भय से अमरत्व एवं आत्मिक शांति की ओर ले चलो।\n\n\n\n\n\nॐ शांति शांति शांति।\n\n\n\nहमारे मन में शांति हो,\nहमारे आसपास शांति हो,\nसंपूर्ण सृष्टि में शांति हो।",
                                 "शिव की पवित्र ध्यान स्थली, कैलाश में आपका स्वागत है। यहाँ अनन्त शांति की अनुभूति होती है।",
                                 "अब आप चिंता मुक्त हो जाइए। हम अत्याधुनिक तकनीक और ऋषियों के प्राचीन ज्ञान के मिश्रण से आपकी समस्याओं का समाधान करेंगे।"
                             ];
@@ -249,15 +249,18 @@ export default function DhyanKakshaPage() {
         if (!startBackgroundLoop || ambientSlides.length === 0) return;
 
         const currentSlide = activeBuffer === 'A' ? currentSlideA : currentSlideB;
-        const duration = currentSlide?.type === 'image' ? 3000 : 30000;
+
+        // ONLY allow image slides if the current mantra is an Agnihotra one
+        const isAgnihotra = currentItem.titleHi.includes('अग्निहोत्र') || currentItem.titleHi.includes('शान्ति पाठ');
+        const effectiveDuration = (currentSlide?.type === 'image' && isAgnihotra) ? 3000 : 30000;
 
         const interval = setInterval(() => {
-            console.log(`[Ambient] Rotating random slide after ${duration}ms...`);
+            console.log(`[Ambient] Rotating random slide...`);
             pickRandomSlide();
-        }, duration);
+        }, effectiveDuration);
 
         return () => clearInterval(interval);
-    }, [startBackgroundLoop, ambientSlides, activeBuffer, currentSlideA, currentSlideB]);
+    }, [startBackgroundLoop, ambientSlides, activeBuffer, currentSlideA, currentSlideB, currentItem]);
 
     // Handle media synchronization on the buffers
     React.useEffect(() => {
@@ -336,7 +339,9 @@ export default function DhyanKakshaPage() {
                         border: '1px solid rgba(212, 175, 55, 0.3)',
                         animation: 'pulse 3s infinite ease-in-out'
                     }}>
-                        <span style={{ fontSize: '3rem' }}>🕉️</span>
+                        <div className={pageStyles.goldenOmEntranceContainer}>
+                            <img src="/images/golden_om_enter.png" alt="Vedic Om" className={pageStyles.goldenOmEntrance} />
+                        </div>
                     </div>
 
                     <div style={{ maxWidth: '600px' }}>
@@ -439,6 +444,10 @@ export default function DhyanKakshaPage() {
                 isPaused={currentItem.type === 'video'}
                 isSessionPaused={isSessionPaused}
                 onPlayingChange={(playing) => {
+                    // Reset session pause if manually starting a mantra from library
+                    if (playing && isSessionPaused) {
+                        setIsSessionPaused(false);
+                    }
                     // IF a library mantra starts playing, ensure we pause the VIDEO sequence
                     if (playing && currentItem.type === 'video') {
                         setIsSessionPaused(true);

@@ -245,12 +245,14 @@ export default function MantraSangrah({
     const currentTrackRef = useRef<Track | null>(null);
     const playlistRef = useRef<Track[]>([]);
     const onTrackEndedRef = useRef(onTrackEnded);
+    const onPlayingChangeRef = useRef(onPlayingChange);
     const lastAutoClosedIndex = useRef<number | null>(null);
 
     // Keep refs updated
     useEffect(() => {
         onTrackEndedRef.current = onTrackEnded;
-    }, [onTrackEnded]);
+        onPlayingChangeRef.current = onPlayingChange;
+    }, [onTrackEnded, onPlayingChange]);
 
     // Keep refs updated
     useEffect(() => {
@@ -338,18 +340,18 @@ export default function MantraSangrah({
 
         const handlePlay = () => {
             setIsPlaying(true);
-            onPlayingChange?.(true);
+            onPlayingChangeRef.current?.(true);
         };
 
         const handlePause = () => {
             setIsPlaying(false);
-            onPlayingChange?.(false);
+            onPlayingChangeRef.current?.(false);
         };
 
         const handleError = (e: Event) => {
             console.error('Audio error:', e);
             setIsPlaying(false);
-            onPlayingChange?.(false);
+            onPlayingChangeRef.current?.(false);
         };
 
         // Add event listeners
@@ -458,9 +460,9 @@ export default function MantraSangrah({
         if (isSessionPaused || (isPaused && !startPlaying && !forceTrackId)) {
             console.log("[MantraSangrah] Pausing audio (Session Paused or Video Turn).");
             audio.pause();
-        } else if (!isPaused && audio.paused && isPlaying && !isSessionPaused) {
-            // Resume if sequence moved back to mantra turn
-            console.log("[MantraSangrah] Resuming mantra turn.");
+        } else if (!isPaused && audio.paused && !isSessionPaused) {
+            // Resume if sequence moved back to mantra turn or manually unpaused
+            console.log("[MantraSangrah] Attempting to resume playback.");
             audio.play().catch(err => {
                 if (err && typeof err === 'object' && 'name' in err && err.name === 'AbortError') {
                     // Silent
@@ -469,7 +471,7 @@ export default function MantraSangrah({
                 }
             });
         }
-    }, [isPaused, isSessionPaused, isPlaying, startPlaying, forceTrackId]);
+    }, [isPaused, isSessionPaused, startPlaying, forceTrackId]);
 
 
     // AUTO-CLOSE MENU & SYNC: When a video starts or sequence changes

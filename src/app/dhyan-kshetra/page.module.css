@@ -104,6 +104,21 @@
         text-shadow: 0 0 20px rgba(0, 0, 0, 0.8), 0 0 40px rgba(255, 165, 0, 0.6);
     }
 
+    .goldenOmEntranceContainer {
+        margin-bottom: 2rem;
+        display: flex;
+        justify-content: center;
+        width: 100%;
+    }
+
+    .goldenOmEntrance {
+        width: 150px;
+        height: 150px;
+        object-fit: contain;
+        filter: drop-shadow(0 0 20px rgba(255, 215, 0, 0.6));
+        animation: omPulse 4s ease-in-out infinite;
+    }
+
     .sriYantraContainer {
         margin-top: 48vh !important;
         /* Lowered from 35vh */
