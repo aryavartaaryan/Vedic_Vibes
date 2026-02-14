@@ -18,11 +18,15 @@ export default function IntroVideoFlash({ videos, onComplete }: IntroVideoFlashP
     const [isFadingOut, setIsFadingOut] = useState(false);
 
     const isMounted = useRef(true);
-    const videoRef = useRef<HTMLVideoElement>(null);
+    const videoRefA = useRef<HTMLVideoElement>(null);
+    const videoRefB = useRef<HTMLVideoElement>(null);
+    const [activeBuffer, setActiveBuffer] = useState<'A' | 'B'>('A');
     const [showText, setShowText] = useState(false);
     const [displayedText, setDisplayedText] = useState('');
     const [isMuted, setIsMuted] = useState(false);
-    const currentVideo = videos[currentIndex];
+
+    // We'll track if the "other" buffer is ready
+    // const [bufferBPrepared, setBufferBPrepared] = useState(false); // This state was not used in the provided snippet, removing.
 
     useEffect(() => {
         isMounted.current = true;
@@ -31,68 +35,67 @@ export default function IntroVideoFlash({ videos, onComplete }: IntroVideoFlashP
         };
     }, []);
 
+    // Function to get active/inactive refs
+    const getRefs = () => {
+        return activeBuffer === 'A'
+            ? { active: videoRefA, inactive: videoRefB }
+            : { active: videoRefB, inactive: videoRefA };
+    };
+
+    const attemptPlay = async (videoEl: HTMLVideoElement | null, index: number) => {
+        if (!videoEl || !isMounted.current) return;
+
+        try {
+            videoEl.muted = false;
+            videoEl.volume = 1.0;
+            setIsMuted(false);
+            videoEl.currentTime = 0;
+
+            await videoEl.play();
+            console.log(`[Intro] Success: Playing video ${index + 1} with sound`);
+        } catch (err: any) {
+            if (err && typeof err === 'object' && 'name' in err && err.name === 'AbortError') {
+                console.log(`[Intro] Playback interrupt for video ${index + 1}, ignoring.`);
+                return;
+            }
+            console.warn(`[Intro] Autoplay failed for video ${index + 1}, retrying muted...`);
+            try {
+                if (videoEl && isMounted.current) {
+                    videoEl.muted = true;
+                    setIsMuted(true);
+                    await videoEl.play();
+                }
+            } catch (muteErr) {
+                console.error("[Intro] Muted playback failed:", muteErr);
+            }
+        }
+    };
+
+    // Prepare next video in the inactive buffer
     useEffect(() => {
+        const nextIndex = currentIndex + 1;
+        if (nextIndex < videos.length) {
+            const { inactive } = getRefs();
+            if (inactive.current) {
+                inactive.current.src = videos[nextIndex].src;
+                inactive.current.load();
+                console.log(`[Intro] Preloading video ${nextIndex + 1} in background`);
+            }
+        }
+    }, [currentIndex, videos, activeBuffer]); // Added activeBuffer to dependencies
+
+    // Main playback effect
+    useEffect(() => {
+        const currentVideo = videos[currentIndex];
         if (!currentVideo) return;
 
-        const attemptPlay = async () => {
-            const videoEl = videoRef.current;
-            if (!videoEl || !isMounted.current) return;
-
-            try {
-                // FORCE unmuted on every new video load
-                console.log(`[Intro] Attempting unmuted play for video ${currentIndex + 1}`);
-                videoEl.muted = false;
-                videoEl.volume = 1.0;
-                setIsMuted(false);
-
-                // Reset to beginning to ensure we start from 0 with sound
-                videoEl.currentTime = 0;
-
-                await videoEl.play();
-                if (isMounted.current) {
-                    console.log(`[Intro] Success: Playing video ${currentIndex + 1} with sound`);
-                }
-            } catch (err: any) {
-                if (err && typeof err === 'object' && 'name' in err && err.name === 'AbortError') {
-                    console.log(`[Intro] Playback interrupt for video ${currentIndex + 1}, ignoring.`);
-                    return;
-                }
-
-                if (err && typeof err === 'object' && 'name' in err && err.name === 'NotAllowedError') {
-                    console.warn(`[Intro] Autoplay with sound failed for video ${currentIndex + 1}. Muting and retrying...`);
-                    try {
-                        if (videoEl && isMounted.current) {
-                            videoEl.muted = true;
-                            setIsMuted(true);
-                            await videoEl.play();
-                            console.log(`[Intro] Playing video ${currentIndex + 1} muted (fallback)`);
-                            return;
-                        }
-                    } catch (muteErr) {
-                        console.error("[Intro] Muted playback also failed:", muteErr);
-                    }
-                }
-
-                console.warn(`[Intro] Autoplay failed for video ${currentIndex + 1}:`, err);
-                try {
-                    if (videoEl && isMounted.current) {
-                        videoEl.muted = true;
-                        setIsMuted(true);
-                        await videoEl.play();
-                    }
-                } catch (mutedErr: any) {
-                    if (mutedErr && typeof mutedErr === 'object' && 'name' in mutedErr && mutedErr.name !== 'AbortError') {
-                        console.error(`[Intro] Video playback failed completely:`, mutedErr);
-                    }
-                }
-            }
-        };
+        const { active } = getRefs();
 
         // Reset text state
         setDisplayedText('');
         setShowText(false);
 
-        attemptPlay();
+        attemptPlay(active.current, currentIndex);
 
         // Handle Text Animation
         const runTextAnimation = async () => {
@@ -102,7 +105,6 @@ export default function IntroVideoFlash({ videos, onComplete }: IntroVideoFlashP
             }
 
             textDone.current = false;
-            // Normalize to array
             const textSegments = Array.isArray(currentVideo.text) ? currentVideo.text : [currentVideo.text];
 
             let segmentIdx = 0;
@@ -110,42 +112,29 @@ export default function IntroVideoFlash({ videos, onComplete }: IntroVideoFlashP
                 if (!isMounted.current) break;
                 if (!segment || segment.trim() === '') continue;
 
-                // 1. Prepare segment
                 setDisplayedText('');
                 setShowText(true);
-
-                // 2. Simple Appearance: Show whole segment immediately
                 setDisplayedText(segment);
 
-                if (!isMounted.current) break;
-
-                // 3. Wait for 5 seconds, but 8 seconds for the very first mantra segment
                 const waitTime = (currentIndex === 0 && segmentIdx === 0) ? 8000 : 5000;
                 await new Promise(r => setTimeout(r, waitTime));
 
                 if (!isMounted.current) break;
-
-                // 4. Fade out text
                 setShowText(false);
-                await new Promise(r => setTimeout(r, 1000)); // Wait for fade out
+                await new Promise(r => setTimeout(r, 1000));
                 segmentIdx++;
             }
 
-            // AFTER ALL TEXT IS DONE: Allow video to proceed if it was waiting
             textDone.current = true;
-            if (isMounted.current && videoRef.current && videoRef.current.ended) {
+            const { active: currentActive } = getRefs();
+            if (isMounted.current && currentActive.current && currentActive.current.ended) {
                 handleEnded();
             }
         };
 
-        const animationPromise = runTextAnimation();
+        runTextAnimation();
 
-        return () => {
-            // Cleanup if needed
-        };
-
-    }, [currentIndex, currentVideo]); // Depend on currentIndex to trigger effect on change
-
+    }, [currentIndex, activeBuffer, videos]); // Depend on buffer toggle too and videos
 
     const textDone = useRef(false);
 
@@ -158,6 +147,8 @@ export default function IntroVideoFlash({ videos, onComplete }: IntroVideoFlashP
         console.log(`Video ${currentIndex + 1} ended`);
 
         if (currentIndex < videos.length - 1) {
+            // TOGGLE BUFFER
+            setActiveBuffer(prev => prev === 'A' ? 'B' : 'A');
             setCurrentIndex(prev => prev + 1);
         } else {
             console.log('Sequence complete, fading out');
@@ -165,23 +156,35 @@ export default function IntroVideoFlash({ videos, onComplete }: IntroVideoFlashP
             setTimeout(() => {
                 setIsPlaying(false);
                 onComplete();
-            }, 800);
+            }, 1000); // Slightly longer fade for smoothness
         }
     };
 
+    // Attach ended listener to both buffers
     useEffect(() => {
-        const videoEl = videoRef.current;
-        if (videoEl) {
-            videoEl.addEventListener('ended', handleEnded);
-        }
+        const elA = videoRefA.current;
+        const elB = videoRefB.current;
 
-        return () => {
-            if (videoEl) {
-                videoEl.removeEventListener('ended', handleEnded);
+        // Ensure the handler only fires for the currently active video
+        const onEndedA = () => {
+            if (activeBuffer === 'A') {
+                handleEnded();
             }
         };
-    }, [currentIndex, videos.length, onComplete]);
+        const onEndedB = () => {
+            if (activeBuffer === 'B') {
+                handleEnded();
+            }
+        };
 
+        elA?.addEventListener('ended', onEndedA);
+        elB?.addEventListener('ended', onEndedB);
+
+        return () => {
+            elA?.removeEventListener('ended', onEndedA);
+            elB?.removeEventListener('ended', onEndedB);
+        };
+    }, [currentIndex, activeBuffer, videos.length, onComplete]); // Added onComplete to dependencies
 
     const handleSkip = () => {
         console.log('User skipped intro');
@@ -189,38 +192,41 @@ export default function IntroVideoFlash({ videos, onComplete }: IntroVideoFlashP
         setTimeout(() => {
             setIsPlaying(false);
             onComplete();
-        }, 500);
+        }, 800);
     };
 
-    // If explicitly stopped, return null to unmount
     if (!isPlaying) return null;
 
-    // If still loading videos or playing, show overlay
-    return (
+    const currentVideoConfig = videos[currentIndex];
+    const nextVideoConfig = videos[currentIndex + 1];
 
+    return (
         <div
             className={`${styles.overlay} ${isFadingOut ? styles.fadeOut : ''}`}
             onClick={handleSkip}
         >
             <div className={styles.videoContainer}>
-                {/* Key ensures we get a fresh video element for each source, avoiding state issues */}
-                {currentVideo && (
-                    <video
-                        key={currentVideo.src}
-                        ref={videoRef}
-                        className={styles.singleVideo}
-                        playsInline
-                        muted={false}
-                        preload="auto"
-                        style={{
-                            objectFit: currentVideo.objectFit || 'cover',
-                            width: '100%',
-                            height: '100%'
-                        }}
-                    >
-                        <source src={currentVideo.src} type="video/mp4" />
-                    </video>
-                )}
+                {/* Buffer A */}
+                <video
+                    ref={videoRefA}
+                    className={`${styles.singleVideo} ${activeBuffer === 'A' ? styles.visible : styles.hidden}`}
+                    playsInline
+                    muted={false}
+                    preload="auto"
+                    src={currentVideoConfig?.src} // Always set src for the current video
+                    style={{ objectFit: currentVideoConfig?.objectFit || 'cover' }}
+                />
+
+                {/* Buffer B */}
+                <video
+                    ref={videoRefB}
+                    className={`${styles.singleVideo} ${activeBuffer === 'B' ? styles.visible : styles.hidden}`}
+                    playsInline
+                    muted={false}
+                    preload="auto"
+                    src={nextVideoConfig?.src} // Always set src for the next video to preload
+                    style={{ objectFit: nextVideoConfig?.objectFit || 'cover' }}
+                />
             </div>
 
             {/* Text Overlay */}
@@ -230,18 +236,18 @@ export default function IntroVideoFlash({ videos, onComplete }: IntroVideoFlashP
                 </div>
             )}
 
-            {/* Skip and Unmute hints */}
+            {/* Skip/Unmute hints */}
             <div className={styles.skipHint}>
                 {isMuted ? (
                     <button
                         className={styles.unmuteBtn}
                         onClick={(e) => {
                             e.stopPropagation();
-                            const videoEl = videoRef.current;
-                            if (videoEl) {
-                                videoEl.muted = false;
+                            const { active } = getRefs();
+                            if (active.current) {
+                                active.current.muted = false;
                                 setIsMuted(false);
-                                videoEl.play().catch(() => { });
+                                active.current.play().catch(() => { });
                             }
                         }}
                     >
