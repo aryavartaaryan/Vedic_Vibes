@@ -119,8 +119,8 @@ export default function IntroVideoFlash({ videos, onComplete }: IntroVideoFlashP
                 setShowText(true);
                 setDisplayedText(segment);
 
-                // Wait for display: 7s for first segment of first video, 5s for others
-                const waitTime = (currentIndex === 0 && segmentIdx === 0) ? 7000 : 5000;
+                // Wait for display: 7s for first two significant segments of first video, 5s for others
+                const waitTime = (currentIndex === 0 && (segmentIdx === 0 || segmentIdx === 1)) ? 7000 : 5000;
                 await new Promise(r => setTimeout(r, waitTime));
 
                 if (!isMounted.current) break;
