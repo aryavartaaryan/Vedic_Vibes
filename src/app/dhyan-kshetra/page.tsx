@@ -225,28 +225,36 @@ export default function DhyanKakshaPage() {
     }, []);
 
     // Function to prepare the NEXT slide into the inactive buffer
-    const pickRandomSlide = () => {
+    const pickRandomSlide = (isAgnihotraSession: boolean) => {
         if (ambientSlides.length === 0) return;
 
         const currentActive = activeBuffer === 'A' ? currentSlideA : currentSlideB;
         const currentActiveSrc = currentActive?.src;
         const currentActiveType = currentActive?.type;
 
-        // Filter for "other" type to encourage distribution, but fallback to all if needed
-        const otherTypeSlides = ambientSlides.filter(s => s.type !== currentActiveType);
-        const pool = otherTypeSlides.length > 0 ? otherTypeSlides : ambientSlides;
+        // FILTER: Only include images if it's an Agnihotra/Shanti session
+        let pool = ambientSlides;
+        if (!isAgnihotraSession) {
+            pool = ambientSlides.filter(s => s.type === 'video');
+            // If no videos available (shouldn't happen), fallback to all
+            if (pool.length === 0) pool = ambientSlides;
+        }
 
-        let nextSlide = pool[Math.floor(Math.random() * pool.length)];
+        // Distribution Filter: Encourage switching types (video <-> image) if possible
+        const otherTypeSlides = pool.filter(s => s.type !== currentActiveType);
+        const finalPool = otherTypeSlides.length > 0 ? otherTypeSlides : pool;
+
+        let nextSlide = finalPool[Math.floor(Math.random() * finalPool.length)];
 
         // Avoid immediate repeat of the exact same source
-        if (pool.length > 1 && nextSlide.src === currentActiveSrc) {
-            nextSlide = pool.filter(s => s.src !== currentActiveSrc)[Math.floor(Math.random() * (pool.length - 1))];
+        if (finalPool.length > 1 && nextSlide.src === currentActiveSrc) {
+            nextSlide = finalPool.filter(s => s.src !== currentActiveSrc)[Math.floor(Math.random() * (finalPool.length - 1))];
         }
 
         const start = nextSlide.type === 'video' ? Math.floor(Math.random() * 4) * 15 : undefined;
         const animationIndex = Math.floor(Math.random() * 4) + 1; // 1 to 4
 
-        console.log(`[Ambient] Buffering distributed ${nextSlide.type} into ${activeBuffer === 'A' ? 'B' : 'A'}:`, nextSlide.src);
+        console.log(`[Ambient] Buffering ${isAgnihotraSession ? 'Agnihotra' : 'Regular'} ${nextSlide.type} into ${activeBuffer === 'A' ? 'B' : 'A'}:`, nextSlide.src);
 
         if (activeBuffer === 'A') {
             setCurrentSlideB({ ...nextSlide, start, animationIndex });
@@ -255,23 +263,30 @@ export default function DhyanKakshaPage() {
         }
     };
 
-    // Auto-rotate ambient slides: 7s for images (cinematic), 30s for videos
+    // Auto-rotate ambient slides: 3s for images (Agnihotra), 30s for videos
     React.useEffect(() => {
         if (!startBackgroundLoop || ambientSlides.length === 0) return;
 
         const currentSlide = activeBuffer === 'A' ? currentSlideA : currentSlideB;
 
-        // ONLY allow image slides if the current mantra is an Agnihotra one
-        const isAgnihotra = currentItem.titleHi.includes('अग्निहोत्र') || currentItem.titleHi.includes('शान्ति पाठ');
-        const effectiveDuration = (currentSlide?.type === 'image' && isAgnihotra) ? 3000 : 30000;
+        // Robust check for Agnihotra or Shanti sessions
+        const title = currentItem.titleHi.toLowerCase() + currentItem.title.toLowerCase();
+        const isAgnihotra = title.includes('अग्निहोत्र') ||
+            title.includes('agnihotra') ||
+            title.includes('शान्ति') ||
+            title.includes('shanti');
+
+        const effectiveDuration = (currentSlide?.type === 'image') ? 3000 : 30000;
+
+        console.log(`[Ambient] Timer set for ${effectiveDuration}ms (${currentSlide?.type}). Agnihotra Mode: ${isAgnihotra}`);
 
         const interval = setInterval(() => {
-            console.log(`[Ambient] Rotating random slide...`);
-            pickRandomSlide();
+            console.log(`[Ambient] Rotating slide...`);
+            pickRandomSlide(isAgnihotra);
         }, effectiveDuration);
 
         return () => clearInterval(interval);
-    }, [startBackgroundLoop, ambientSlides, activeBuffer, currentSlideA, currentSlideB, currentItem]);
+    }, [startBackgroundLoop, ambientSlides.length, activeBuffer, currentSlideA?.src, currentSlideB?.src, currentItem.id]);
 
     // Handle media synchronization on the buffers
     React.useEffect(() => {
