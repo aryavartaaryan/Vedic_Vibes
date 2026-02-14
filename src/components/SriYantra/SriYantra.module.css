@@ -134,8 +134,8 @@
     }
 
     .container {
-        max-width: 63vw;
-        height: 63vw;
+        max-width: 50vw;
+        height: 50vw;
         margin: 0 auto;
         background: transparent !important;
     }

@@ -14,7 +14,7 @@
     flex-direction: column;
     align-items: center;
     gap: 14px;
-    width: 150px;
+    width: 120px;
 }
 
 /* Grand Golden Sunburst Button */
@@ -170,7 +170,7 @@
     align-items: center;
     justify-content: center;
     gap: 14px;
-    width: 150px;
+    width: 120px;
 }
 
 .acharyaTrigger {
@@ -803,7 +803,7 @@
 
 @media (max-width: 768px) {
     .triggerContainer {
-        left: 16px;
+        left: 12px;
         bottom: 155px;
         /* Fixed anchor for the button position */
         top: auto;
@@ -812,6 +812,7 @@
         display: flex;
         flex-direction: column;
         align-items: center;
+        width: 100px;
     }
 
     .trigger {
@@ -844,7 +845,7 @@
     }
 
     .acharyaContainer {
-        right: 16px;
+        right: 12px;
         bottom: 155px;
         /* Identical bottom anchor for symmetry */
         top: auto;
@@ -853,6 +854,7 @@
         display: flex;
         flex-direction: column;
         align-items: center;
+        width: 100px;
     }
 
     .acharyaTrigger {
