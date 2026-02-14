@@ -110,12 +110,13 @@ export default function IntroVideoFlash({ videos, onComplete }: IntroVideoFlashP
                 setDisplayedText('');
                 setShowText(true);
 
-                // 2. Animate words
-                for (let i = 0; i < words.length; i++) {
-                    if (!isMounted.current) break;
-                    setDisplayedText(prev => prev ? `${prev} ${words[i]}` : words[i]);
-                    await new Promise(r => setTimeout(r, 600)); // 600ms per word
-                }
+                // 2. Show full segment for better readability
+                setDisplayedText(segment);
+                setShowText(true);
+
+                // Wait while visible (adjust time based on segment length)
+                const readingTime = Math.max(3000, segment.length * 50);
+                await new Promise(r => setTimeout(r, readingTime));
 
                 if (!isMounted.current) break;
 

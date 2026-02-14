@@ -28,7 +28,7 @@ export default function Navbar() {
             <div className={styles.navHeader}>
                 <Link href="/" className={styles.logoLink} onClick={closeMenu}>
                     <Flame size={24} color="var(--sacred-kumkum)" fill="var(--sacred-kumkum)" />
-                    <span>Samadhaan</span>
+                    <span>Pranav Samadhaan</span>
                 </Link>
 
                 <button

@@ -168,10 +168,14 @@ export default function MantraSangrah({
                             } else if (file.name.includes('Lalitha Sahasranamam I Manojna')) {
                                 title = 'Lalitha Sahasranamam';
                                 isSpecial = true;
-                            } else if (file.name.includes('vishnu_sahasranama')) {
+                            }
+
+                            let startTime = 0;
+                            if (file.name.includes('vishnu_sahasranama')) {
                                 title = 'Vishnu Sahasranama';
                                 isSpecial = true;
                                 isDefault = true;
+                                startTime = 5;
                             }
 
                             return {
@@ -179,7 +183,7 @@ export default function MantraSangrah({
                                 title,
                                 titleHi,
                                 src: file.path,
-                                startTime: 0,
+                                startTime,
                                 isSpecial,
                                 isDefault
                             };
@@ -241,6 +245,7 @@ export default function MantraSangrah({
     const currentTrackRef = useRef<Track | null>(null);
     const playlistRef = useRef<Track[]>([]);
     const onTrackEndedRef = useRef(onTrackEnded);
+    const lastAutoClosedIndex = useRef<number | null>(null);
 
     // Keep refs updated
     useEffect(() => {
@@ -466,6 +471,38 @@ export default function MantraSangrah({
         }
     }, [isPaused, isSessionPaused, isPlaying, startPlaying, forceTrackId]);
 
+
+    // AUTO-CLOSE MENU & SYNC: When a video starts or sequence changes
+    useEffect(() => {
+        if (externalPlaylist && currentIndex !== undefined) {
+            const track = externalPlaylist[currentIndex];
+            if (track && track.type === 'video') {
+                // BUG FIX: Only auto-close if we haven't already auto-closed for THIS index
+                // This allows the user to manually reopen it.
+                if (isOpen && lastAutoClosedIndex.current !== currentIndex) {
+                    console.log(`[MantraSangrah] Auto-closing menu for video index ${currentIndex}.`);
+                    setIsOpen(false);
+                    lastAutoClosedIndex.current = currentIndex;
+                }
+
+                // CLEAR internal library selection to let sequential controls take over
+                if (currentTrack) {
+                    setCurrentTrack(null);
+                    currentTrackRef.current = null;
+                    if (audioRef.current) {
+                        audioRef.current.pause();
+                        setIsPlaying(false);
+                    }
+                }
+            } else {
+                // If it's not a video (e.g. back to mantra), reset the close lock for future videos
+                if (lastAutoClosedIndex.current !== currentIndex) {
+                    lastAutoClosedIndex.current = null;
+                }
+            }
+        }
+    }, [currentIndex, externalPlaylist, isOpen, currentTrack]);
+
     const selectTrack = async (track: Track) => {
         const audio = audioRef.current;
         if (!audio) return;
@@ -609,7 +646,7 @@ export default function MantraSangrah({
                 <div className={styles.header}>
                     <div className={styles.headerTitle}>
                         <Sparkles size={20} className={styles.headerIcon} />
-                        <h2>{lang === 'hi' ? 'मंत्र संग्रह' : 'Mantra Sangrah'}</h2>
+                        <h2>{lang === 'hi' ? 'हमारा संग्रह' : 'Humara Sangrah'}</h2>
                     </div>
                     <button
                         className={styles.closeBtn}
@@ -627,68 +664,53 @@ export default function MantraSangrah({
                 {/* Playlist Scroll Area */}
                 <div className={styles.playlist}>
                     <div className={styles.trackList}>
-                        {/* SECTION 1: Meditation Sequence (If provided) */}
-                        {externalPlaylist && (
-                            <div className={styles.sectionGroup}>
-                                <p className={styles.categoryLabel}>
-                                    {lang === 'hi' ? '🧘 साधना क्रम' : '🧘 Meditation Sequence'}
-                                </p>
-                                {externalPlaylist.map((track: any, index: number) => {
-                                    const isActive = currentIndex === index;
-                                    return (
-                                        <button
-                                            key={`seq-${track.id || index}`}
-                                            className={`${styles.trackItem} ${isActive ? styles.trackActive : ''}`}
-                                            onClick={() => onSelectIndex?.(index)}
-                                        >
-                                            <div className={styles.trackInfo}>
-                                                <div className={styles.trackTitleContainer}>
-                                                    {track.type === 'video' ? <span className={styles.mediaIcon}>📽️</span> : <span className={styles.mediaIcon}>🎵</span>}
-                                                    <span className={styles.trackTitle}>
-                                                        {track.titleHi}
-                                                    </span>
-                                                </div>
-                                                <div className={styles.badgeContainer}>
-                                                    {track.type === 'video' ? (
-                                                        <span className={styles.trackBadgeVideo}>
-                                                            {lang === 'hi' ? 'दर्शन' : 'Darshan'}
-                                                        </span>
-                                                    ) : (
-                                                        <span className={styles.trackBadge}>
-                                                            {lang === 'hi' ? 'मंत्र' : 'Mantra'}
-                                                        </span>
-                                                    )}
-                                                </div>
-                                            </div>
-                                            <div className={styles.trackAction}>
-                                                {isActive && (track.type === 'video' ? !isSessionPaused : (isPlaying && !isSessionPaused)) ? (
-                                                    <Pause size={18} />
-                                                ) : (
-                                                    <Play size={18} />
-                                                )}
-                                            </div>
-                                        </button>
-                                    );
-                                })}
-                                <div className={styles.sectionDivider} />
-                            </div>
-                        )}
-
-                        {/* SECTION 2: Full Collection */}
+                        {/* Unified Collection in Playback Order */}
                         <div className={styles.sectionGroup}>
-                            <p className={styles.categoryLabel}>
-                                {lang === 'hi' ? '🎼 मंत्र संग्रह (पूर्ण)' : '🎼 Mantra Collection (Full)'}
-                            </p>
+                            {/* 1. Sequence Items (Videos + Audio in their playback order) */}
+                            {externalPlaylist && externalPlaylist.map((track, index) => {
+                                const isActive = currentIndex === index && (!currentTrack || track.type === 'video');
+                                const isVideo = track.type === 'video';
+
+                                return (
+                                    <button
+                                        key={`seq-${track.id || index}`}
+                                        className={`${styles.trackItem} ${isActive ? styles.trackActive : ''}`}
+                                        onClick={() => {
+                                            onSelectIndex?.(index);
+                                            if (isVideo) setIsOpen(false); // Close on video selection
+                                        }}
+                                    >
+                                        <div className={styles.trackInfo}>
+                                            <div className={styles.trackTitleContainer}>
+                                                <span className={styles.mediaIcon}>{isVideo ? '📽️' : '🎵'}</span>
+                                                <span className={styles.trackTitle}>{track.titleHi}</span>
+                                            </div>
+                                            {isVideo ? (
+                                                <div className={styles.badgeContainer}>
+                                                    <span className={styles.trackBadge}>{lang === 'hi' ? 'दर्शन' : 'Darshan'}</span>
+                                                </div>
+                                            ) : (track.title.includes('Vishnu') || track.title.includes('Lalitha')) && (
+                                                <div className={styles.badgeContainer}>
+                                                    <span className={styles.trackBadge}>{lang === 'hi' ? 'विशेष' : 'Vishesh'}</span>
+                                                </div>
+                                            )}
+                                        </div>
+                                        <div className={styles.trackAction}>
+                                            {isActive && (isVideo ? !isSessionPaused : isPlaying) ? <Pause size={18} /> : <Play size={18} />}
+                                        </div>
+                                    </button>
+                                );
+                            })}
+
+                            {/* 2. Full Library Collection (Remaining items) */}
                             {playlist
                                 .filter(track => {
-                                    // Hide if this track is already in the meditation sequence (externalPlaylist)
                                     if (!externalPlaylist) return true;
                                     return !externalPlaylist.some((extItem: any) =>
                                         extItem.id === track.id || extItem.src === track.id
                                     );
                                 })
                                 .map((track) => {
-                                    // If we are in sequential mode, check if this specific audio path matches currentTrack
                                     const isActive = currentTrack?.id === track.id;
                                     return (
                                         <button
@@ -699,9 +721,7 @@ export default function MantraSangrah({
                                             <div className={styles.trackInfo}>
                                                 <div className={styles.trackTitleContainer}>
                                                     <span className={styles.mediaIcon}>🪷</span>
-                                                    <span className={styles.trackTitle}>
-                                                        {track.titleHi}
-                                                    </span>
+                                                    <span className={styles.trackTitle}>{track.titleHi}</span>
                                                 </div>
                                                 <div className={styles.badgeContainer}>
                                                     {track.isDefault && (
@@ -710,18 +730,12 @@ export default function MantraSangrah({
                                                         </span>
                                                     )}
                                                     {track.isSpecial && (
-                                                        <span className={styles.trackBadge}>
-                                                            {lang === 'hi' ? 'विशेष' : 'Vishesh'}
-                                                        </span>
+                                                        <span className={styles.trackBadge}>{lang === 'hi' ? 'विशेष' : 'Vishesh'}</span>
                                                     )}
                                                 </div>
                                             </div>
                                             <div className={styles.trackAction}>
-                                                {isActive && isPlaying ? (
-                                                    <Pause size={18} />
-                                                ) : (
-                                                    <Play size={18} />
-                                                )}
+                                                {isActive && isPlaying ? <Pause size={18} /> : <Play size={18} />}
                                             </div>
                                         </button>
                                     );
@@ -737,12 +751,19 @@ export default function MantraSangrah({
 
                         {/* Derive current display item from either library track or sequence index */}
                         {(() => {
-                            const isSequenceItem = !!externalPlaylist && currentIndex !== undefined && !currentTrack;
-                            const activeItem = isSequenceItem ? externalPlaylist[currentIndex] : currentTrack;
+                            // PRIORITIZE external playlist (the meditation sequence) if it exists and current index is valid
+                            const isSequenceActive = !!externalPlaylist && currentIndex !== undefined;
+                            const sequenceItem = isSequenceActive ? externalPlaylist[currentIndex] : null;
+
+                            // An item is from "sequence" if no library track is playing OR if the sequence item is a video
+                            // (Videos MUST use sequence controls)
+                            const useSequenceControls = isSequenceActive && (!currentTrack || sequenceItem?.type === 'video');
+
+                            const activeItem = useSequenceControls ? sequenceItem : currentTrack;
                             const isVideo = activeItem?.type === 'video';
 
                             // Control State
-                            const isPausedNow = isVideo ? isSessionPaused : (isSequenceItem ? isSessionPaused : isPaused);
+                            const isPausedNow = isVideo ? isSessionPaused : (useSequenceControls ? isSessionPaused : isPaused);
                             const currentlyPlaying = !isPausedNow;
 
                             // UI Values
@@ -756,11 +777,13 @@ export default function MantraSangrah({
                                         onClick={() => {
                                             if (isVideo && onVideoToggle) {
                                                 onVideoToggle();
-                                            } else if (isSequenceItem) {
-                                                onSelectIndex?.(currentIndex);
+                                            } else if (useSequenceControls) {
+                                                onSelectIndex?.(currentIndex!);
                                             } else {
+
                                                 togglePlayPause();
                                             }
+
                                         }}
                                     >
                                         {currentlyPlaying ? <Pause size={22} /> : <Play size={22} className={styles.playIconOffset} />}

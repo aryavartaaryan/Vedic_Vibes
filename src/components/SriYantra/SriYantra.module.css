@@ -13,8 +13,8 @@
 .container {
     position: relative;
     width: 100%;
-    max-width: 590px;
-    height: 590px;
+    max-width: 413px;
+    height: 413px;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -85,8 +85,8 @@
 .sideYantra {
     position: relative;
     width: 100%;
-    max-width: 245px;
-    height: 245px;
+    max-width: 172px;
+    height: 172px;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -99,13 +99,13 @@
 /* Responsive adjustments */
 @media (max-width: 1200px) {
     .container {
-        max-width: 420px;
-        height: 420px;
+        max-width: 300px;
+        height: 300px;
     }
 
     .sideYantra {
-        max-width: 220px;
-        height: 220px;
+        max-width: 154px;
+        height: 154px;
         margin: 0 -30px;
     }
 }
@@ -117,8 +117,8 @@
     }
 
     .container {
-        max-width: 85vw;
-        height: 85vw;
+        max-width: 63vw;
+        height: 63vw;
         margin: 0 auto;
         background: transparent !important;
     }

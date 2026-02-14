@@ -230,9 +230,9 @@ export default function PranicPathSection() {
             <div className={styles.contentWrapper}>
                 <div className={styles.omAnchor}>🕉</div>
 
-                <SolarFlareText>
-                    Samadhaan
-                </SolarFlareText>
+                <h1 className={styles.title}>
+                    Pranav Samadhaan
+                </h1>
 
                 {/* Looping Subheading */}
                 <LuminescentText delay={0.2} loop>

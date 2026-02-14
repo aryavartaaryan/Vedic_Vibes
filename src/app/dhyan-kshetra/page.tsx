@@ -42,7 +42,7 @@ export default function DhyanKakshaPage() {
         return [
             { type: "mantra", id: "guidance", src: "/audio/Guidance.wav", title: "Guidance", titleHi: "दर्शन और मार्गदर्शन" },
             { type: "mantra", id: "/audio/Om_Sahana_Vavatu_Shanti_Mantra.mp3", src: "/audio/Om_Sahana_Vavatu_Shanti_Mantra.mp3", title: "Om Sahana Vavatu", titleHi: "ॐ सहना ववतु" },
-            { type: "video", id: "v1", src: VIDEO_LIST[0], title: "Maheshvara Sutram", titleHi: "महेश्वर सूत्रम्", trimEnd: 5 },
+            { type: "video", id: "v1", src: VIDEO_LIST[0], title: "Maheshvara Sutram", titleHi: "महेश्वर सूत्रम्", trimEnd: 4 },
             { type: "mantra", id: "/audio/Lalitha Sahasranamam I Manojna & Pradanya - Om Voices Junior I The names of Goddess Lalitha Devi [zNYj8GrXEQk].mp3", src: "/audio/Lalitha Sahasranamam I Manojna & Pradanya - Om Voices Junior I The names of Goddess Lalitha Devi [zNYj8GrXEQk].mp3", title: "Lalitha Sahasranamam", titleHi: "ललिता सहस्रनाम" },
             { type: "video", id: "v2", src: VIDEO_LIST[1], title: "Shiv Shakti Energy", titleHi: "शिव शक्ति ऊर्जा" },
             { type: "mantra", id: "/audio/vishnu_sahasranama.mp3.mp3", src: "/audio/vishnu_sahasranama.mp3.mp3", title: "Vishnu Sahasranama", titleHi: "विष्णु सहस्रनाम" },
@@ -139,15 +139,23 @@ export default function DhyanKakshaPage() {
 
 
 
-    // Fetch Videos on Mount
+    // State for A/B double buffering ambient slides (Videos + Images)
+    const [ambientSlides, setAmbientSlides] = useState<{ src: string, type: 'video' | 'image' }[]>([]);
+    const [currentSlideA, setCurrentSlideA] = useState<{ src: string, type: 'video' | 'image', start?: number, animationIndex?: number } | null>(null);
+    const [currentSlideB, setCurrentSlideB] = useState<{ src: string, type: 'video' | 'image', start?: number, animationIndex?: number } | null>(null);
+    const [activeBuffer, setActiveBuffer] = useState<'A' | 'B'>('A');
+
+    const videoRefA = React.useRef<HTMLVideoElement>(null);
+    const videoRefB = React.useRef<HTMLVideoElement>(null);
+
+    // Fetch Media on Mount
     useEffect(() => {
-        const fetchVideos = async () => {
+        const fetchMedia = async () => {
             try {
-                // Fetch Flash Videos for Intro
+                // 1. Fetch Flash Videos for Intro
                 const flashRes = await fetch('/api/videos?folder=Flash Videos');
                 if (flashRes.ok) {
                     const data = await flashRes.json();
-                    // Sort to ensure consistent order if needed, or keep random/file-system order
                     const videos = data.files.map((f: any) => {
                         let text: string | string[] = "";
                         if (f.name.includes('kailash') && !f.name.includes('2')) {
@@ -161,114 +169,138 @@ export default function DhyanKakshaPage() {
                             text = "विशेष ध्यान क्षेत्र में आपका स्वागत है...";
                         }
 
-                        return {
-                            src: f.path,
-                            text: text
-                        };
+                        return { src: f.path, text: text };
                     });
                     setIntroVideos(videos);
                 }
 
-                // Fetch Slide Videos for Background
-                const slideRes = await fetch('/api/videos?folder=Slide Videos&t=' + Date.now());
-                if (slideRes.ok) {
-                    const data = await slideRes.json();
-                    const paths = data.files.map((f: any) => f.path);
-                    console.log("Loaded slide videos for sequential and loop:", paths);
-                    setSlideVideos(paths);
+                // 2. Fetch Slide Videos & Images for Background
+                const [vRes, iRes] = await Promise.all([
+                    fetch('/api/videos?folder=Slide Videos&t=' + Date.now()),
+                    fetch('/api/images')
+                ]);
 
-                    // IF no slide is set yet, pick one now so we are ready
-                    if (paths.length > 0) {
-                        const randomVideoPath = paths[Math.floor(Math.random() * paths.length)];
-                        const randomStart = Math.floor(Math.random() * 4) * 15;
-                        setCurrentSlide({ src: randomVideoPath, start: randomStart });
-                    }
+                let combined: { src: string, type: 'video' | 'image' }[] = [];
+
+                if (vRes.ok) {
+                    const vData = await vRes.json();
+                    combined = [...combined, ...vData.files.map((f: any) => ({ src: f.path, type: 'video' }))];
+                }
+                if (iRes.ok) {
+                    const iData = await iRes.json();
+                    combined = [...combined, ...iData.files.map((f: any) => ({ src: f.path, type: 'image' }))];
+                }
+
+                console.log("Loaded unified ambient slides:", combined);
+                setAmbientSlides(combined);
+
+                // Initial Slide
+                if (combined.length > 0) {
+                    const first = combined[Math.floor(Math.random() * combined.length)];
+                    const start = first.type === 'video' ? Math.floor(Math.random() * 4) * 15 : undefined;
+                    const animationIndex = Math.floor(Math.random() * 4) + 1; // 1 to 4
+                    setCurrentSlideA({ ...first, start, animationIndex });
+                    setActiveBuffer('A');
                 }
             } catch (error) {
-                console.error("Failed to fetch videos:", error);
+                console.error("Failed to fetch media:", error);
             }
         };
 
-        fetchVideos();
+        fetchMedia();
     }, []);
 
-    // State for current slide configuration
-    const [currentSlide, setCurrentSlide] = useState<{ src: string, start: number } | null>(null);
-    const videoRef = React.useRef<HTMLVideoElement>(null);
-
-    // Initial Random Slide on Mount (or when loop starts)
-    React.useEffect(() => {
-        if (startBackgroundLoop && !currentSlide && slideVideos.length > 0) {
-            pickRandomSlide();
-        }
-    }, [startBackgroundLoop, slideVideos]);
-
-    // Function to generate a new random slide at runtime
+    // Function to prepare the NEXT slide into the inactive buffer
     const pickRandomSlide = () => {
-        if (slideVideos.length === 0) return;
+        if (ambientSlides.length === 0) return;
 
-        // Try to pick a DIFFERENT video than current one if possible
-        let nextVideoPath = slideVideos[Math.floor(Math.random() * slideVideos.length)];
-        if (slideVideos.length > 1 && currentSlide && nextVideoPath === currentSlide.src) {
-            // Pick another one
-            const otherVideos = slideVideos.filter(v => v !== currentSlide.src);
-            nextVideoPath = otherVideos[Math.floor(Math.random() * otherVideos.length)];
+        const currentActive = activeBuffer === 'A' ? currentSlideA : currentSlideB;
+        const currentActiveSrc = currentActive?.src;
+        const currentActiveType = currentActive?.type;
+
+        // Filter for "other" type to encourage distribution, but fallback to all if needed
+        const otherTypeSlides = ambientSlides.filter(s => s.type !== currentActiveType);
+        const pool = otherTypeSlides.length > 0 ? otherTypeSlides : ambientSlides;
+
+        let nextSlide = pool[Math.floor(Math.random() * pool.length)];
+
+        // Avoid immediate repeat of the exact same source
+        if (pool.length > 1 && nextSlide.src === currentActiveSrc) {
+            nextSlide = pool.filter(s => s.src !== currentActiveSrc)[Math.floor(Math.random() * (pool.length - 1))];
         }
 
-        const randomStart = Math.floor(Math.random() * 4) * 15;
+        const start = nextSlide.type === 'video' ? Math.floor(Math.random() * 4) * 15 : undefined;
+        const animationIndex = Math.floor(Math.random() * 4) + 1; // 1 to 4
 
-        console.log("[Ambient] Picking new slide:", nextVideoPath);
-        setCurrentSlide({ src: nextVideoPath, start: randomStart });
+        console.log(`[Ambient] Buffering distributed ${nextSlide.type} into ${activeBuffer === 'A' ? 'B' : 'A'}:`, nextSlide.src);
+
+        if (activeBuffer === 'A') {
+            setCurrentSlideB({ ...nextSlide, start, animationIndex });
+        } else {
+            setCurrentSlideA({ ...nextSlide, start, animationIndex });
+        }
     };
 
-    // Auto-rotate slides every 30 seconds
+    // Auto-rotate ambient slides: 11s for images (cinematic), 30s for videos
     React.useEffect(() => {
-        if (!startBackgroundLoop || slideVideos.length === 0) return;
+        if (!startBackgroundLoop || ambientSlides.length === 0) return;
+
+        const currentSlide = activeBuffer === 'A' ? currentSlideA : currentSlideB;
+        const duration = currentSlide?.type === 'image' ? 11000 : 30000;
 
         const interval = setInterval(() => {
-            console.log("[Ambient] Interval rotation triggered.");
+            console.log(`[Ambient] Rotating random slide after ${duration}ms...`);
             pickRandomSlide();
-        }, 30000); // 30 seconds
+        }, duration);
 
         return () => clearInterval(interval);
-    }, [startBackgroundLoop, slideVideos, currentSlide]); // Depend on currentSlide for the "different" check
+    }, [startBackgroundLoop, ambientSlides, activeBuffer, currentSlideA, currentSlideB]);
 
-    // Apply slide settings to video element
+    // Handle media synchronization on the buffers
     React.useEffect(() => {
-        const video = videoRef.current;
-        if (video && currentSlide && currentItem.type === 'mantra' && startBackgroundLoop) {
-            const toPlay = encodeURI(currentSlide.src);
+        if (!startBackgroundLoop) return;
 
-            console.log("[Ambient] Applying src:", toPlay);
-            if (!video.src.includes(toPlay)) {
-                video.src = toPlay;
-            }
-            video.currentTime = currentSlide.start;
+        const syncBuffer = (buffer: 'A' | 'B') => {
+            const slide = buffer === 'A' ? currentSlideA : currentSlideB;
+            const ref = buffer === 'A' ? videoRefA : videoRefB;
 
-            // Use a proper play attempt with retry
-            const playAmbient = async () => {
-                try {
-                    video.muted = true; // Ambient always muted
-                    await video.play();
-                } catch (e) {
-                    if (e && typeof e === 'object' && 'name' in e && e.name === 'AbortError') {
-                        // Silent
-                    } else {
-                        console.log("[Ambient] Autoplay prevented, retrying in 1s...", e);
-                        setTimeout(() => video.play().catch(() => { }), 1000);
-                    }
+            if (ref.current && slide && slide.type === 'video') {
+                const video = ref.current;
+                const toPlay = encodeURI(slide.src);
+
+                if (!video.src.includes(toPlay)) {
+                    video.src = toPlay;
+                    if (slide.start !== undefined) video.currentTime = slide.start;
+                    video.load();
                 }
-            };
-            playAmbient();
-        }
-    }, [currentSlide, currentItem.type, startBackgroundLoop]);
 
+                if (buffer === activeBuffer && currentItem.type === 'mantra') {
+                    video.play().catch(e => {
+                        if (e.name !== 'AbortError') console.warn(`[Ambient] Buffer ${buffer} play failed:`, e);
+                    });
+                }
+            }
+        };
+
+        syncBuffer('A');
+        syncBuffer('B');
+    }, [currentSlideA, currentSlideB, activeBuffer, startBackgroundLoop, currentItem.type]);
+
+
+    const ambientLayerStyle: React.CSSProperties = {
+        position: 'absolute',
+        inset: 0,
+        width: '100%',
+        height: '100%',
+        objectFit: 'cover',
+        objectPosition: 'top center',
+        transition: 'opacity 1.5s ease-in-out',
+    };
 
     return (
         <main
             className={pageStyles.container}
             style={{
-                background: 'transparent', // Let video show through
                 minHeight: '100vh',
                 position: 'relative',
                 overflow: 'hidden'
@@ -312,7 +344,7 @@ export default function DhyanKakshaPage() {
                             marginBottom: '1rem',
                             textShadow: '0 0 20px rgba(255, 215, 0, 0.3)'
                         }}>
-                            Dhyan Kshetra
+                            ध्यान क्षेत्र
                         </h1>
                         <p style={{
                             color: 'rgba(255, 255, 255, 0.8)',
@@ -327,28 +359,7 @@ export default function DhyanKakshaPage() {
 
                     <button
                         onClick={() => setHasStarted(true)}
-                        style={{
-                            padding: '1.2rem 3rem',
-                            fontSize: '1.2rem',
-                            fontWeight: '600',
-                            color: '#0a0502',
-                            background: 'linear-gradient(135deg, #FFD700 0%, #B8860B 100%)',
-                            border: 'none',
-                            borderRadius: '50px',
-                            cursor: 'pointer',
-                            boxShadow: '0 10px 30px rgba(0, 0, 0, 0.5), 0 0 20px rgba(212, 175, 55, 0.4)',
-                            transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
-                            fontFamily: 'inherit',
-                            marginTop: '1rem'
-                        }}
-                        onMouseEnter={(e) => {
-                            e.currentTarget.style.transform = 'scale(1.05) translateY(-2px)';
-                            e.currentTarget.style.boxShadow = '0 15px 40px rgba(0, 0, 0, 0.6), 0 0 30px rgba(212, 175, 55, 0.6)';
-                        }}
-                        onMouseLeave={(e) => {
-                            e.currentTarget.style.transform = 'scale(1)';
-                            e.currentTarget.style.boxShadow = '0 10px 30px rgba(0, 0, 0, 0.5), 0 0 20px rgba(212, 175, 55, 0.4)';
-                        }}
+                        className={pageStyles.enterButton}
                     >
                         Enter / प्रवेश करें
                     </button>
@@ -505,25 +516,80 @@ export default function DhyanKakshaPage() {
                         }}
                     />
 
-                    {/* LAYER 2: Ambient Background Loop (During Mantras) */}
-                    {currentSlide && (
-                        <video
-                            ref={videoRef}
-                            autoPlay
-                            muted
-                            playsInline
-                            onEnded={pickRandomSlide}
-                            style={{
-                                display: currentItem.type === 'mantra' ? 'block' : 'none',
-                                width: '100%',
-                                height: '100%',
-                                objectFit: 'cover',
-                                objectPosition: 'top center',
-                                transition: 'opacity 1s ease-in-out',
-                                backgroundColor: '#000' // FALLBACK to prevent white screen
-                            }}
-                        />
-                    )}
+                    {/* LAYER 2: Ambient Background Loop (During Mantras) - A/B Double Buffering */}
+                    <div
+                        style={{
+                            position: 'absolute',
+                            inset: 0,
+                            zIndex: 0,
+                            backgroundColor: '#000',
+                            overflow: 'hidden'
+                        }}
+                    >
+                        {/* Buffer A - Media Display */}
+                        {currentSlideA && (
+                            currentSlideA.type === 'video' ? (
+                                <video
+                                    ref={videoRefA}
+                                    autoPlay
+                                    muted
+                                    playsInline
+                                    onCanPlayThrough={() => activeBuffer === 'B' && setActiveBuffer('A')}
+                                    onEnded={() => activeBuffer === 'A' && pickRandomSlide()}
+                                    style={{
+                                        ...ambientLayerStyle,
+                                        opacity: activeBuffer === 'A' ? 1 : 0,
+                                        zIndex: activeBuffer === 'A' ? 2 : 1
+                                    }}
+                                />
+                            ) : (
+                                <img
+                                    src={currentSlideA.src}
+                                    alt="Atmosphere"
+                                    onLoad={() => activeBuffer === 'B' && setActiveBuffer('A')}
+                                    className={pageStyles[`ambientCinematic${currentSlideA.animationIndex || 1}`]}
+                                    style={{
+                                        ...ambientLayerStyle,
+                                        objectFit: 'cover',
+                                        opacity: activeBuffer === 'A' ? 1 : 0,
+                                        zIndex: activeBuffer === 'A' ? 2 : 1
+                                    }}
+                                />
+                            )
+                        )}
+
+                        {/* Buffer B - Media Display */}
+                        {currentSlideB && (
+                            currentSlideB.type === 'video' ? (
+                                <video
+                                    ref={videoRefB}
+                                    autoPlay
+                                    muted
+                                    playsInline
+                                    onCanPlayThrough={() => activeBuffer === 'A' && setActiveBuffer('B')}
+                                    onEnded={() => activeBuffer === 'B' && pickRandomSlide()}
+                                    style={{
+                                        ...ambientLayerStyle,
+                                        opacity: activeBuffer === 'B' ? 1 : 0,
+                                        zIndex: activeBuffer === 'B' ? 2 : 1
+                                    }}
+                                />
+                            ) : (
+                                <img
+                                    src={currentSlideB.src}
+                                    alt="Atmosphere"
+                                    onLoad={() => activeBuffer === 'A' && setActiveBuffer('B')}
+                                    className={pageStyles[`ambientCinematic${currentSlideB.animationIndex || 1}`]}
+                                    style={{
+                                        ...ambientLayerStyle,
+                                        objectFit: 'cover',
+                                        opacity: activeBuffer === 'B' ? 1 : 0,
+                                        zIndex: activeBuffer === 'B' ? 2 : 1
+                                    }}
+                                />
+                            )
+                        )}
+                    </div>
                 </div>
             )}
 
@@ -534,21 +600,7 @@ export default function DhyanKakshaPage() {
             {/* <div style={{...}} /> */}
 
             {/* Main Content Container */}
-            <div className={styles.heroSection} style={{
-                position: 'relative',
-                minHeight: '100vh',
-                display: 'flex',
-                flexDirection: 'column',
-                alignItems: 'center',
-                justifyContent: 'flex-start',
-                paddingTop: '85px',
-                paddingBottom: '150px', // Increased to lift content up
-                paddingLeft: '1rem',
-                paddingRight: '1rem',
-                gap: '1rem',
-                zIndex: 10,
-                background: 'transparent' // Force transparent to see video
-            }}>
+            <div className={pageStyles.heroSection}>
 
 
 
