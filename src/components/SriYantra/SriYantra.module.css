@@ -70,9 +70,9 @@
 
 .authenticCore {
     position: absolute;
-    width: 38.5%;
-    /* Increased from 32% (20% increase) */
-    height: 38.5%;
+    width: 45%;
+    /* Increased from 38.5% for visual balance with larger container */
+    height: 45%;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -134,8 +134,8 @@
     }
 
     .container {
-        max-width: 50vw;
-        height: 50vw;
+        max-width: 62.5vw;
+        height: 62.5vw;
         margin: 0 auto;
         background: transparent !important;
     }
