@@ -123,6 +123,7 @@
     margin-top: 1rem;
     background: linear-gradient(135deg, #FFD700 0%, #FFA500 50%, #FFD700 100%);
     -webkit-background-clip: text;
+    background-clip: text;
     -webkit-text-fill-color: transparent;
     text-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
     letter-spacing: 2px;

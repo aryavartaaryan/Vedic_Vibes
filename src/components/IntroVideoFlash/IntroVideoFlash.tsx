@@ -116,6 +116,10 @@ export default function IntroVideoFlash({ videos, onComplete, onFadeOutStart }: 
             }
         };
 
+        if (currentIndex === 0) {
+            onFadeOutStart?.();
+        }
+
         runTextAnimation();
     }, [currentIndex]);
 
