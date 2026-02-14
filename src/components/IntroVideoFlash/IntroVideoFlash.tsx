@@ -62,6 +62,15 @@ export default function IntroVideoFlash({ videos, onComplete }: IntroVideoFlashP
         }
     };
 
+    // Video Playback Trigger
+    useEffect(() => {
+        if (!isPlaying) return;
+        const activeVideoEl = bufferA.active ? videoRefA.current : videoRefB.current;
+        if (activeVideoEl) {
+            attemptPlay(activeVideoEl, currentIndex);
+        }
+    }, [currentIndex, bufferA.active, isPlaying]);
+
     // Text Animation Effect
     useEffect(() => {
         const currentVideo = videos[currentIndex];
