@@ -96,8 +96,12 @@ export default function IntroVideoFlash({ videos, onComplete }: IntroVideoFlashP
 
         // Handle Text Animation
         const runTextAnimation = async () => {
-            if (!currentVideo.text || !isMounted.current) return;
+            if (!currentVideo.text || !isMounted.current) {
+                textDone.current = true;
+                return;
+            }
 
+            textDone.current = false;
             // Normalize to array
             const textSegments = Array.isArray(currentVideo.text) ? currentVideo.text : [currentVideo.text];
 
@@ -113,14 +117,14 @@ export default function IntroVideoFlash({ videos, onComplete }: IntroVideoFlashP
                 for (let i = 0; i <= segment.length; i++) {
                     if (!isMounted.current) break;
                     setDisplayedText(segment.substring(0, i));
-                    // Slowed down by another 50%: 240ms per character for shorter, 160ms for longer
-                    const charDelay = segment.length > 50 ? 160 : 240;
+                    // Slowed down even more: 300ms for short, 200ms for long segments
+                    const charDelay = segment.length > 50 ? 200 : 300;
                     await new Promise(r => setTimeout(r, charDelay));
                 }
 
                 if (!isMounted.current) break;
 
-                // 3. Wait for exactly 5 seconds after complete appearance as requested
+                // 3. Wait for 5 seconds after complete appearance
                 await new Promise(r => setTimeout(r, 5000));
 
                 if (!isMounted.current) break;
@@ -128,6 +132,12 @@ export default function IntroVideoFlash({ videos, onComplete }: IntroVideoFlashP
                 // 4. Fade out text
                 setShowText(false);
                 await new Promise(r => setTimeout(r, 1000)); // Wait for fade out
+            }
+
+            // AFTER ALL TEXT IS DONE: Allow video to proceed if it was waiting
+            textDone.current = true;
+            if (isMounted.current && videoRef.current && videoRef.current.ended) {
+                handleEnded();
             }
         };
 
@@ -140,24 +150,29 @@ export default function IntroVideoFlash({ videos, onComplete }: IntroVideoFlashP
     }, [currentIndex, currentVideo]); // Depend on currentIndex to trigger effect on change
 
 
+    const textDone = useRef(false);
+
+    const handleEnded = () => {
+        if (!textDone.current) {
+            console.log("Video ended but text still playing, waiting...");
+            return;
+        }
+
+        console.log(`Video ${currentIndex + 1} ended`);
+
+        if (currentIndex < videos.length - 1) {
+            setCurrentIndex(prev => prev + 1);
+        } else {
+            console.log('Sequence complete, fading out');
+            setIsFadingOut(true);
+            setTimeout(() => {
+                setIsPlaying(false);
+                onComplete();
+            }, 800);
+        }
+    };
+
     useEffect(() => {
-        const handleEnded = () => {
-            console.log(`Video ${currentIndex + 1} ended`);
-
-            if (currentIndex < videos.length - 1) {
-                // Determine if we should switch to next video
-                setCurrentIndex(prev => prev + 1);
-            } else {
-                // Sequence complete
-                console.log('Sequence complete, fading out');
-                setIsFadingOut(true);
-                setTimeout(() => {
-                    setIsPlaying(false);
-                    onComplete();
-                }, 800);
-            }
-        };
-
         const videoEl = videoRef.current;
         if (videoEl) {
             videoEl.addEventListener('ended', handleEnded);
