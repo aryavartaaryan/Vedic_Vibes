@@ -113,16 +113,15 @@ export default function IntroVideoFlash({ videos, onComplete }: IntroVideoFlashP
                 for (let i = 0; i <= segment.length; i++) {
                     if (!isMounted.current) break;
                     setDisplayedText(segment.substring(0, i));
-                    // Faster for longer segments, slower for shorter
-                    const charDelay = segment.length > 50 ? 40 : 80;
+                    // Slowed down: 120ms per character for shorter, 80ms for longer
+                    const charDelay = segment.length > 50 ? 80 : 120;
                     await new Promise(r => setTimeout(r, charDelay));
                 }
 
                 if (!isMounted.current) break;
 
-                // Wait while visible (adjust time based on segment length)
-                const readingTime = Math.max(3000, segment.length * 30);
-                await new Promise(r => setTimeout(r, readingTime));
+                // 3. Wait for exactly 5 seconds after complete appearance as requested
+                await new Promise(r => setTimeout(r, 5000));
 
                 if (!isMounted.current) break;
 
