@@ -20,13 +20,15 @@ export default function IntroVideoFlash({ videos, onComplete }: IntroVideoFlashP
     const isMounted = useRef(true);
     const videoRefA = useRef<HTMLVideoElement>(null);
     const videoRefB = useRef<HTMLVideoElement>(null);
-    const [activeBuffer, setActiveBuffer] = useState<'A' | 'B'>('A');
+
+    // Track which buffer is CURRENTLY active and what its source is
+    const [bufferA, setBufferA] = useState<{ src: string | null; active: boolean }>({ src: videos[0]?.src || null, active: true });
+    const [bufferB, setBufferB] = useState<{ src: string | null; active: boolean }>({ src: videos[1]?.src || null, active: false });
+
     const [showText, setShowText] = useState(false);
     const [displayedText, setDisplayedText] = useState('');
     const [isMuted, setIsMuted] = useState(false);
-
-    // We'll track if the "other" buffer is ready
-    // const [bufferBPrepared, setBufferBPrepared] = useState(false); // This state was not used in the provided snippet, removing.
+    const textDone = useRef(false);
 
     useEffect(() => {
         isMounted.current = true;
@@ -34,13 +36,6 @@ export default function IntroVideoFlash({ videos, onComplete }: IntroVideoFlashP
             isMounted.current = false;
         };
     }, []);
-
-    // Function to get active/inactive refs
-    const getRefs = () => {
-        return activeBuffer === 'A'
-            ? { active: videoRefA, inactive: videoRefB }
-            : { active: videoRefB, inactive: videoRefA };
-    };
 
     const attemptPlay = async (videoEl: HTMLVideoElement | null, index: number) => {
         if (!videoEl || !isMounted.current) return;
@@ -54,10 +49,6 @@ export default function IntroVideoFlash({ videos, onComplete }: IntroVideoFlashP
             await videoEl.play();
             console.log(`[Intro] Success: Playing video ${index + 1} with sound`);
         } catch (err: any) {
-            if (err && typeof err === 'object' && 'name' in err && err.name === 'AbortError') {
-                console.log(`[Intro] Playback interrupt for video ${index + 1}, ignoring.`);
-                return;
-            }
             console.warn(`[Intro] Autoplay failed for video ${index + 1}, retrying muted...`);
             try {
                 if (videoEl && isMounted.current) {
@@ -71,33 +62,11 @@ export default function IntroVideoFlash({ videos, onComplete }: IntroVideoFlashP
         }
     };
 
-    // Prepare next video in the inactive buffer
-    useEffect(() => {
-        const nextIndex = currentIndex + 1;
-        if (nextIndex < videos.length) {
-            const { inactive } = getRefs();
-            if (inactive.current) {
-                inactive.current.src = videos[nextIndex].src;
-                inactive.current.load();
-                console.log(`[Intro] Preloading video ${nextIndex + 1} in background`);
-            }
-        }
-    }, [currentIndex, videos, activeBuffer]); // Added activeBuffer to dependencies
-
-    // Main playback effect
+    // Text Animation Effect
     useEffect(() => {
         const currentVideo = videos[currentIndex];
         if (!currentVideo) return;
 
-        const { active } = getRefs();
-
-        // Reset text state
-        setDisplayedText('');
-        setShowText(false);
-
-        attemptPlay(active.current, currentIndex);
-
-        // Handle Text Animation
         const runTextAnimation = async () => {
             if (!currentVideo.text || !isMounted.current) {
                 textDone.current = true;
@@ -107,7 +76,6 @@ export default function IntroVideoFlash({ videos, onComplete }: IntroVideoFlashP
             textDone.current = false;
             const textSegments = Array.isArray(currentVideo.text) ? currentVideo.text : [currentVideo.text];
 
-            // 1. Initial delay to let video start
             await new Promise(r => setTimeout(r, 1500));
 
             let segmentIdx = 0;
@@ -119,15 +87,13 @@ export default function IntroVideoFlash({ videos, onComplete }: IntroVideoFlashP
                 setShowText(true);
                 setDisplayedText(segment);
 
-                // Wait for display: 7s for first two significant segments of first video, 5s for others
                 const waitTime = (currentIndex === 0 && (segmentIdx === 0 || segmentIdx === 1)) ? 7000 : 5000;
                 await new Promise(r => setTimeout(r, waitTime));
 
                 if (!isMounted.current) break;
                 setShowText(false);
-                await new Promise(r => setTimeout(r, 800)); // Fade out duration
+                await new Promise(r => setTimeout(r, 800));
 
-                // Gap between sentences for better distribution
                 if (segmentIdx < textSegments.length - 1) {
                     await new Promise(r => setTimeout(r, 1500));
                 }
@@ -136,65 +102,65 @@ export default function IntroVideoFlash({ videos, onComplete }: IntroVideoFlashP
             }
 
             textDone.current = true;
-            const { active: currentActive } = getRefs();
-            if (isMounted.current && currentActive.current && currentActive.current.ended) {
+            const currentVideoEl = bufferA.active ? videoRefA.current : videoRefB.current;
+            if (isMounted.current && currentVideoEl && currentVideoEl.ended) {
                 handleEnded();
             }
         };
 
         runTextAnimation();
-
-    }, [currentIndex, activeBuffer, videos]); // Depend on buffer toggle too and videos
-
-    const textDone = useRef(false);
+    }, [currentIndex, videos]); // Depend on videos to ensure currentVideo is up-to-date
 
     const handleEnded = () => {
-        if (!textDone.current) {
-            console.log("Video ended but text still playing, waiting...");
-            return;
-        }
+        if (!textDone.current) return;
 
-        console.log(`Video ${currentIndex + 1} ended`);
+        const nextIndex = currentIndex + 1;
+        if (nextIndex < videos.length) {
+            // Swap buffers
+            if (bufferA.active) {
+                // Currently A is active, swap to B
+                setBufferA(prev => ({ ...prev, active: false }));
+                setBufferB(prev => ({ ...prev, active: true }));
+                // Buffer A is now inactive, preload the video AFTER B (index + 2)
+                setTimeout(() => {
+                    const preloadIndex = currentIndex + 2;
+                    if (preloadIndex < videos.length) {
+                        setBufferA(prev => ({ ...prev, src: videos[preloadIndex].src }));
+                    } else {
+                        setBufferA(prev => ({ ...prev, src: null })); // Clear src if no more videos
+                    }
+                }, 500);
+            } else {
+                // Currently B is active, swap to A
+                setBufferB(prev => ({ ...prev, active: false }));
+                setBufferA(prev => ({ ...prev, active: true }));
+                // Buffer B is now inactive, preload the video AFTER A (index + 2)
+                setTimeout(() => {
+                    const preloadIndex = currentIndex + 2;
+                    if (preloadIndex < videos.length) {
+                        setBufferB(prev => ({ ...prev, src: videos[preloadIndex].src }));
+                    } else {
+                        setBufferB(prev => ({ ...prev, src: null })); // Clear src if no more videos
+                    }
+                }, 500);
+            }
 
-        if (currentIndex < videos.length - 1) {
-            // TOGGLE BUFFER
-            setActiveBuffer(prev => prev === 'A' ? 'B' : 'A');
-            setCurrentIndex(prev => prev + 1);
+            setCurrentIndex(nextIndex);
+
+            // Play the NEW active buffer immediately
+            // The state update for active buffer might not be immediate, so we infer the next active ref
+            const nextVideoEl = bufferA.active ? videoRefB.current : videoRefA.current;
+            if (nextVideoEl) {
+                attemptPlay(nextVideoEl, nextIndex);
+            }
         } else {
-            console.log('Sequence complete, fading out');
             setIsFadingOut(true);
             setTimeout(() => {
                 setIsPlaying(false);
                 onComplete();
-            }, 1000); // Slightly longer fade for smoothness
+            }, 1000);
         }
     };
-
-    // Attach ended listener to both buffers
-    useEffect(() => {
-        const elA = videoRefA.current;
-        const elB = videoRefB.current;
-
-        // Ensure the handler only fires for the currently active video
-        const onEndedA = () => {
-            if (activeBuffer === 'A') {
-                handleEnded();
-            }
-        };
-        const onEndedB = () => {
-            if (activeBuffer === 'B') {
-                handleEnded();
-            }
-        };
-
-        elA?.addEventListener('ended', onEndedA);
-        elB?.addEventListener('ended', onEndedB);
-
-        return () => {
-            elA?.removeEventListener('ended', onEndedA);
-            elB?.removeEventListener('ended', onEndedB);
-        };
-    }, [currentIndex, activeBuffer, videos.length, onComplete]); // Added onComplete to dependencies
 
     const handleSkip = () => {
         console.log('User skipped intro');
@@ -207,9 +173,6 @@ export default function IntroVideoFlash({ videos, onComplete }: IntroVideoFlashP
 
     if (!isPlaying) return null;
 
-    const currentVideoConfig = videos[currentIndex];
-    const nextVideoConfig = videos[currentIndex + 1];
-
     return (
         <div
             className={`${styles.overlay} ${isFadingOut ? styles.fadeOut : ''}`}
@@ -219,23 +182,25 @@ export default function IntroVideoFlash({ videos, onComplete }: IntroVideoFlashP
                 {/* Buffer A */}
                 <video
                     ref={videoRefA}
-                    className={`${styles.singleVideo} ${activeBuffer === 'A' ? styles.visible : styles.hidden}`}
+                    className={`${styles.singleVideo} ${bufferA.active ? styles.visible : styles.hidden}`}
                     playsInline
                     muted={false}
                     preload="auto"
-                    src={currentVideoConfig?.src} // Always set src for the current video
-                    style={{ objectFit: currentVideoConfig?.objectFit || 'cover' }}
+                    src={bufferA.src || undefined}
+                    onEnded={handleEnded}
+                    style={{ objectFit: 'cover' }}
                 />
 
                 {/* Buffer B */}
                 <video
                     ref={videoRefB}
-                    className={`${styles.singleVideo} ${activeBuffer === 'B' ? styles.visible : styles.hidden}`}
+                    className={`${styles.singleVideo} ${bufferB.active ? styles.visible : styles.hidden}`}
                     playsInline
                     muted={false}
                     preload="auto"
-                    src={nextVideoConfig?.src} // Always set src for the next video to preload
-                    style={{ objectFit: nextVideoConfig?.objectFit || 'cover' }}
+                    src={bufferB.src || undefined}
+                    onEnded={handleEnded}
+                    style={{ objectFit: 'cover' }}
                 />
             </div>
 
@@ -253,11 +218,11 @@ export default function IntroVideoFlash({ videos, onComplete }: IntroVideoFlashP
                         className={styles.unmuteBtn}
                         onClick={(e) => {
                             e.stopPropagation();
-                            const { active } = getRefs();
-                            if (active.current) {
-                                active.current.muted = false;
+                            const activeEl = bufferA.active ? videoRefA.current : videoRefB.current;
+                            if (activeEl) {
+                                activeEl.muted = false;
                                 setIsMuted(false);
-                                active.current.play().catch(() => { });
+                                activeEl.play().catch(() => { });
                             }
                         }}
                     >

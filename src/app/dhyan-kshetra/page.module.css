@@ -1,8 +1,7 @@
 /* Page specific styles for Dhyan Kshetra */
 
 .container {
-    background: #e6f5ff;
-    /* Warm Sky Blue */
+    background: #000;
     min-height: 100vh;
     position: relative;
     overflow: hidden;
