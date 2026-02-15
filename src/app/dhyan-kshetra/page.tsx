@@ -58,7 +58,7 @@ export default function DhyanKakshaPage() {
             ? startSequence.filter(item => item.id !== "guidance")
             : startSequence;
 
-        // POOL OF REMAINING MEDIA
+        // POOL OF REMAINING MEDIA (ordered by spiritual importance: high → low)
         const remainingVideos = [
             { type: "video", id: "v2", src: VIDEO_LIST[1], title: "Shiv Shakti Energy", titleHi: "शिव शक्ति ऊर्जा" },
             { type: "video", id: "v3", src: VIDEO_LIST[2], title: "Mahadev Nav Varsh", titleHi: "महादेव नव वर्ष" },
@@ -76,19 +76,19 @@ export default function DhyanKakshaPage() {
             { type: "mantra", id: "/audio/Shiva Tandava Stotram (All 18 Slokas)  Vande Guru Paramparaam  'Shiva-Bhakta' Ravana.mp3", src: "/audio/Shiva Tandava Stotram (All 18 Slokas)  Vande Guru Paramparaam  'Shiva-Bhakta' Ravana.mp3", title: "Shiva Tandava", titleHi: "शिव ताण्डव स्तोत्रम्" }
         ];
 
-        // ALTERNATING SECTION
+        // ALTERNATING: mantra → video → mantra → video ...
         const alternatingSection: any[] = [];
         const maxPairs = Math.min(remainingVideos.length, remainingMantras.length);
 
         for (let i = 0; i < maxPairs; i++) {
-            alternatingSection.push(remainingVideos[i]);
             alternatingSection.push(remainingMantras[i]);
+            alternatingSection.push(remainingVideos[i]);
         }
 
-        // REMAINING ITEMS (Videos or Mantras left over)
+        // REMAINING ITEMS (leftover videos after mantras are exhausted)
         const leftovers = [
-            ...remainingVideos.slice(maxPairs),
-            ...remainingMantras.slice(maxPairs)
+            ...remainingMantras.slice(maxPairs),
+            ...remainingVideos.slice(maxPairs)
         ];
 
         return [...effectiveStartSequence, ...alternatingSection, ...leftovers];
