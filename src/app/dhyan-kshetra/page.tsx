@@ -740,7 +740,7 @@ export default function DhyanKakshaPage() {
                                         handleSelectIndex(1);
                                     }}
                                 >
-                                    {lang === 'hi' ? 'मार्गदर्शन छोड़ें ⏭️' : 'Skip Guidance ⏭️'}
+                                    {lang === 'hi' ? 'मार्गदर्शन स्किप करें ⏭️' : 'Skip Guidance ⏭️'}
                                 </button>
                             )}
                         </div>
