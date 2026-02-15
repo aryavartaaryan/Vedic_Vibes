@@ -66,7 +66,6 @@ interface MantraSangrahProps {
     onVideoSeek?: (time: number) => void;
     onVideoToggle?: () => void;
     sessionActive?: boolean;
-    skipSignal?: number;
 }
 
 // Helper to get Hindi title
@@ -128,8 +127,7 @@ export default function MantraSangrah({
     onVideoSeek,
     onVideoToggle,
     onTimeUpdate,
-    sessionActive = false,
-    skipSignal = 0,
+    sessionActive = false
 }: MantraSangrahProps) {
     const [isOpen, setIsOpen] = useState(false);
     const [playlist, setPlaylist] = useState<Track[]>(INITIAL_PLAYLIST);
@@ -439,9 +437,9 @@ export default function MantraSangrah({
 
             if (track) {
                 // GUARD: If this track is already loaded, don't restart it (which resets currentTime)
-                // UNLESS skipSignal has changed (user explicitly wants to skip)
+                // We check the source directly to avoid resets on re-render
                 const isSameSrc = audioRef.current.src.includes(encodeURI(track.src));
-                if (isSameSrc && skipSignal === 0) {
+                if (isSameSrc) {
                     if (audioRef.current.paused && !isPaused && !isSessionPaused) {
                         console.log(`[MantraSangrah] Track already loaded but paused, resuming instead of restarting.`);
                         audioRef.current.play().catch(() => { });
@@ -451,7 +449,7 @@ export default function MantraSangrah({
                     return;
                 }
 
-                console.log(`Forcing track from parent: ${track.title} (ID/Src: ${forceTrackId}, skipSignal: ${skipSignal})`);
+                console.log(`Forcing track from parent: ${track.title} (ID/Src: ${forceTrackId})`);
                 // Stop current audio before switching
                 audioRef.current.pause();
                 audioRef.current.currentTime = 0;
@@ -470,7 +468,7 @@ export default function MantraSangrah({
                 console.warn(`Could not find forced track: ${forceTrackId}`);
             }
         }
-    }, [forceTrackId, playlist, externalPlaylist, skipSignal]);
+    }, [forceTrackId, playlist, externalPlaylist]);
 
     useEffect(() => {
         const audio = audioRef.current;

@@ -31,7 +31,6 @@ export default function DhyanKakshaPage() {
     const [isFirstTime, setIsFirstTime] = useState<boolean | null>(null);
     const [isMantraPlaying, setIsMantraPlaying] = useState(false);
     const [forceMantraId, setForceMantraId] = useState<string | null>(null);
-    const [skipSignal, setSkipSignal] = useState(0);
     const [isMuted, setIsMuted] = useState(false);
     const [isSessionPaused, setIsSessionPaused] = useState(false);
     const [introVideos, setIntroVideos] = useState<{ src: string, text?: string | string[] }[]>([]);
@@ -565,7 +564,6 @@ export default function DhyanKakshaPage() {
                 lang={lang}
                 startPlaying={isMantraPlaying}
                 forceTrackId={forceMantraId}
-                skipSignal={skipSignal}
                 isPaused={currentItem.type === 'video'}
                 isSessionPaused={isSessionPaused}
                 sessionActive={!showIntro}
