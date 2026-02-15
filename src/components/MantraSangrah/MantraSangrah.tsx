@@ -564,6 +564,9 @@ export default function MantraSangrah({
         if (audio.paused) {
             try {
                 await audio.play();
+                setIsPlaying(true);
+                setManualPlaybackOverride(true);
+                if (onPlayingChangeRef.current) onPlayingChangeRef.current(true);
             } catch (err: any) {
                 if (err && typeof err === 'object' && 'name' in err && err.name === 'AbortError') {
                     // Silent
@@ -573,6 +576,9 @@ export default function MantraSangrah({
             }
         } else {
             audio.pause();
+            setIsPlaying(false);
+            setManualPlaybackOverride(false);
+            if (onPlayingChangeRef.current) onPlayingChangeRef.current(false);
         }
     }, [currentTrack]);
 

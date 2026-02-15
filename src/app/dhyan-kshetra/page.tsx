@@ -581,6 +581,9 @@ export default function DhyanKakshaPage() {
                     } else if (playing && isSessionPaused) {
                         // Reset session pause if manually starting a mantra from library
                         setIsSessionPaused(false);
+                    } else if (!playing && (currentItem.type === 'mantra')) {
+                        // User manually paused a mantra - set session paused so resume effect doesn't override
+                        setIsSessionPaused(true);
                     }
                 }}
                 onTrackEnded={() => {
