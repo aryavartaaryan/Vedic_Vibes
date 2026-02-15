@@ -122,8 +122,8 @@
 }
 
 .homeVedicOm {
-    width: clamp(120px, 15vw, 180px);
-    /* Medium size as requested */
+    width: clamp(80px, 12vw, 130px);
+    /* Reduced size to prevent mobile shifting */
     height: auto;
     filter: drop-shadow(0 0 30px rgba(79, 195, 247, 0.4)) drop-shadow(0 0 50px rgba(212, 175, 55, 0.4));
     animation: floatingOm 6s ease-in-out infinite;

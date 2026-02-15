@@ -412,9 +412,6 @@ export default function DhyanKakshaPage() {
                     textAlign: 'center',
                     padding: '2rem'
                 }}>
-                    <div className={pageStyles.goldenOmEntranceContainer}>
-                        <img src="/images/golden_om_enter.png" alt="Vedic Om" className={pageStyles.goldenOmEntrance} />
-                    </div>
 
                     <div style={{ maxWidth: '600px' }}>
                         <h1 style={{
