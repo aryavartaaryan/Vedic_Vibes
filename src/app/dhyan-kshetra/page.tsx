@@ -44,11 +44,11 @@ export default function DhyanKakshaPage() {
     const playlist = useMemo(() => {
         // PRE-REQUISITE ITEMS (The Specific Start Sequence)
         const startSequence = [
-            { type: "mantra", id: "guidance", src: "/audio/Guidance.wav", title: "Guidance", titleHi: "दर्शन और मार्गदर्शन" },
+            { type: "mantra", id: "guidance", src: "/audio/Guidance.wav", title: "Guidance", titleHi: "आज्ञा और मार्गदर्शन" },
             { type: "mantra", id: "/audio/Om_Sahana_Vavatu_Shanti_Mantra.mp3", src: "/audio/Om_Sahana_Vavatu_Shanti_Mantra.mp3", title: "Om Sahana Vavatu", titleHi: "ॐ सहना ववतु" },
             { type: "mantra", id: "/audio/Lalitha Sahasranamam I Manojna & Pradanya - Om Voices Junior I The names of Goddess Lalitha Devi [zNYj8GrXEQk].mp3", src: "/audio/Lalitha Sahasranamam I Manojna & Pradanya - Om Voices Junior I The names of Goddess Lalitha Devi [zNYj8GrXEQk].mp3", title: "Lalitha Sahasranamam", titleHi: "ललिता सहस्रनाम (विशेष)" },
-            { type: "video", id: "v_vishesh", src: "https://ik.imagekit.io/aup4wh6lq/VISHNU%20SAHASRANAMAM%20_%20Madhubanti%20Bagchi%20&%20Siddharth%20Bhavsar%20_%20Stotra%20For%20Peace%20&%20Divine%20Blessings.mp4", title: "Vishesh", titleHi: "विष्णु सहस्रनाम", startTime: 7 },
-            { type: "video", id: "v1", src: VIDEO_LIST[0], title: "Maheshvara Sutram", titleHi: "महेश्वर सूत्रम् (काशिका)", trimEnd: 4 }, // "Kashika"
+            { type: "video", id: "v_vishesh", src: "https://ik.imagekit.io/aup4wh6lq/VISHNU%20SAHASRANAMAM%20_%20Madhubanti%20Bagchi%20&%20Siddharth%20Bhavsar%20_%20Stotra%20For%20Peace%20&%20Divine%20Blessings.mp4", title: "Vishesh", titleHi: "विष्णु सहस्रनाम (विशेष)", startTime: 7 },
+            { type: "video", id: "v1", src: VIDEO_LIST[0], title: "Maheshvara Sutram", titleHi: "महेश्वर सूत्रम् (दर्शन)", trimEnd: 4 }, // "Kashika"
         ];
 
         // If NOT first time, remove the Guidance mantra
@@ -58,13 +58,13 @@ export default function DhyanKakshaPage() {
 
         // POOL OF REMAINING MEDIA
         const remainingVideos = [
-            { type: "video", id: "v2", src: VIDEO_LIST[1], title: "Shiv Shakti Energy", titleHi: "शिव शक्ति ऊर्जा" },
-            { type: "video", id: "v3", src: VIDEO_LIST[2], title: "Mahadev Nav Varsh", titleHi: "महादेव नव वर्ष" },
-            { type: "video", id: "v4", src: VIDEO_LIST[3], title: "Ardhanarishwara", titleHi: "अर्धनारीश्वर स्वरूप" },
-            { type: "video", id: "v5", src: VIDEO_LIST[4], title: "Shiv Swarnamala", titleHi: "शिव स्वर्णमाला स्तुति" },
-            { type: "video", id: "v6", src: VIDEO_LIST[5], title: "Sound Healing", titleHi: "नाद चिकित्सा" },
-            { type: "video", id: "v7", src: VIDEO_LIST[6], title: "Mahashivratri Special", titleHi: "महाशिवरात्रि दर्शन" },
-            { type: "video", id: "v8", src: VIDEO_LIST[7], title: "Kaal Bhairav Ashtakam", titleHi: "काल भैरव अष्टकम्" }
+            { type: "video", id: "v2", src: VIDEO_LIST[1], title: "Shiv Shakti Energy", titleHi: "शिव शक्ति ऊर्जा (दर्शन)" },
+            { type: "video", id: "v3", src: VIDEO_LIST[2], title: "Mahadev Nav Varsh", titleHi: "महादेव नव वर्ष (दर्शन)" },
+            { type: "video", id: "v4", src: VIDEO_LIST[3], title: "Ardhanarishwara", titleHi: "अर्धनारीश्वर स्वरूप (दर्शन)" },
+            { type: "video", id: "v5", src: VIDEO_LIST[4], title: "Shiv Swarnamala", titleHi: "शिव स्वर्णमाला स्तुति (दर्शन)" },
+            { type: "video", id: "v6", src: VIDEO_LIST[5], title: "Sound Healing", titleHi: "नाद चिकित्सा (दर्शन)" },
+            { type: "video", id: "v7", src: VIDEO_LIST[6], title: "Mahashivratri Special", titleHi: "महाशिवरात्रि (दर्शन)" },
+            { type: "video", id: "v8", src: VIDEO_LIST[7], title: "Kaal Bhairav Ashtakam", titleHi: "काल भैरव अष्टकम् (दर्शन)" }
         ];
 
         const remainingMantras = [
