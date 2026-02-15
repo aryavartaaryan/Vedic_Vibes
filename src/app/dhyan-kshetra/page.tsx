@@ -428,7 +428,7 @@ export default function DhyanKakshaPage() {
                         src="/images/golden_om_enter.png"
                         alt="Om"
                         style={{
-                            width: 'clamp(80px, 18vw, 120px)',
+                            width: 'clamp(110px, 25vw, 170px)',
                             height: 'auto',
                             opacity: 0.85,
                             filter: 'drop-shadow(0 0 25px rgba(255, 215, 0, 0.4))',
