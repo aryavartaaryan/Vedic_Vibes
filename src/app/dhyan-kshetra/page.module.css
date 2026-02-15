@@ -121,8 +121,8 @@
     }
 
     .sriYantraContainer {
-        margin-top: 38vh !important;
-        /* Moved up from 42vh */
+        margin-top: 5vh !important;
+        /* Lifted even higher to make space for the dashboard */
         width: 100% !important;
         display: flex !important;
         justify-content: center !important;
@@ -144,8 +144,8 @@
     flex-direction: column;
     align-items: center;
     justify-content: flex-start;
-    padding-top: 85px;
-    padding-bottom: 150px;
+    padding-top: 40px;
+    padding-bottom: 220px;
     padding-left: 1rem;
     padding-right: 1rem;
     gap: 1.5rem;
@@ -159,7 +159,8 @@
     width: 100%;
     display: flex;
     justify-content: center;
-    margin-top: 10px;
+    margin-top: -20px;
+    /* Lifted on desktop as well */
     /* Moved up from 60px */
     z-index: 5;
 }
@@ -380,17 +381,15 @@
 
 /* SESSION DASHBOARD (Unified Up Next + Countdown) */
 .sessionDashboard {
-    position: absolute;
-    bottom: 30px;
-    left: 50%;
-    transform: translateX(-50%);
+    position: relative;
+    margin-top: 40px;
     z-index: 30;
     pointer-events: none;
     display: flex;
     flex-direction: column;
     align-items: center;
     gap: 12px;
-    width: 100%;
+    width: 90%;
     max-width: 450px;
     animation: dashboardFadeIn 1.2s cubic-bezier(0.165, 0.84, 0.44, 1);
 }
@@ -474,12 +473,12 @@
 @keyframes dashboardFadeIn {
     from {
         opacity: 0;
-        transform: translate(-50%, 40px);
+        transform: translateY(40px);
     }
 
     to {
         opacity: 1;
-        transform: translate(-50%, 0);
+        transform: translateY(0);
     }
 }
 

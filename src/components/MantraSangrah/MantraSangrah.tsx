@@ -13,6 +13,7 @@ interface Track {
     startTime: number;
     isDefault?: boolean;
     isSpecial?: boolean;
+    type?: string;
 }
 
 // Initial static playlist as fallback/loading state
