@@ -788,11 +788,6 @@ export default function DhyanKakshaPage() {
                     </h1>
                 </div>
 
-                {/* Sri Yantra - Central Focus - Size adjusted in component CSS */}
-                <div className={pageStyles.sriYantraContainer}>
-                    <SriYantra />
-                </div>
-
                 {/* SESSION DASHBOARD (Unified Up Next + Countdown) */}
                 {!showIntro && (
                     <div className={pageStyles.sessionDashboard}>
@@ -853,6 +848,11 @@ export default function DhyanKakshaPage() {
                         </div>
                     </div>
                 )}
+
+                {/* Sri Yantra - Central Focus - Size adjusted in component CSS */}
+                <div className={pageStyles.sriYantraContainer}>
+                    <SriYantra />
+                </div>
 
 
 

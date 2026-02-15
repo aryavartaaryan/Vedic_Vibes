@@ -121,8 +121,8 @@
     }
 
     .sriYantraContainer {
-        margin-top: 22vh !important;
-        /* Lowered from 5vh to avoid touching the header */
+        margin-top: 15vh !important;
+        /* Pushed down on mobile */
         width: 100% !important;
         display: flex !important;
         justify-content: center !important;
@@ -144,7 +144,7 @@
     flex-direction: column;
     align-items: center;
     justify-content: flex-start;
-    padding-top: 60px;
+    padding-top: 40px;
     padding-bottom: 220px;
     padding-left: 1rem;
     padding-right: 1rem;
@@ -159,8 +159,8 @@
     width: 100%;
     display: flex;
     justify-content: center;
-    margin-top: 20px;
-    /* Lowered from -20px for better vertical balance */
+    margin-top: 60px;
+    /* Pushed down to leave space for top dashboard */
     z-index: 5;
 }
 
@@ -381,55 +381,54 @@
 /* SESSION DASHBOARD (Unified Up Next + Countdown) */
 .sessionDashboard {
     position: relative;
-    margin-top: 40px;
+    margin-top: 10px;
     z-index: 30;
     pointer-events: none;
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 12px;
+    gap: 8px;
     width: 90%;
-    max-width: 450px;
+    max-width: 400px;
     animation: dashboardFadeIn 1.2s cubic-bezier(0.165, 0.84, 0.44, 1);
 }
 
 .dashboardPill {
-    background: linear-gradient(135deg, rgba(0, 15, 30, 0.75) 0%, rgba(0, 5, 10, 0.85) 100%);
+    background: linear-gradient(135deg, rgba(0, 15, 30, 0.7) 0%, rgba(0, 5, 10, 0.8) 100%);
     backdrop-filter: blur(25px);
     -webkit-backdrop-filter: blur(25px);
-    border: 1.5px solid rgba(212, 175, 55, 0.4);
-    border-radius: 24px;
-    padding: 16px 32px;
+    border: 1px solid rgba(212, 175, 55, 0.3);
+    border-radius: 20px;
+    padding: 10px 24px;
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 10px;
+    gap: 6px;
     box-shadow:
-        0 15px 45px rgba(0, 0, 0, 0.8),
-        0 0 30px rgba(0, 150, 255, 0.2),
-        inset 0 0 20px rgba(255, 215, 0, 0.05);
+        0 10px 30px rgba(0, 0, 0, 0.8),
+        inset 0 0 15px rgba(255, 215, 0, 0.05);
     width: 100%;
 }
 
 .dashboardHeader {
     display: flex;
     align-items: center;
-    gap: 8px;
+    gap: 6px;
     font-family: 'Noto Serif Devanagari', serif;
-    font-size: 0.8rem;
-    color: rgba(255, 215, 0, 0.8);
+    font-size: 0.7rem;
+    color: rgba(255, 215, 0, 0.75);
     text-transform: uppercase;
-    letter-spacing: 0.15em;
+    letter-spacing: 0.12em;
     font-weight: 700;
 }
 
 .dashboardTitle {
     font-family: 'Noto Serif Devanagari', serif;
-    font-size: 1.15rem;
+    font-size: 0.95rem;
     color: #F5E6D3;
     font-weight: 600;
     text-align: center;
-    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.5);
 }
 
 .dashboardDivider {
@@ -453,13 +452,13 @@
 
 .dashboardTimeValue {
     font-family: 'Inter', sans-serif;
-    font-size: 1.8rem;
+    font-size: 1.4rem;
     background: linear-gradient(180deg, #FFD700 0%, #FFF 100%);
     -webkit-background-clip: text;
     background-clip: text;
     -webkit-text-fill-color: transparent;
     font-weight: 700;
-    filter: drop-shadow(0 0 10px rgba(255, 215, 0, 0.4));
+    filter: drop-shadow(0 0 8px rgba(255, 215, 0, 0.3));
 }
 
 .dashboardSesh {
