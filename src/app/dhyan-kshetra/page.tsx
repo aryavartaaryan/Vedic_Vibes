@@ -738,11 +738,7 @@ export default function DhyanKakshaPage() {
                             {currentItem.id === 'guidance' && (
                                 <button
                                     className={pageStyles.skipGuidanceBtn}
-                                    onClick={() => {
-                                        // Increment skip signal to force MantraSangrah to re-trigger
-                                        setSkipSignal(s => s + 1);
-                                        handleSelectIndex(1);
-                                    }}
+                                    onClick={() => goNext()}
                                 >
                                     {lang === 'hi' ? 'मार्गदर्शन स्किप करें ⏭️' : 'Skip Guidance ⏭️'}
                                 </button>
