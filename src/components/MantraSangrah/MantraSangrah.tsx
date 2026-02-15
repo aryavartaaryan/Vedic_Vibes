@@ -797,23 +797,34 @@ export default function MantraSangrah({
                                             } else if (useSequenceControls) {
                                                 onSelectIndex?.(currentIndex!);
                                             } else {
-
                                                 togglePlayPause();
                                             }
-
                                         }}
                                     >
                                         {currentlyPlaying ? <Pause size={22} /> : <Play size={22} className={styles.playIconOffset} />}
                                     </button>
 
                                     <div className={styles.miniTrackInfo}>
-                                        <span className={styles.miniTrackTitle}>
-                                            {activeItem?.titleHi || activeItem?.title}
-                                        </span>
+                                        <div className={styles.miniTrackHeader}>
+                                            <span className={styles.miniTrackTitle}>
+                                                {activeItem?.titleHi || activeItem?.title}
+                                            </span>
+                                            <span className={styles.miniTime}>
+                                                {formatTime(displayTime)} / {formatTime(isVideo ? (videoDuration || 0) : duration)}
+                                            </span>
+                                        </div>
 
+                                        {/* Seamless Progress Bar */}
+                                        <div
+                                            className={styles.miniProgressBar}
+                                            onClick={handleProgressClick}
+                                        >
+                                            <div
+                                                className={styles.miniProgressFill}
+                                                style={{ width: `${displayProgress}%` }}
+                                            />
+                                        </div>
                                     </div>
-
-                                    {/* Time display moved to on-screen countdown as requested */}
                                 </>
                             );
                         })()}

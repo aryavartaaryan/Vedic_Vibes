@@ -380,34 +380,35 @@
 
 /* SESSION DASHBOARD (Unified Up Next + Countdown) */
 .sessionDashboard {
-    position: relative;
-    margin-top: 10px;
-    z-index: 30;
+    position: absolute;
+    top: 130px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 100;
     pointer-events: none;
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 8px;
-    width: 90%;
-    max-width: 400px;
+    width: auto;
+    min-width: 250px;
     animation: dashboardFadeIn 1.2s cubic-bezier(0.165, 0.84, 0.44, 1);
 }
 
 .dashboardPill {
-    background: linear-gradient(135deg, rgba(0, 15, 30, 0.7) 0%, rgba(0, 5, 10, 0.8) 100%);
-    backdrop-filter: blur(25px);
-    -webkit-backdrop-filter: blur(25px);
-    border: 1px solid rgba(212, 175, 55, 0.3);
-    border-radius: 20px;
-    padding: 10px 24px;
+    background: linear-gradient(135deg, rgba(0, 15, 30, 0.6) 0%, rgba(0, 5, 10, 0.7) 100%);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid rgba(212, 175, 55, 0.2);
+    border-radius: 16px;
+    padding: 12px 28px;
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 6px;
+    gap: 4px;
     box-shadow:
-        0 10px 30px rgba(0, 0, 0, 0.8),
-        inset 0 0 15px rgba(255, 215, 0, 0.05);
-    width: 100%;
+        0 10px 40px rgba(0, 0, 0, 0.6),
+        inset 0 0 20px rgba(255, 215, 0, 0.03);
+    width: fit-content;
 }
 
 .dashboardHeader {
@@ -437,36 +438,6 @@
     background: linear-gradient(90deg, transparent, rgba(212, 175, 55, 0.6), transparent);
 }
 
-.dashboardCountdown {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-}
-
-.dashboardTimeLabel {
-    color: #A0B0C0;
-    font-size: 0.8rem;
-    font-weight: 800;
-    letter-spacing: 0.1em;
-}
-
-.dashboardTimeValue {
-    font-family: 'Inter', sans-serif;
-    font-size: 1.4rem;
-    background: linear-gradient(180deg, #FFD700 0%, #FFF 100%);
-    -webkit-background-clip: text;
-    background-clip: text;
-    -webkit-text-fill-color: transparent;
-    font-weight: 700;
-    filter: drop-shadow(0 0 8px rgba(255, 215, 0, 0.3));
-}
-
-.dashboardSesh {
-    font-size: 1.1rem;
-    color: rgba(212, 175, 55, 0.95);
-    font-family: 'Noto Serif Devanagari', serif;
-    font-weight: 600;
-}
 
 @keyframes dashboardFadeIn {
     from {
@@ -482,22 +453,17 @@
 
 @media (max-width: 768px) {
     .sessionDashboard {
-        bottom: 220px;
-        /* Above mobile triggers and panel */
+        top: 100px;
         max-width: 90%;
     }
 
     .dashboardPill {
-        padding: 12px 20px;
-        border-radius: 20px;
+        padding: 10px 18px;
+        border-radius: 12px;
     }
 
     .dashboardTitle {
-        font-size: 1rem;
-    }
-
-    .dashboardTimeValue {
-        font-size: 1.5rem;
+        font-size: 0.85rem;
     }
 }
 
