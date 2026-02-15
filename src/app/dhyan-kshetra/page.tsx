@@ -17,7 +17,8 @@ const VIDEO_LIST: string[] = [
     "https://ik.imagekit.io/aup4wh6lq/The%20_Lord%20who%20is%20half%20woman_%20signifies%20the%20perfect%20synthesis%20of%20masculine%20and%20feminine%20energies,.mp4",
     "https://ik.imagekit.io/aup4wh6lq/Shiv%20Swarnamala%20Stuti%20_%E2%9D%A4%EF%B8%8F%20I%20Verse%20-%207%20_.Follow%20@aumm_namah_shivay%20for%20more%20%E2%9D%A4%EF%B8%8F%20.._mahadev%20_shiv.mp4",
     "https://ik.imagekit.io/aup4wh6lq/Most%20people%20don_t%20realize%20it,%20but%20sound%20has%20the%20power%20to%20heal%20-%20or%20harm.%20There_s%20a%20reason%20why%20an.mp4",
-    "/videos/mahashivratri_darshan.mp4"
+    "/videos/mahashivratri_darshan.mp4",
+    "https://ik.imagekit.io/aup4wh6lq/Kaal%20Bhairav%20Ashtakam%20_%20Tanuku%20Sisters%20_%20@DivineDharohar.mp4"
 ];
 
 export default function DhyanKakshaPage() {
@@ -43,9 +44,9 @@ export default function DhyanKakshaPage() {
             { type: "mantra", id: "guidance", src: "/audio/Guidance.wav", title: "Guidance", titleHi: "दर्शन और मार्गदर्शन" },
             { type: "mantra", id: "/audio/Om_Sahana_Vavatu_Shanti_Mantra.mp3", src: "/audio/Om_Sahana_Vavatu_Shanti_Mantra.mp3", title: "Om Sahana Vavatu", titleHi: "ॐ सहना ववतु" },
             { type: "video", id: "v1", src: VIDEO_LIST[0], title: "Maheshvara Sutram", titleHi: "महेश्वर सूत्रम्", trimEnd: 4 },
-            { type: "mantra", id: "/audio/Lalitha Sahasranamam I Manojna & Pradanya - Om Voices Junior I The names of Goddess Lalitha Devi [zNYj8GrXEQk].mp3", src: "/audio/Lalitha Sahasranamam I Manojna & Pradanya - Om Voices Junior I The names of Goddess Lalitha Devi [zNYj8GrXEQk].mp3", title: "Lalitha Sahasranamam", titleHi: "ललिता सहस्रनाम" },
+            { type: "mantra", id: "/audio/Lalitha Sahasranamam I Manojna & Pradanya - Om Voices Junior I The names of Goddess Lalitha Devi [zNYj8GrXEQk].mp3", src: "/audio/Lalitha Sahasranamam I Manojna & Pradanya - Om Voices Junior I The names of Goddess Lalitha Devi [zNYj8GrXEQk].mp3", title: "Lalitha Sahasranamam", titleHi: "ललिता सहस्रनाम (विशेष)" },
             { type: "video", id: "v2", src: VIDEO_LIST[1], title: "Shiv Shakti Energy", titleHi: "शिव शक्ति ऊर्जा" },
-            { type: "mantra", id: "/audio/vishnu_sahasranama.mp3.mp3", src: "/audio/vishnu_sahasranama.mp3.mp3", title: "Vishnu Sahasranama", titleHi: "विष्णु सहस्रनाम" },
+            { type: "video", id: "v_vishesh", src: "https://ik.imagekit.io/aup4wh6lq/VISHNU%20SAHASRANAMAM%20_%20Madhubanti%20Bagchi%20&%20Siddharth%20Bhavsar%20_%20Stotra%20For%20Peace%20&%20Divine%20Blessings.mp4", title: "Vishesh", titleHi: "विष्णु सहस्रनाम | मधुबंती बागची & सिद्धार्थ भावसार | शांति और दिव्य आशीर्वाद के लिए स्तोत्र", startTime: 7 },
             { type: "video", id: "v3", src: VIDEO_LIST[2], title: "Mahadev Nav Varsh", titleHi: "महादेव नव वर्ष" },
             { type: "mantra", id: "/audio/Challakere_Brothers_vedic_chanting_-_Shri_suktam_(mp3.pm).mp3", src: "/audio/Challakere_Brothers_vedic_chanting_-_Shri_suktam_(mp3.pm).mp3", title: "Shri Suktam", titleHi: "श्री सूक्तम्" },
             { type: "video", id: "v4", src: VIDEO_LIST[3], title: "Ardhanarishwara", titleHi: "अर्धनारीश्वर स्वरूप" },
@@ -54,7 +55,8 @@ export default function DhyanKakshaPage() {
             { type: "mantra", id: "/audio/Challakere_Brothers_vedic_chanting_-_MahaMrtyunjaya_mantrah_108_times_(mp3.pm).mp3", src: "/audio/Challakere_Brothers_vedic_chanting_-_MahaMrtyunjaya_mantrah_108_times_(mp3.pm).mp3", title: "MahaMrtyunjaya", titleHi: "महामृत्युंजय मंत्र" },
             { type: "video", id: "v6", src: VIDEO_LIST[5], title: "Sound Healing", titleHi: "नाद चिकित्सा" },
             { type: "mantra", id: "/audio/Shiva Tandava Stotram (All 18 Slokas)  Vande Guru Paramparaam  'Shiva-Bhakta' Ravana.mp3", src: "/audio/Shiva Tandava Stotram (All 18 Slokas)  Vande Guru Paramparaam  'Shiva-Bhakta' Ravana.mp3", title: "Shiva Tandava", titleHi: "शिव ताण्डव स्तोत्रम्" },
-            { type: "video", id: "v7", src: VIDEO_LIST[6], title: "Mahashivratri Special", titleHi: "महाशिवरात्रि दर्शन" }
+            { type: "video", id: "v7", src: VIDEO_LIST[6], title: "Mahashivratri Special", titleHi: "महाशिवरात्रि दर्शन" },
+            { type: "video", id: "v8", src: VIDEO_LIST[7], title: "Kaal Bhairav Ashtakam", titleHi: "काल भैरव अष्टकम्" }
         ];
     }, []);
 
@@ -105,6 +107,9 @@ export default function DhyanKakshaPage() {
             if (!video.src.includes(currentItem.src)) {
                 console.log(`[Video Sync] Loading source: ${currentItem.titleHi}`);
                 video.src = currentItem.src;
+                if ((currentItem as any).startTime) {
+                    video.currentTime = (currentItem as any).startTime;
+                }
                 video.load();
             }
 
@@ -154,8 +159,10 @@ export default function DhyanKakshaPage() {
             try {
                 // 1. Fetch Flash Videos for Intro
                 const flashRes = await fetch('/api/videos?folder=Flash Videos');
+                console.log("[Intro] Flash fetch status:", flashRes.status);
                 if (flashRes.ok) {
                     const data = await flashRes.json();
+                    console.log("[Intro] Flash videos found:", data.files?.length);
                     const videos = data.files
                         .filter((f: any) => {
                             const name = f.name.toLowerCase();
@@ -392,10 +399,11 @@ export default function DhyanKakshaPage() {
                     </div>
 
                     <button
-                        onClick={() => setHasStarted(true)}
-                        className={pageStyles.enterButton}
+                        onClick={() => introVideos.length > 0 && setHasStarted(true)}
+                        className={`${pageStyles.enterButton} ${introVideos.length === 0 ? pageStyles.buttonLoading : ""}`}
+                        disabled={introVideos.length === 0}
                     >
-                        प्रवेश करें
+                        {introVideos.length === 0 ? "प्रतीक्षा करें..." : "प्रवेश करें"}
                     </button>
 
                     <style jsx>{`
@@ -644,7 +652,7 @@ export default function DhyanKakshaPage() {
             {/* <div style={{...}} /> */}
 
             {/* Main Content Container */}
-            <div className={pageStyles.heroSection}>
+            <div className={`${pageStyles.heroSection} ${showIntro ? pageStyles.mainContentHidden : ""}`}>
 
 
 

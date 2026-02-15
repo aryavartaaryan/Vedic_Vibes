@@ -32,6 +32,10 @@ export default function IntroVideoFlash({ videos, onComplete, onFadeOutStart }: 
 
     useEffect(() => {
         isMounted.current = true;
+
+        // Only call onComplete if we are CERTAIN we have no videos after trying to load
+        // But in this app, introVideos are passed as props from page.tsx
+        // So if they are empty, we just wait a bit or exit if it's truly empty
         return () => {
             isMounted.current = false;
         };
@@ -137,7 +141,7 @@ export default function IntroVideoFlash({ videos, onComplete, onFadeOutStart }: 
                     if (isMounted.current && preloadIndex < videos.length) {
                         setBufferA({ src: videos[preloadIndex].src, active: false });
                     }
-                }, 1000);
+                }, 100);
             } else {
                 setBufferB(prev => ({ ...prev, active: false }));
                 setBufferA(prev => ({ ...prev, active: true }));
@@ -146,7 +150,7 @@ export default function IntroVideoFlash({ videos, onComplete, onFadeOutStart }: 
                     if (isMounted.current && preloadIndex < videos.length) {
                         setBufferB({ src: videos[preloadIndex].src, active: false });
                     }
-                }, 1000);
+                }, 100);
             }
             setCurrentIndex(nextIndex);
         } else {
@@ -204,7 +208,7 @@ export default function IntroVideoFlash({ videos, onComplete, onFadeOutStart }: 
                 <div className={styles.textOverlay}>
                     {displayedText.includes('🕉') ? (
                         <div className={styles.omIconContainer}>
-                            <img src="/images/elegant_om_v2.png" alt="Vedic Om" className={styles.omIcon} />
+                            <div className={styles.vedicOmText}>ॐ</div>
                             <p className={styles.animatedText}>
                                 {displayedText.replace('🕉', '').trim()}
                             </p>

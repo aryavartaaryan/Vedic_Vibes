@@ -70,7 +70,7 @@ interface MantraSangrahProps {
 const getHindiTitle = (filename: string): string => {
     // Specific Long Names or Priority Mappings First
     if (filename.includes('Om_Sahana_Vavatu')) return 'ॐ सहना ववतु (शांति मंत्र)';
-    if (filename.includes('Lalitha Sahasranamam')) return 'ललिता सहस्रनाम';
+    if (filename.includes('Lalitha Sahasranamam')) return 'ललिता सहस्रनाम (विशेष)';
     if (filename.includes('vishnu_sahasranama')) return 'विष्णु सहस्रनाम';
     if (filename.includes('MahaMrtyunjaya')) return 'महामृत्युंजय मंत्र (108 बार)';
     if (filename.includes('Narayana_Suktam')) return 'नारायण सूक्तम्';
@@ -605,7 +605,7 @@ export default function MantraSangrah({
             </button>
 
             {/* Floating Golden Lotus Trigger - Top Left Temple Pillar */}
-            <div className={`${styles.triggerContainer} ${isOpen ? styles.triggerHidden : ''}`}>
+            <div className={`${styles.triggerContainer} ${isOpen || !sessionActive ? styles.triggerHidden : ''}`}>
                 <button
                     className={styles.trigger}
                     onClick={() => setIsOpen(true)}
@@ -619,7 +619,7 @@ export default function MantraSangrah({
             </div>
 
             {/* Acharya Samvad - Top Right Temple Pillar */}
-            <div className={styles.acharyaContainer}>
+            <div className={`${styles.acharyaContainer} ${!sessionActive ? styles.triggerHidden : ''}`}>
                 <Link
                     href={`/acharya-samvad?lang=${lang}`}
                     className={styles.acharyaTrigger}

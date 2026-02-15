@@ -8,13 +8,13 @@ import styles from './PranicPathSection.module.css';
 // --- 3. SACRED GEOMETRY (SRI YANTRA) ---
 const SriYantraSVG = ({ className }: { className?: string }) => (
     <svg viewBox="0 0 100 100" className={className} style={{ width: '100%', height: '100%' }}>
-        <g fill="none" stroke="#D4AF37" strokeWidth="0.2" opacity="0.3">
-            {/* Simplified Pattern for background "Etched" feel */}
+        <g fill="none" stroke="#D4AF37" strokeWidth="0.3" opacity="0.6">
+            {/* Improved visibility for background "Etched" feel */}
             <circle cx="50" cy="50" r="48" strokeDasharray="0.5 0.5" />
             <path d="M50 2 L85 85 L15 85 Z" />
             <path d="M50 98 L85 15 L15 15 Z" />
-            <path d="M50 85 L80 30 L20 30 Z" opacity="0.5" />
-            <path d="M50 15 L80 70 L20 70 Z" opacity="0.5" />
+            <path d="M50 85 L80 30 L20 30 Z" opacity="0.6" />
+            <path d="M50 15 L80 70 L20 70 Z" opacity="0.6" />
         </g>
     </svg>
 );
@@ -207,29 +207,30 @@ export default function PranicPathSection() {
                 {/* Petals logic can remain or be styled in CSS */}
             </div>
 
-            {/* Sri Yantra - Deep Etched Pulse */}
-            <motion.div
-                style={{
-                    position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)',
-                    width: '800px', height: '800px', zIndex: 1, pointerEvents: 'none', filter: 'drop-shadow(0 0 5px rgba(0,0,0,0.5))'
-                }}
-                animate={{
-                    scale: [1, 1.15, 1.15, 1], // Inhale(4), Hold(4), Exhale(4) roughly
-                    opacity: [0.3, 0.4, 0.4, 0.3]
-                }}
-                transition={{
-                    duration: 12, // 4+4+4
-                    times: [0, 0.33, 0.66, 1],
-                    repeat: Infinity,
-                    ease: "easeInOut"
-                }}
-            >
-                <SriYantraSVG />
-            </motion.div>
-
             <div className={styles.contentWrapper}>
+                {/* Center the Sacred Geometry strictly within the card */}
+                <motion.div
+                    className={styles.sacredGeometryBackground}
+                    animate={{
+                        scale: [0.95, 1.1, 1.1, 0.95],
+                        opacity: [0.4, 0.6, 0.6, 0.4]
+                    }}
+                    transition={{
+                        duration: 15,
+                        times: [0, 0.33, 0.66, 1],
+                        repeat: Infinity,
+                        ease: "easeInOut"
+                    }}
+                >
+                    <SriYantraSVG />
+                </motion.div>
+
                 <div className={styles.auroraContainer}>
-                    <img src="/images/home_vedic_om.png" className={styles.vedicOmHero} alt="Sacred Om" />
+                    <img
+                        src="/images/home_vedic_om.png"
+                        className={styles.homeVedicOm}
+                        alt="Vedic Om"
+                    />
                 </div>
 
                 <h1 className={styles.title}>

@@ -154,13 +154,26 @@
     gap: 20px;
 }
 
-.omIcon {
-    width: 280px;
-    height: 280px;
-    object-fit: contain;
-    mix-blend-mode: screen;
-    filter: drop-shadow(0 0 15px rgba(255, 215, 0, 0.4));
+.vedicOmText {
+    font-size: 8rem;
+    font-weight: 800;
+    font-family: 'Noto Serif Devanagari', serif;
+    background: linear-gradient(135deg,
+            #2196F3 0%,
+            #4FC3F7 30%,
+            #D4AF37 70%,
+            #FFD700 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    filter: drop-shadow(0 0 25px rgba(212, 175, 55, 0.5));
     animation: omPulse 4s ease-in-out infinite;
+    margin-bottom: 2rem;
+    line-height: 1.25;
+    /* Increased to fix anuswar visibility */
+    padding-top: 0.5rem;
+    /* Space for the dot */
+    display: block;
 }
 
 @keyframes omPulse {
