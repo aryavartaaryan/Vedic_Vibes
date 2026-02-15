@@ -121,8 +121,8 @@
     }
 
     .sriYantraContainer {
-        margin-top: 5vh !important;
-        /* Lifted even higher to make space for the dashboard */
+        margin-top: 22vh !important;
+        /* Lowered from 5vh to avoid touching the header */
         width: 100% !important;
         display: flex !important;
         justify-content: center !important;
@@ -144,7 +144,7 @@
     flex-direction: column;
     align-items: center;
     justify-content: flex-start;
-    padding-top: 40px;
+    padding-top: 60px;
     padding-bottom: 220px;
     padding-left: 1rem;
     padding-right: 1rem;
@@ -159,9 +159,8 @@
     width: 100%;
     display: flex;
     justify-content: center;
-    margin-top: -20px;
-    /* Lifted on desktop as well */
-    /* Moved up from 60px */
+    margin-top: 20px;
+    /* Lowered from -20px for better vertical balance */
     z-index: 5;
 }
 

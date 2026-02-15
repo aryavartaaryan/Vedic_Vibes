@@ -692,66 +692,6 @@ export default function DhyanKakshaPage() {
                         </div>
                     )}
 
-                    {/* SESSION DASHBOARD (Unified Up Next + Countdown) */}
-                    {!showIntro && (
-                        <div className={pageStyles.sessionDashboard}>
-                            <div className={pageStyles.dashboardPill}>
-                                {/* Part 1: Up Next */}
-                                <div className={pageStyles.dashboardHeader}>
-                                    <Sparkles size={14} className={pageStyles.nextIcon} />
-                                    <span>{lang === 'hi' ? 'अगला अनुभव' : 'Up Next'}</span>
-                                </div>
-                                <div className={pageStyles.dashboardTitle}>
-                                    {(() => {
-                                        let nextIdx = (currentIndex + 1) % playlist.length;
-                                        if (nextIdx === 0 && playlist.length > 1) nextIdx = 1;
-                                        const nextItem = playlist[nextIdx];
-                                        return (
-                                            <>
-                                                <span className={pageStyles.nextTypeIcon} style={{ marginRight: '8px' }}>
-                                                    {nextItem.type === 'video' ? '📽️' : '🎵'}
-                                                </span>
-                                                {lang === 'hi' ? nextItem.titleHi : nextItem.title}
-                                            </>
-                                        );
-                                    })()}
-                                </div>
-
-                                {/* Divider */}
-                                {(() => {
-                                    const isVideo = currentItem.type === 'video';
-                                    const dur = isVideo ? videoDuration : audioDuration;
-                                    const showCountdown = (currentItem.id !== 'guidance') && (dur >= 300);
-                                    return showCountdown ? <div className={pageStyles.dashboardDivider} /> : null;
-                                })()}
-
-                                {/* Part 2: Remaining Time (With Visibility Filters) */}
-                                {(() => {
-                                    const isVideo = currentItem.type === 'video';
-                                    const cur = isVideo ? videoTime : audioTime;
-                                    const dur = isVideo ? videoDuration : audioDuration;
-
-                                    if (currentItem.id === 'guidance' || (dur > 0 && dur < 300)) return null;
-
-                                    const remaining = Math.max(0, dur - cur);
-
-                                    return (
-                                        <div className={pageStyles.dashboardCountdown}>
-                                            <span className={pageStyles.dashboardTimeLabel}>
-                                                {lang === 'hi' ? 'समय' : 'TIME'}
-                                            </span>
-                                            <span className={pageStyles.dashboardTimeValue}>
-                                                {formatTime(remaining)}
-                                            </span>
-                                            <span className={pageStyles.dashboardSesh}>
-                                                {lang === 'hi' ? 'शेष' : 'Remaining'}
-                                            </span>
-                                        </div>
-                                    );
-                                })()}
-                            </div>
-                        </div>
-                    )}
 
                     {/* LAYER 2: Ambient Background Loop (During Mantras) - A/B Double Buffering */}
                     <div
@@ -852,6 +792,67 @@ export default function DhyanKakshaPage() {
                 <div className={pageStyles.sriYantraContainer}>
                     <SriYantra />
                 </div>
+
+                {/* SESSION DASHBOARD (Unified Up Next + Countdown) */}
+                {!showIntro && (
+                    <div className={pageStyles.sessionDashboard}>
+                        <div className={pageStyles.dashboardPill}>
+                            {/* Part 1: Up Next */}
+                            <div className={pageStyles.dashboardHeader}>
+                                <Sparkles size={14} className={pageStyles.nextIcon} />
+                                <span>{lang === 'hi' ? 'अगला अनुभव' : 'Up Next'}</span>
+                            </div>
+                            <div className={pageStyles.dashboardTitle}>
+                                {(() => {
+                                    let nextIdx = (currentIndex + 1) % playlist.length;
+                                    if (nextIdx === 0 && playlist.length > 1) nextIdx = 1;
+                                    const nextItem = playlist[nextIdx];
+                                    return (
+                                        <>
+                                            <span className={pageStyles.nextTypeIcon} style={{ marginRight: '8px' }}>
+                                                {nextItem.type === 'video' ? '📽️' : '🎵'}
+                                            </span>
+                                            {lang === 'hi' ? nextItem.titleHi : nextItem.title}
+                                        </>
+                                    );
+                                })()}
+                            </div>
+
+                            {/* Divider */}
+                            {(() => {
+                                const isVideo = currentItem.type === 'video';
+                                const dur = isVideo ? videoDuration : audioDuration;
+                                const showCountdown = (currentItem.id !== 'guidance') && (dur >= 300);
+                                return showCountdown ? <div className={pageStyles.dashboardDivider} /> : null;
+                            })()}
+
+                            {/* Part 2: Remaining Time (With Visibility Filters) */}
+                            {(() => {
+                                const isVideo = currentItem.type === 'video';
+                                const cur = isVideo ? videoTime : audioTime;
+                                const dur = isVideo ? videoDuration : audioDuration;
+
+                                if (currentItem.id === 'guidance' || (dur > 0 && dur < 300)) return null;
+
+                                const remaining = Math.max(0, dur - cur);
+
+                                return (
+                                    <div className={pageStyles.dashboardCountdown}>
+                                        <span className={pageStyles.dashboardTimeLabel}>
+                                            {lang === 'hi' ? 'समय' : 'TIME'}
+                                        </span>
+                                        <span className={pageStyles.dashboardTimeValue}>
+                                            {formatTime(remaining)}
+                                        </span>
+                                        <span className={pageStyles.dashboardSesh}>
+                                            {lang === 'hi' ? 'शेष' : 'Remaining'}
+                                        </span>
+                                    </div>
+                                );
+                            })()}
+                        </div>
+                    </div>
+                )}
 
 
 
