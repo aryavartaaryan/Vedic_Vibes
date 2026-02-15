@@ -155,13 +155,17 @@
 }
 
 .sriYantraContainer {
-    position: relative;
-    width: 100%;
+    position: absolute;
+    bottom: 22%;
+    left: 50%;
+    transform: translateX(-50%);
+    width: clamp(220px, 50vw, 360px);
+    height: clamp(220px, 50vw, 360px);
     display: flex;
     justify-content: center;
-    margin-top: 60px;
-    /* Pushed down to leave space for top dashboard */
+    align-items: center;
     z-index: 5;
+    pointer-events: none;
 }
 
 .mainContentHidden {
@@ -436,6 +440,26 @@
     width: 40px;
     height: 1px;
     background: linear-gradient(90deg, transparent, rgba(212, 175, 55, 0.6), transparent);
+}
+
+.dashboardShesh {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-family: 'Noto Serif Devanagari', serif;
+    font-size: 0.8rem;
+    color: rgba(212, 175, 55, 0.85);
+    font-weight: 600;
+    margin-top: 2px;
+    letter-spacing: 0.05em;
+}
+
+.sheshTime {
+    font-family: 'Inter', sans-serif;
+    font-size: 0.85rem;
+    color: #FFD700;
+    font-weight: 700;
+    text-shadow: 0 0 8px rgba(255, 215, 0, 0.3);
 }
 
 

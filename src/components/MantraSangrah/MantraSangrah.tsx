@@ -779,9 +779,10 @@ export default function MantraSangrah({
                             const activeItem = useSequenceControls ? sequenceItem : currentTrack;
                             const isVideo = activeItem?.type === 'video';
 
-                            // Control State
-                            const isPausedNow = isVideo ? isSessionPaused : (useSequenceControls ? isSessionPaused : isPaused);
-                            const currentlyPlaying = !isPausedNow;
+                            // Control State - Use ACTUAL playback state
+                            const currentlyPlaying = isVideo
+                                ? !isSessionPaused
+                                : isPlaying; // Use actual audio isPlaying state
 
                             // UI Values
                             const displayProgress = isVideo ? (videoProgress || 0) : progress;
@@ -794,9 +795,8 @@ export default function MantraSangrah({
                                         onClick={() => {
                                             if (isVideo && onVideoToggle) {
                                                 onVideoToggle();
-                                            } else if (useSequenceControls) {
-                                                onSelectIndex?.(currentIndex!);
                                             } else {
+                                                // For ALL mantras (sequence or library), toggle audio directly
                                                 togglePlayPause();
                                             }
                                         }}

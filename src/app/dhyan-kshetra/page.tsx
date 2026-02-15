@@ -713,6 +713,24 @@ export default function DhyanKakshaPage() {
                                         );
                                     })()}
                                 </div>
+
+                                {/* शेष (Remaining Time) - Only for mantras > 5 min */}
+                                {(() => {
+                                    const isVideo = currentItem.type === 'video';
+                                    const cur = isVideo ? videoTime : audioTime;
+                                    const dur = isVideo ? videoDuration : audioDuration;
+
+                                    if (currentItem.id === 'guidance' || dur < 300) return null;
+
+                                    const remaining = Math.max(0, dur - cur);
+
+                                    return (
+                                        <div className={pageStyles.dashboardShesh}>
+                                            <span>{lang === 'hi' ? 'शेष' : 'Remaining'}</span>
+                                            <span className={pageStyles.sheshTime}>{formatTime(remaining)}</span>
+                                        </div>
+                                    );
+                                })()}
                             </div>
                         </div>
                     )}
