@@ -101,10 +101,12 @@ export default function DhyanKakshaPage() {
 
     const goNext = () => {
         let nextIndex = (currentIndex + 1) % playlist.length;
-        // SKIP index 0 (Guidance) during automatic loops - it's only for the start
+        // SKIP index 0 (Guidance/Margdarshan) during automatic transitions
+        // We only want it to play once at the start.
         if (nextIndex === 0 && playlist.length > 1) {
             nextIndex = 1;
         }
+        console.log(`[Sequence] goNext: ${currentIndex} -> ${nextIndex}`);
         handleSelectIndex(nextIndex);
     };
 

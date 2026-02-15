@@ -331,14 +331,22 @@ export default function MantraSangrah({
                 return;
             }
 
-            // Fallback to internal sequential logic if no parent listener
+            // Fallback to internal sequential logic ONLY if no parent listener
+            // AND never reset to Guidance (index 0) automatically
             const currentIdx = currentPlaylist.findIndex(t => t.id === current?.id);
             if (currentIdx !== -1 && currentIdx < currentPlaylist.length - 1) {
                 const nextTrack = currentPlaylist[currentIdx + 1];
-                playTrack(nextTrack);
-            } else {
-                const firstMantra = currentPlaylist[0];
-                if (firstMantra) playTrack(firstMantra);
+                // If next is guidance, skip it
+                if (nextTrack.id === 'guidance') {
+                    if (currentIdx + 2 < currentPlaylist.length) {
+                        playTrack(currentPlaylist[currentIdx + 2]);
+                    }
+                } else {
+                    playTrack(nextTrack);
+                }
+            } else if (currentPlaylist.length > 1) {
+                // Loop back to index 1 (skip Guidance)
+                playTrack(currentPlaylist[1]);
             }
         };
 
