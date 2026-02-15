@@ -579,8 +579,10 @@ export default function DhyanKakshaPage() {
                         onEnded={goNext}
                         onWaiting={() => setIsVideoLoading(true)}
                         onPlaying={() => setIsVideoLoading(false)}
-                        onLoadedData={() => setIsVideoLoading(false)}
                         onCanPlay={() => setIsVideoLoading(false)}
+                        onLoadedData={() => setIsVideoLoading(false)}
+                        onLoadStart={() => setIsVideoLoading(true)}
+                        onStalled={() => setIsVideoLoading(true)}
                         onError={(e) => {
                             setIsVideoLoading(false);
                             const error = (e.currentTarget.error);
@@ -625,7 +627,7 @@ export default function DhyanKakshaPage() {
                             <div className={pageStyles.spiritualSpinner}>
                                 <div className={pageStyles.spinnerLotus}>🪷</div>
                                 <span className={pageStyles.loadingText}>
-                                    {lang === 'hi' ? 'प्राण ऊर्जा संचित हो रही है...' : 'Accumulating Pranic Energy...'}
+                                    {lang === 'hi' ? 'संचित हो रहा है... (Loading)' : 'Accumulating... (Loading)'}
                                 </span>
                             </div>
                         </div>
