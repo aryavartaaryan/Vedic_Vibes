@@ -535,7 +535,7 @@ export default function DhyanKakshaPage() {
                 style={{
                     position: 'fixed',
                     top: '20px',
-                    right: '130px',
+                    left: '20px',
                     zIndex: 100,
                     padding: '0.5rem 1.2rem',
                     background: 'linear-gradient(135deg, rgba(10, 5, 2, 0.9) 0%, rgba(25, 12, 5, 0.85) 100%)',
