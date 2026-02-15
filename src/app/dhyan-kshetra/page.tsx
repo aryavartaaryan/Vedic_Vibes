@@ -80,6 +80,11 @@ export default function DhyanKakshaPage() {
         setCurrentIndex(index);
         setIsSessionPaused(false);
 
+        // AUTO-SCROLL TO TOP: Ensure video/player is visible
+        if (typeof window !== 'undefined') {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
         if (playlist[index].type === 'mantra') {
             // STOP active video if any
             if (sequentialVideoRef.current) {
