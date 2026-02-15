@@ -34,9 +34,8 @@ export default function DhyanKakshaPage() {
     const [isSessionPaused, setIsSessionPaused] = useState(false);
     const [introVideos, setIntroVideos] = useState<{ src: string, text?: string | string[] }[]>([]);
     const [slideVideos, setSlideVideos] = useState<string[]>([]);
-    const [videoProgress, setVideoProgress] = useState(0);
-    const [videoTime, setVideoTime] = useState(0);
     const [videoDuration, setVideoDuration] = useState(0);
+    const [isVideoLoading, setIsVideoLoading] = useState(false);
     const sequentialVideoRef = React.useRef<HTMLVideoElement>(null);
 
     const playlist = useMemo(() => {
@@ -94,7 +93,12 @@ export default function DhyanKakshaPage() {
     };
 
     const goNext = () => {
-        handleSelectIndex((currentIndex + 1) % playlist.length);
+        let nextIndex = (currentIndex + 1) % playlist.length;
+        // SKIP index 0 (Guidance) during automatic loops - it's only for the start
+        if (nextIndex === 0 && playlist.length > 1) {
+            nextIndex = 1;
+        }
+        handleSelectIndex(nextIndex);
     };
 
     // Effect to handle sequential video playback robustly
@@ -480,8 +484,14 @@ export default function DhyanKakshaPage() {
                 sessionActive={!showIntro}
                 onPlayingChange={(playing) => {
                     setIsMantraPlaying(playing);
-                    // Reset session pause if manually starting a mantra from library
-                    if (playing && isSessionPaused) {
+                    // If a mantra starts playing, PAUSE the video
+                    if (playing && currentItem.type === 'video') {
+                        setIsSessionPaused(true);
+                        if (sequentialVideoRef.current) {
+                            sequentialVideoRef.current.pause();
+                        }
+                    } else if (playing && isSessionPaused) {
+                        // Reset session pause if manually starting a mantra from library
                         setIsSessionPaused(false);
                     }
                 }}
@@ -532,7 +542,12 @@ export default function DhyanKakshaPage() {
                         ref={sequentialVideoRef}
                         playsInline
                         onEnded={goNext}
+                        onWaiting={() => setIsVideoLoading(true)}
+                        onPlaying={() => setIsVideoLoading(false)}
+                        onLoadedData={() => setIsVideoLoading(false)}
+                        onCanPlay={() => setIsVideoLoading(false)}
                         onError={(e) => {
+                            setIsVideoLoading(false);
                             const error = (e.currentTarget.error);
                             console.error(`[Sequential Video Error] Code ${error?.code}: ${error?.message}`, currentItem.src);
                         }}
@@ -561,12 +576,25 @@ export default function DhyanKakshaPage() {
                             left: 0,
                             width: '100%',
                             height: '100%',
-                            objectFit: 'cover',
+                            objectFit: 'contain', // User requested no cutting
                             objectPosition: 'center',
                             transition: 'opacity 1s ease-in-out',
-                            zIndex: 10
+                            zIndex: 10,
+                            backgroundColor: '#000' // Ensure black bars if ratio differs
                         }}
                     />
+
+                    {/* VIDEO LOADING OVERLAY */}
+                    {isVideoLoading && currentItem.type === 'video' && (
+                        <div className={pageStyles.videoBufferingOverlay}>
+                            <div className={pageStyles.spiritualSpinner}>
+                                <div className={pageStyles.spinnerLotus}>🪷</div>
+                                <span className={pageStyles.loadingText}>
+                                    {lang === 'hi' ? 'प्राण ऊर्जा संचित हो रही है...' : 'Accumulating Pranic Energy...'}
+                                </span>
+                            </div>
+                        </div>
+                    )}
 
                     {/* LAYER 2: Ambient Background Loop (During Mantras) - A/B Double Buffering */}
                     <div

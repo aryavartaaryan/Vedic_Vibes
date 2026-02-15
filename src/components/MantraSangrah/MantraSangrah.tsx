@@ -134,6 +134,7 @@ export default function MantraSangrah({
     const [progress, setProgress] = useState(0);
     const [lang, setLangState] = useState(langProp);
     const [duration, setDuration] = useState(0);
+    const [manualPlaybackOverride, setManualPlaybackOverride] = useState(false);
 
     // Sync with prop if needed
     useEffect(() => {
@@ -279,6 +280,7 @@ export default function MantraSangrah({
         try {
             await audio.play();
             setIsPlaying(true);
+            setManualPlaybackOverride(true); // User-selected/Auto-selected from this library
         } catch (err: any) {
             if (err && typeof err === 'object' && 'name' in err && err.name === 'AbortError') {
                 console.log("Mantra play request was interrupted (AbortError), ignoring.");
@@ -447,6 +449,7 @@ export default function MantraSangrah({
                     startTime: track.startTime || 0
                 };
                 playTrack(normalizedTrack);
+                setManualPlaybackOverride(false); // Reset on external sequence change
             } else {
                 console.warn(`Could not find forced track: ${forceTrackId}`);
             }
@@ -459,7 +462,8 @@ export default function MantraSangrah({
 
         // isPaused (prop) is for video/mantra turn coordination
         // isSessionPaused is for manual overrides
-        if (!sessionActive || isSessionPaused || (isPaused && !startPlaying && !forceTrackId)) {
+        // manualPlaybackOverride (Internal) allows library tracks to play even during video turns
+        if (!sessionActive || isSessionPaused || (isPaused && !startPlaying && !forceTrackId && !manualPlaybackOverride)) {
             if (!audio.paused) {
                 console.log("[MantraSangrah] Session inactive or paused. Silencing audio.");
                 audio.pause();
