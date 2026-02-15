@@ -479,6 +479,29 @@
     text-shadow: 0 0 8px rgba(255, 215, 0, 0.3);
 }
 
+.skipGuidanceBtn {
+    margin-top: 8px;
+    padding: 6px 20px;
+    font-family: 'Noto Serif Devanagari', serif;
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: rgba(255, 215, 0, 0.9);
+    background: rgba(255, 215, 0, 0.1);
+    border: 1px solid rgba(255, 215, 0, 0.25);
+    border-radius: 20px;
+    cursor: pointer;
+    pointer-events: auto;
+    transition: all 0.3s ease;
+    letter-spacing: 0.05em;
+    backdrop-filter: blur(8px);
+}
+
+.skipGuidanceBtn:hover {
+    background: rgba(255, 215, 0, 0.2);
+    border-color: rgba(255, 215, 0, 0.5);
+    box-shadow: 0 0 15px rgba(255, 215, 0, 0.2);
+}
+
 
 @keyframes dashboardFadeIn {
     from {

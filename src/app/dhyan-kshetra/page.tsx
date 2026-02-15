@@ -397,110 +397,94 @@ export default function DhyanKakshaPage() {
                 overflow: 'hidden'
             }}
         >
-            {/* SPLASH SCREEN FOR USER ACTIVATION (Audio restriction fix) */}
+            {/* SPLASH SCREEN - Elegant Single Entry */}
             {!hasStarted && (
                 <div style={{
                     position: 'fixed',
                     inset: 0,
                     zIndex: 9999,
-                    background: 'radial-gradient(circle at center, #001a33 0%, #000814 100%)',
+                    background: 'radial-gradient(ellipse at 50% 30%, #0a1628 0%, #050d1a 40%, #020810 100%)',
                     display: 'flex',
                     flexDirection: 'column',
                     alignItems: 'center',
                     justifyContent: 'center',
-                    gap: '2.5rem',
+                    gap: '2rem',
                     textAlign: 'center',
                     padding: '2rem'
                 }}>
 
-                    <div style={{ maxWidth: '600px' }}>
+                    {/* Decorative Om */}
+                    <div style={{
+                        fontSize: '4rem',
+                        opacity: 0.3,
+                        filter: 'drop-shadow(0 0 20px rgba(255, 215, 0, 0.3))',
+                        animation: 'breathe 4s ease-in-out infinite'
+                    }}>🕉️</div>
+
+                    <div style={{ maxWidth: '500px' }}>
                         <h1 style={{
-                            color: '#FFD700',
+                            background: 'linear-gradient(135deg, #FFD700, #FF9933, #FFD700)',
+                            WebkitBackgroundClip: 'text',
+                            WebkitTextFillColor: 'transparent',
                             fontFamily: "'Playfair Display', serif",
-                            fontSize: '3rem',
+                            fontSize: 'clamp(2rem, 6vw, 3rem)',
                             marginBottom: '1rem',
-                            textShadow: '0 0 30px rgba(0, 150, 255, 0.5), 0 0 15px rgba(255, 215, 0, 0.3)',
-                            letterSpacing: '2px'
+                            letterSpacing: '3px',
+                            filter: 'drop-shadow(0 0 15px rgba(255, 215, 0, 0.3))'
                         }}>
                             ध्यान क्षेत्र
                         </h1>
                         <p style={{
-                            color: 'rgba(245, 230, 211, 0.9)',
-                            fontSize: '1.3rem',
-                            lineHeight: '1.6',
+                            color: 'rgba(245, 230, 211, 0.85)',
+                            fontSize: 'clamp(1rem, 3vw, 1.2rem)',
+                            lineHeight: '1.8',
                             fontFamily: "'Noto Serif Devanagari', serif",
-                            textShadow: '0 2px 4px rgba(0,0,0,0.5)'
+                            textShadow: '0 1px 3px rgba(0,0,0,0.5)'
                         }}>
-                            Prepare for a divine meditation experience.<br />
-                            दिव्य ध्यान अनुभव के लिए तैयार रहें।
+                            दिव्य ध्यान अनुभव के लिए तैयार रहें।<br />
+                            <span style={{ color: 'rgba(150, 200, 255, 0.7)', fontSize: '0.9em' }}>
+                                Prepare for a divine meditation experience.
+                            </span>
                         </p>
                     </div>
 
-                    <div style={{
-                        display: 'flex',
-                        flexDirection: 'column',
-                        gap: '1.2rem',
-                        width: '100%',
-                        maxWidth: '350px',
-                        animation: 'fadeInUp 1s ease-out 0.5s both'
-                    }}>
-                        <p style={{
-                            color: '#FFD700',
+                    {/* Single Enter Button */}
+                    <button
+                        onClick={() => {
+                            if (introVideos.length > 0) {
+                                setIsFirstTime(true);
+                                setHasStarted(true);
+                            }
+                        }}
+                        disabled={introVideos.length === 0}
+                        style={{
+                            padding: '1rem 3.5rem',
+                            fontSize: 'clamp(1.1rem, 3vw, 1.3rem)',
                             fontFamily: "'Noto Serif Devanagari', serif",
-                            fontSize: '1.25rem',
-                            marginBottom: '0.8rem',
-                            opacity: 0.95,
-                            textShadow: '0 2px 6px rgba(0,0,0,0.6)'
-                        }}>
-                            क्या आप मार्गदर्शन ऑडियो सुनना चाहते हैं?
-                        </p>
-                        <div style={{
-                            display: 'flex',
-                            gap: '1.5rem',
-                            justifyContent: 'center',
-                            width: '100%'
-                        }}>
-                            <button
-                                onClick={() => {
-                                    if (introVideos.length > 0) {
-                                        setIsFirstTime(true);
-                                        setHasStarted(true);
-                                    }
-                                }}
-                                className={`${pageStyles.choiceButton} ${introVideos.length === 0 ? pageStyles.buttonLoading : ""}`}
-                                disabled={introVideos.length === 0}
-                                style={{ flex: 1, minWidth: '120px' }}
-                            >
-                                {introVideos.length === 0 ? "..." : "हाँ"}
-                            </button>
-                            <button
-                                onClick={() => {
-                                    if (introVideos.length > 0) {
-                                        setIsFirstTime(false);
-                                        setHasStarted(true);
-                                    }
-                                }}
-                                className={`${pageStyles.choiceButton} ${pageStyles.returningButton} ${introVideos.length === 0 ? pageStyles.buttonLoading : ""}`}
-                                disabled={introVideos.length === 0}
-                                style={{ flex: 1, minWidth: '120px' }}
-                            >
-                                {introVideos.length === 0 ? "..." : "नहीं"}
-                            </button>
-                        </div>
-                    </div>
+                            fontWeight: 700,
+                            color: '#0a1628',
+                            background: 'linear-gradient(135deg, #FFD700 0%, #FF9933 50%, #FFD700 100%)',
+                            border: '1px solid rgba(255, 215, 0, 0.4)',
+                            borderRadius: '50px',
+                            cursor: introVideos.length === 0 ? 'wait' : 'pointer',
+                            letterSpacing: '1px',
+                            boxShadow: '0 8px 32px rgba(255, 215, 0, 0.25), inset 0 1px 0 rgba(255,255,255,0.3)',
+                            transition: 'all 0.4s ease',
+                            opacity: introVideos.length === 0 ? 0.5 : 1,
+                            animation: introVideos.length > 0 ? 'gentlePulse 3s ease-in-out infinite' : 'none'
+                        }}
+                    >
+                        {introVideos.length === 0 ? '🪷 प्रतीक्षा करें...' : '🪷 प्रवेश करें'}
+                    </button>
 
                     <style jsx>{`
-                        @keyframes fadeInUp {
-                            from { opacity: 0; transform: translateY(20px); }
-                            to { opacity: 1; transform: translateY(0); }
+                        @keyframes breathe {
+                            0%, 100% { transform: scale(1); opacity: 0.25; }
+                            50% { transform: scale(1.08); opacity: 0.4; }
                         }
-                    `}</style>
-
-                    <style jsx>{`
-                        @keyframes pulse {
-                            0% { transform: scale(1); opacity: 0.8; }
-                            50% { transform: scale(1.05); opacity: 1; border-color: rgba(212, 175, 55, 0.6); }
-                            100% { transform: scale(1); opacity: 0.8; }
+                        @keyframes gentlePulse {
+                            0%, 100% { box-shadow: 0 8px 32px rgba(255, 215, 0, 0.2); }
+                            50% { box-shadow: 0 8px 40px rgba(255, 215, 0, 0.4), 0 0 60px rgba(255, 153, 51, 0.15); }
                         }
                     `}</style>
                 </div>
@@ -714,13 +698,13 @@ export default function DhyanKakshaPage() {
                                     })()}
                                 </div>
 
-                                {/* शेष (Remaining Time) - Only for mantras > 5 min */}
+                                {/* शेष (Remaining Time) - Only for mantras > 3 min */}
                                 {(() => {
                                     const isVideo = currentItem.type === 'video';
                                     const cur = isVideo ? videoTime : audioTime;
                                     const dur = isVideo ? videoDuration : audioDuration;
 
-                                    if (currentItem.id === 'guidance' || dur < 300) return null;
+                                    if (currentItem.id === 'guidance' || dur < 180) return null;
 
                                     const remaining = Math.max(0, dur - cur);
 
@@ -732,6 +716,18 @@ export default function DhyanKakshaPage() {
                                     );
                                 })()}
                             </div>
+
+                            {/* Skip Guidance Button */}
+                            {currentItem.id === 'guidance' && (
+                                <button
+                                    className={pageStyles.skipGuidanceBtn}
+                                    onClick={() => {
+                                        handleSelectIndex(1);
+                                    }}
+                                >
+                                    {lang === 'hi' ? 'मार्गदर्शन छोड़ें ⏭️' : 'Skip Guidance ⏭️'}
+                                </button>
+                            )}
                         </div>
                     )}
 
