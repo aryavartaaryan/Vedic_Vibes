@@ -631,6 +631,33 @@ export default function DhyanKakshaPage() {
                         </div>
                     )}
 
+                    {/* UP NEXT INDICATOR */}
+                    {!showIntro && (
+                        <div className={pageStyles.upNextContainer}>
+                            <div className={pageStyles.upNextContent}>
+                                <div className={pageStyles.upNextHeader}>
+                                    <Sparkles size={14} className={pageStyles.nextIcon} />
+                                    <span>{lang === 'hi' ? 'अगला अनुभव' : 'Up Next'}</span>
+                                </div>
+                                <div className={pageStyles.upNextTitle}>
+                                    {(() => {
+                                        let nextIdx = (currentIndex + 1) % playlist.length;
+                                        if (nextIdx === 0 && playlist.length > 1) nextIdx = 1;
+                                        const nextItem = playlist[nextIdx];
+                                        return (
+                                            <>
+                                                <span className={pageStyles.nextTypeIcon}>
+                                                    {nextItem.type === 'video' ? '📽️' : '🎵'}
+                                                </span>
+                                                {lang === 'hi' ? nextItem.titleHi : nextItem.title}
+                                            </>
+                                        );
+                                    })()}
+                                </div>
+                            </div>
+                        </div>
+                    )}
+
                     {/* LAYER 2: Ambient Background Loop (During Mantras) - A/B Double Buffering */}
                     <div
                         style={{
