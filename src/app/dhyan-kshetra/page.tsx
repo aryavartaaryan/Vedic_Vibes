@@ -423,13 +423,18 @@ export default function DhyanKakshaPage() {
                     padding: '2rem'
                 }}>
 
-                    {/* Decorative Om */}
-                    <div style={{
-                        fontSize: '4rem',
-                        opacity: 0.3,
-                        filter: 'drop-shadow(0 0 20px rgba(255, 215, 0, 0.3))',
-                        animation: 'breathe 4s ease-in-out infinite'
-                    }}>🕉️</div>
+                    {/* Decorative Om Image */}
+                    <img
+                        src="/images/golden_om_enter.png"
+                        alt="Om"
+                        style={{
+                            width: 'clamp(80px, 18vw, 120px)',
+                            height: 'auto',
+                            opacity: 0.85,
+                            filter: 'drop-shadow(0 0 25px rgba(255, 215, 0, 0.4))',
+                            animation: 'breathe 4s ease-in-out infinite'
+                        }}
+                    />
 
                     <div style={{ maxWidth: '500px' }}>
                         <h1 style={{
