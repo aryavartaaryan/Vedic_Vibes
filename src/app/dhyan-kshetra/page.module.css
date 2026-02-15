@@ -281,3 +281,106 @@
         filter: brightness(1) drop-shadow(0 0 10px rgba(212, 175, 55, 0.4));
     }
 }
+
+/* UP NEXT INDICATOR */
+.upNextContainer {
+    position: absolute;
+    bottom: 40px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 25;
+    pointer-events: none;
+    animation: upNextFadeIn 1.5s ease-out;
+}
+
+.upNextContent {
+    background: linear-gradient(135deg, rgba(20, 10, 5, 0.85) 0%, rgba(40, 20, 10, 0.75) 100%);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(212, 175, 55, 0.4);
+    border-radius: 50px;
+    padding: 10px 24px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    box-shadow:
+        0 10px 30px rgba(0, 0, 0, 0.6),
+        0 0 20px rgba(255, 215, 0, 0.1);
+    min-width: 280px;
+}
+
+.upNextHeader {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-family: 'Noto Serif Devanagari', serif;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: rgba(255, 215, 0, 0.8);
+    font-weight: 600;
+}
+
+.nextIcon {
+    color: #FFD700;
+    animation: sparkle 2s infinite ease-in-out;
+}
+
+.upNextTitle {
+    font-family: 'Noto Serif Devanagari', serif;
+    font-size: 1rem;
+    color: #F5E6D3;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.nextTypeIcon {
+    font-size: 1.1rem;
+    opacity: 0.9;
+}
+
+@keyframes upNextFadeIn {
+    from {
+        opacity: 0;
+        transform: translate(-50%, 20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translate(-50%, 0);
+    }
+}
+
+@keyframes sparkle {
+
+    0%,
+    100% {
+        transform: scale(1);
+        filter: brightness(1);
+    }
+
+    50% {
+        transform: scale(1.2);
+        filter: brightness(1.5);
+    }
+}
+
+@media (max-width: 768px) {
+    .upNextContainer {
+        bottom: 120px;
+        /* Space for mobile controls */
+        width: 90%;
+    }
+
+    .upNextContent {
+        min-width: auto;
+        padding: 8px 16px;
+    }
+
+    .upNextTitle {
+        font-size: 0.9rem;
+    }
+}
