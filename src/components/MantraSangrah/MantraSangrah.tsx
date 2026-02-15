@@ -701,9 +701,9 @@ export default function MantraSangrah({
                                             <div className={styles.trackTitleContainer}>
                                                 <span className={styles.mediaIcon}>{isVideo ? '📽️' : '🎵'}</span>
                                                 <div className={styles.trackTitleGroup}>
-                                                    <span className={styles.trackTitle}>{track.titleHi}</span>
+                                                    <span className={styles.trackTitle}>{lang === 'hi' ? track.titleHi : track.title}</span>
                                                     {isVideo && (
-                                                        <span className={styles.trackSubtitle}>{lang === 'hi' ? 'चलचित्र' : 'Chalchitra'}</span>
+                                                        <span className={styles.trackSubtitle}>{lang === 'hi' ? 'चलचित्र' : 'Video'}</span>
                                                     )}
                                                     {!isVideo && (track.title.includes('Vishnu') || track.title.includes('Lalitha')) && (
                                                         <span className={styles.trackSubtitle}>{lang === 'hi' ? 'विशेष' : 'Vishesh'}</span>
@@ -738,10 +738,10 @@ export default function MantraSangrah({
                                                 <div className={styles.trackTitleContainer}>
                                                     <span className={styles.mediaIcon}>🪷</span>
                                                     <div className={styles.trackTitleGroup}>
-                                                        <span className={styles.trackTitle}>{track.titleHi}</span>
+                                                        <span className={styles.trackTitle}>{lang === 'hi' ? track.titleHi : track.title}</span>
                                                         {track.isDefault && (
                                                             <span className={track.id === 'guidance' ? styles.trackSubtitleGuidance : styles.trackSubtitle}>
-                                                                {lang === 'hi' ? 'प्रारंभिक' : 'Prarambhik'}
+                                                                {lang === 'hi' ? 'प्रारंभिक' : 'Default'}
                                                             </span>
                                                         )}
                                                         {track.isSpecial && (
@@ -806,7 +806,7 @@ export default function MantraSangrah({
                                     <div className={styles.miniTrackInfo}>
                                         <div className={styles.miniTrackHeader}>
                                             <span className={styles.miniTrackTitle}>
-                                                {activeItem?.titleHi || activeItem?.title}
+                                                {lang === 'hi' ? (activeItem?.titleHi || activeItem?.title) : (activeItem?.title || activeItem?.titleHi)}
                                             </span>
                                             <span className={styles.miniTime}>
                                                 {formatTime(displayTime)} / {formatTime(isVideo ? (videoDuration || 0) : duration)}
