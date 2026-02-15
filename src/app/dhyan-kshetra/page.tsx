@@ -453,37 +453,46 @@ export default function DhyanKakshaPage() {
                         <p style={{
                             color: '#FFD700',
                             fontFamily: "'Noto Serif Devanagari', serif",
-                            fontSize: '1.2rem',
-                            marginBottom: '0.5rem',
-                            opacity: 0.9,
-                            textShadow: '0 2px 4px rgba(0,0,0,0.5)'
+                            fontSize: '1.25rem',
+                            marginBottom: '0.8rem',
+                            opacity: 0.95,
+                            textShadow: '0 2px 6px rgba(0,0,0,0.6)'
                         }}>
-                            क्या आप पहली बार आये हैं?
+                            क्या आप मार्गदर्शन ऑडियो सुनना चाहते हैं?
                         </p>
-                        <button
-                            onClick={() => {
-                                if (introVideos.length > 0) {
-                                    setIsFirstTime(true);
-                                    setHasStarted(true);
-                                }
-                            }}
-                            className={`${pageStyles.choiceButton} ${introVideos.length === 0 ? pageStyles.buttonLoading : ""}`}
-                            disabled={introVideos.length === 0}
-                        >
-                            {introVideos.length === 0 ? "प्रतीक्षा करें..." : "आज्ञा और मार्गदर्शन (First Time)"}
-                        </button>
-                        <button
-                            onClick={() => {
-                                if (introVideos.length > 0) {
-                                    setIsFirstTime(false);
-                                    setHasStarted(true);
-                                }
-                            }}
-                            className={`${pageStyles.choiceButton} ${pageStyles.returningButton} ${introVideos.length === 0 ? pageStyles.buttonLoading : ""}`}
-                            disabled={introVideos.length === 0}
-                        >
-                            {introVideos.length === 0 ? "प्रतीक्षा करें..." : "सीधे ध्यान (Returning User)"}
-                        </button>
+                        <div style={{
+                            display: 'flex',
+                            gap: '1.5rem',
+                            justifyContent: 'center',
+                            width: '100%'
+                        }}>
+                            <button
+                                onClick={() => {
+                                    if (introVideos.length > 0) {
+                                        setIsFirstTime(true);
+                                        setHasStarted(true);
+                                    }
+                                }}
+                                className={`${pageStyles.choiceButton} ${introVideos.length === 0 ? pageStyles.buttonLoading : ""}`}
+                                disabled={introVideos.length === 0}
+                                style={{ flex: 1, minWidth: '120px' }}
+                            >
+                                {introVideos.length === 0 ? "..." : "हाँ"}
+                            </button>
+                            <button
+                                onClick={() => {
+                                    if (introVideos.length > 0) {
+                                        setIsFirstTime(false);
+                                        setHasStarted(true);
+                                    }
+                                }}
+                                className={`${pageStyles.choiceButton} ${pageStyles.returningButton} ${introVideos.length === 0 ? pageStyles.buttonLoading : ""}`}
+                                disabled={introVideos.length === 0}
+                                style={{ flex: 1, minWidth: '120px' }}
+                            >
+                                {introVideos.length === 0 ? "..." : "नहीं"}
+                            </button>
+                        </div>
                     </div>
 
                     <style jsx>{`
