@@ -720,27 +720,34 @@ export default function DhyanKakshaPage() {
                     )}
 
                     {/* FLOATING COUNTDOWN PILL (Vedic Premium) */}
-                    {!showIntro && (
-                        <div className={pageStyles.countdownContainer}>
-                            <div className={pageStyles.countdownPill}>
-                                <span className={pageStyles.countdownLabel}>
-                                    {lang === 'hi' ? 'समय' : 'TIME'}
-                                </span>
-                                <span className={pageStyles.countdownValue}>
-                                    {(() => {
-                                        const isVideo = currentItem.type === 'video';
-                                        const cur = isVideo ? videoTime : audioTime;
-                                        const dur = isVideo ? videoDuration : audioDuration;
-                                        const remaining = Math.max(0, dur - cur);
-                                        return formatTime(remaining);
-                                    })()}
-                                </span>
-                                <span className={pageStyles.countdownSesh}>
-                                    {lang === 'hi' ? 'शेष' : 'Remaining'}
-                                </span>
+                    {(() => {
+                        if (showIntro) return null;
+                        const isVideo = currentItem.type === 'video';
+                        const cur = isVideo ? videoTime : audioTime;
+                        const dur = isVideo ? videoDuration : audioDuration;
+
+                        // NEW: Hide for Guidance (Margdarshan) and media < 5 mins (300s)
+                        const hideCountdown = (currentItem.id === 'guidance') || (dur > 0 && dur < 300);
+                        if (hideCountdown) return null;
+
+                        const remaining = Math.max(0, dur - cur);
+
+                        return (
+                            <div className={pageStyles.countdownContainer}>
+                                <div className={pageStyles.countdownPill}>
+                                    <span className={pageStyles.countdownLabel}>
+                                        {lang === 'hi' ? 'समय' : 'TIME'}
+                                    </span>
+                                    <span className={pageStyles.countdownValue}>
+                                        {formatTime(remaining)}
+                                    </span>
+                                    <span className={pageStyles.countdownSesh}>
+                                        {lang === 'hi' ? 'शेष' : 'Remaining'}
+                                    </span>
+                                </div>
                             </div>
-                        </div>
-                    )}
+                        );
+                    })()}
 
                     {/* LAYER 2: Ambient Background Loop (During Mantras) - A/B Double Buffering */}
                     <div
