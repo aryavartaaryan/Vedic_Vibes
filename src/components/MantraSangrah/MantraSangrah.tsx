@@ -401,25 +401,23 @@ export default function MantraSangrah({
                 const audio = audioRef.current;
                 if (!audio) return;
 
-                console.log("startPlaying triggered. Playing Guidance...");
+                const effectivePlaylist = playlist || externalPlaylist || [];
+                const firstTrack = effectivePlaylist[0];
 
-                try {
-                    audio.muted = false;
-                    setIsMuted(false);
-
-                    const guidanceTrack: Track = {
-                        id: 'guidance',
-                        title: 'Guidance',
-                        titleHi: 'मार्गदर्शन',
-                        src: '/audio/Guidance.wav',
-                        startTime: 0
+                if (firstTrack && firstTrack.type === 'mantra') {
+                    console.log(`[MantraSangrah] startPlaying: Starting with ${firstTrack.title}`);
+                    // Ensure track has all required fields for playTrack
+                    const normalizedTrack: Track = {
+                        ...firstTrack,
+                        id: firstTrack.id || firstTrack.src,
+                        title: firstTrack.title || formatTitle(firstTrack.src),
+                        titleHi: firstTrack.titleHi || firstTrack.title || formatTitle(firstTrack.src),
+                        src: firstTrack.src,
+                        startTime: firstTrack.startTime || 0
                     };
-
-                    playTrack(guidanceTrack);
-                } catch (err) {
-                    console.log('Guidance Play failed:', err);
-                    const firstMantra = playlist[0];
-                    if (firstMantra) playTrack(firstMantra);
+                    playTrack(normalizedTrack);
+                } else {
+                    console.log("[MantraSangrah] startPlaying: No starting mantra found in playlist.");
                 }
             };
             playSequence();

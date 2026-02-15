@@ -28,6 +28,7 @@ export default function DhyanKakshaPage() {
     const [startBackgroundLoop, setStartBackgroundLoop] = useState(false);
     const [playMantra, setPlayMantra] = useState(false);
     const [currentIndex, setCurrentIndex] = useState(0);
+    const [isFirstTime, setIsFirstTime] = useState<boolean | null>(null);
     const [isMantraPlaying, setIsMantraPlaying] = useState(false);
     const [forceMantraId, setForceMantraId] = useState<string | null>(null);
     const [isMuted, setIsMuted] = useState(false);
@@ -49,6 +50,11 @@ export default function DhyanKakshaPage() {
             { type: "video", id: "v_vishesh", src: "https://ik.imagekit.io/aup4wh6lq/VISHNU%20SAHASRANAMAM%20_%20Madhubanti%20Bagchi%20&%20Siddharth%20Bhavsar%20_%20Stotra%20For%20Peace%20&%20Divine%20Blessings.mp4", title: "Vishesh", titleHi: "विष्णु सहस्रनाम", startTime: 7 },
             { type: "video", id: "v1", src: VIDEO_LIST[0], title: "Maheshvara Sutram", titleHi: "महेश्वर सूत्रम् (काशिका)", trimEnd: 4 }, // "Kashika"
         ];
+
+        // If NOT first time, remove the Guidance mantra
+        const effectiveStartSequence = isFirstTime === false
+            ? startSequence.filter(item => item.id !== "guidance")
+            : startSequence;
 
         // POOL OF REMAINING MEDIA
         const remainingVideos = [
@@ -83,8 +89,8 @@ export default function DhyanKakshaPage() {
             ...remainingMantras.slice(maxPairs)
         ];
 
-        return [...startSequence, ...alternatingSection, ...leftovers];
-    }, []);
+        return [...effectiveStartSequence, ...alternatingSection, ...leftovers];
+    }, [isFirstTime]);
 
     const currentItem = playlist[currentIndex];
 
@@ -115,7 +121,7 @@ export default function DhyanKakshaPage() {
             if (sequentialVideoRef.current) {
                 sequentialVideoRef.current.pause();
             }
-            setForceMantraId(playlist[index].id || null);
+            setForceMantraId(playlist[index].id || playlist[index].src || null);
             setIsMantraPlaying(true);
         } else {
             // STOP active audio
@@ -436,13 +442,56 @@ export default function DhyanKakshaPage() {
                         </p>
                     </div>
 
-                    <button
-                        onClick={() => introVideos.length > 0 && setHasStarted(true)}
-                        className={`${pageStyles.enterButton} ${introVideos.length === 0 ? pageStyles.buttonLoading : ""}`}
-                        disabled={introVideos.length === 0}
-                    >
-                        {introVideos.length === 0 ? "प्रतीक्षा करें..." : "प्रवेश करें"}
-                    </button>
+                    <div style={{
+                        display: 'flex',
+                        flexDirection: 'column',
+                        gap: '1.2rem',
+                        width: '100%',
+                        maxWidth: '350px',
+                        animation: 'fadeInUp 1s ease-out 0.5s both'
+                    }}>
+                        <p style={{
+                            color: '#FFD700',
+                            fontFamily: "'Noto Serif Devanagari', serif",
+                            fontSize: '1.2rem',
+                            marginBottom: '0.5rem',
+                            opacity: 0.9,
+                            textShadow: '0 2px 4px rgba(0,0,0,0.5)'
+                        }}>
+                            क्या आप पहली बार आये हैं?
+                        </p>
+                        <button
+                            onClick={() => {
+                                if (introVideos.length > 0) {
+                                    setIsFirstTime(true);
+                                    setHasStarted(true);
+                                }
+                            }}
+                            className={`${pageStyles.choiceButton} ${introVideos.length === 0 ? pageStyles.buttonLoading : ""}`}
+                            disabled={introVideos.length === 0}
+                        >
+                            {introVideos.length === 0 ? "प्रतीक्षा करें..." : "आज्ञा और मार्गदर्शन (First Time)"}
+                        </button>
+                        <button
+                            onClick={() => {
+                                if (introVideos.length > 0) {
+                                    setIsFirstTime(false);
+                                    setHasStarted(true);
+                                }
+                            }}
+                            className={`${pageStyles.choiceButton} ${pageStyles.returningButton} ${introVideos.length === 0 ? pageStyles.buttonLoading : ""}`}
+                            disabled={introVideos.length === 0}
+                        >
+                            {introVideos.length === 0 ? "प्रतीक्षा करें..." : "सीधे ध्यान (Returning User)"}
+                        </button>
+                    </div>
+
+                    <style jsx>{`
+                        @keyframes fadeInUp {
+                            from { opacity: 0; transform: translateY(20px); }
+                            to { opacity: 1; transform: translateY(0); }
+                        }
+                    `}</style>
 
                     <style jsx>{`
                         @keyframes pulse {
@@ -511,7 +560,7 @@ export default function DhyanKakshaPage() {
             {/* Mantra Sangrah - Divine Audio Player */}
             <MantraSangrah
                 lang={lang}
-                startPlaying={false}
+                startPlaying={isMantraPlaying}
                 forceTrackId={forceMantraId}
                 isPaused={currentItem.type === 'video'}
                 isSessionPaused={isSessionPaused}
