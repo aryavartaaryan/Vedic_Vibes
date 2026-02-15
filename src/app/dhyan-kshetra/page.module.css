@@ -418,13 +418,30 @@
 .dashboardHeader {
     display: flex;
     align-items: center;
-    gap: 6px;
+    gap: 8px;
     font-family: 'Noto Serif Devanagari', serif;
-    font-size: 0.7rem;
-    color: rgba(255, 215, 0, 0.75);
+    font-size: 0.85rem;
+    background: linear-gradient(90deg, #FFD700, #FF9933, #FFD700);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
     text-transform: uppercase;
-    letter-spacing: 0.12em;
-    font-weight: 700;
+    letter-spacing: 0.15em;
+    font-weight: 800;
+    filter: drop-shadow(0 0 6px rgba(255, 215, 0, 0.5));
+    animation: glowPulse 3s ease-in-out infinite;
+}
+
+@keyframes glowPulse {
+
+    0%,
+    100% {
+        filter: drop-shadow(0 0 6px rgba(255, 215, 0, 0.4));
+    }
+
+    50% {
+        filter: drop-shadow(0 0 12px rgba(255, 215, 0, 0.7));
+    }
 }
 
 .dashboardTitle {
