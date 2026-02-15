@@ -149,6 +149,16 @@ export default function DhyanKakshaPage() {
         handleSelectIndex(nextIndex);
     };
 
+    // Scroll to top on mount and lock body scroll
+    useEffect(() => {
+        window.scrollTo(0, 0);
+        document.documentElement.scrollTop = 0;
+        document.body.style.overflow = 'hidden';
+        return () => {
+            document.body.style.overflow = '';
+        };
+    }, []);
+
     // Effect to handle sequential video playback robustly
     useEffect(() => {
         const video = sequentialVideoRef.current;
