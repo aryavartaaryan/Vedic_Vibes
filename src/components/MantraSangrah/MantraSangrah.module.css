@@ -578,6 +578,28 @@
     font-weight: 600;
 }
 
+.trackTitleGroup {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.trackSubtitle {
+    font-family: 'Noto Serif Devanagari', serif;
+    font-size: 0.7rem;
+    color: #FF9933;
+    font-weight: 600;
+    opacity: 0.85;
+}
+
+.trackSubtitleGuidance {
+    font-family: 'Noto Serif Devanagari', serif;
+    font-size: 0.7rem;
+    color: #4FC3F7;
+    font-weight: 600;
+    opacity: 0.85;
+}
+
 .sectionGroup {
     display: flex;
     flex-direction: column;

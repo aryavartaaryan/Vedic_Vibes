@@ -700,17 +700,16 @@ export default function MantraSangrah({
                                         <div className={styles.trackInfo}>
                                             <div className={styles.trackTitleContainer}>
                                                 <span className={styles.mediaIcon}>{isVideo ? '📽️' : '🎵'}</span>
-                                                <span className={styles.trackTitle}>{track.titleHi}</span>
+                                                <div className={styles.trackTitleGroup}>
+                                                    <span className={styles.trackTitle}>{track.titleHi}</span>
+                                                    {isVideo && (
+                                                        <span className={styles.trackSubtitle}>{lang === 'hi' ? 'चलचित्र' : 'Chalchitra'}</span>
+                                                    )}
+                                                    {!isVideo && (track.title.includes('Vishnu') || track.title.includes('Lalitha')) && (
+                                                        <span className={styles.trackSubtitle}>{lang === 'hi' ? 'विशेष' : 'Vishesh'}</span>
+                                                    )}
+                                                </div>
                                             </div>
-                                            {isVideo ? (
-                                                <div className={styles.badgeContainer}>
-                                                    <span className={styles.trackBadge}>{lang === 'hi' ? 'दर्शन' : 'Darshan'}</span>
-                                                </div>
-                                            ) : (track.title.includes('Vishnu') || track.title.includes('Lalitha')) && (
-                                                <div className={styles.badgeContainer}>
-                                                    <span className={styles.trackBadge}>{lang === 'hi' ? 'विशेष' : 'Vishesh'}</span>
-                                                </div>
-                                            )}
                                         </div>
                                         <div className={styles.trackAction}>
                                             {isActive && (isVideo ? !isSessionPaused : isPlaying) ? <Pause size={18} /> : <Play size={18} />}
@@ -738,17 +737,17 @@ export default function MantraSangrah({
                                             <div className={styles.trackInfo}>
                                                 <div className={styles.trackTitleContainer}>
                                                     <span className={styles.mediaIcon}>🪷</span>
-                                                    <span className={styles.trackTitle}>{track.titleHi}</span>
-                                                </div>
-                                                <div className={styles.badgeContainer}>
-                                                    {track.isDefault && (
-                                                        <span className={track.id === 'guidance' ? styles.trackBadgeGuidance : styles.trackBadge}>
-                                                            {lang === 'hi' ? 'प्रारंभिक' : 'Prarambhik'}
-                                                        </span>
-                                                    )}
-                                                    {track.isSpecial && (
-                                                        <span className={styles.trackBadge}>{lang === 'hi' ? 'विशेष' : 'Vishesh'}</span>
-                                                    )}
+                                                    <div className={styles.trackTitleGroup}>
+                                                        <span className={styles.trackTitle}>{track.titleHi}</span>
+                                                        {track.isDefault && (
+                                                            <span className={track.id === 'guidance' ? styles.trackSubtitleGuidance : styles.trackSubtitle}>
+                                                                {lang === 'hi' ? 'प्रारंभिक' : 'Prarambhik'}
+                                                            </span>
+                                                        )}
+                                                        {track.isSpecial && (
+                                                            <span className={styles.trackSubtitle}>{lang === 'hi' ? 'विशेष' : 'Vishesh'}</span>
+                                                        )}
+                                                    </div>
                                                 </div>
                                             </div>
                                             <div className={styles.trackAction}>
