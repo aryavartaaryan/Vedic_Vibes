@@ -484,7 +484,7 @@ export default function MantraSangrah({
             }
         } else if (!isPaused && audio.paused && (!isSessionPaused || manualPlaybackOverride) && sessionActive) {
             // Resume if sequence moved back to mantra turn or manually unpaused
-            console.log("[MantraSangrah] Attempting to resume playback (Session Active).");
+            console.log(`[MantraSangrah] Resuming playback. isPaused:${isPaused} isSessionPaused:${isSessionPaused} manual:${manualPlaybackOverride}`);
             audio.play().catch(err => {
                 if (err && typeof err === 'object' && 'name' in err && err.name === 'AbortError') {
                     // Silent
@@ -493,7 +493,7 @@ export default function MantraSangrah({
                 }
             });
         }
-    }, [isPaused, isSessionPaused, startPlaying, forceTrackId, sessionActive]);
+    }, [isPaused, isSessionPaused, startPlaying, forceTrackId, sessionActive, manualPlaybackOverride]);
 
 
     // AUTO-CLOSE MENU & SYNC: When a video starts or sequence changes
