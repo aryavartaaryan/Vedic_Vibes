@@ -72,7 +72,7 @@ interface MantraSangrahProps {
 const getHindiTitle = (filename: string): string => {
     // Specific Long Names or Priority Mappings First
     if (filename.includes('Om_Sahana_Vavatu')) return 'ॐ सहना ववतु (शांति मंत्र)';
-    if (filename.includes('Lalitha Sahasranamam')) return 'ललिता सहस्रनाम (विशेष)';
+    if (filename.includes('Lalitha Sahasranamam')) return 'ललिता सहस्रनाम';
     if (filename.includes('vishnu_sahasranama')) return 'विष्णु सहस्रनाम';
     if (filename.includes('MahaMrtyunjaya')) return 'महामृत्युंजय मंत्र (108 बार)';
     if (filename.includes('Narayana_Suktam')) return 'नारायण सूक्तम्';
