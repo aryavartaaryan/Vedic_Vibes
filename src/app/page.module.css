@@ -561,6 +561,53 @@
   }
 }
 
+/* Enhanced Desktop & Large Screens */
+@media (min-width: 1200px) {
+  .heroTitle {
+    font-size: 5.5rem;
+    letter-spacing: 4px;
+  }
+
+  .heroSubtitle {
+    font-size: 1.4rem;
+    max-width: 900px;
+  }
+
+  .omSymbol {
+    font-size: 8rem;
+  }
+
+  .archwayFrame {
+    border-width: 60px;
+    opacity: 0.8;
+  }
+
+  .archwayFrame::before,
+  .archwayFrame::after {
+    width: 120px;
+  }
+
+  .heroSection {
+    padding-top: 60px !important;
+    padding-bottom: 200px !important;
+  }
+}
+
+@media (min-width: 1600px) {
+  .heroTitle {
+    font-size: 7rem;
+  }
+
+  .heroSubtitle {
+    font-size: 1.6rem;
+    max-width: 1100px;
+  }
+
+  .heroContent {
+    max-width: 1400px;
+  }
+}
+
 /* Small mobile devices (iPhone SE) */
 @media (max-width: 380px) {
   .heroTitle {

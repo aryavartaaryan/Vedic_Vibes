@@ -27,7 +27,7 @@
 
 @media (min-width: 769px) {
     .navbar {
-        padding: 1rem 3rem;
+        padding: 1.2rem 5rem;
     }
 
     .navHeader {
@@ -68,7 +68,7 @@
 
 .navLinks {
     display: flex;
-    gap: 2.5rem;
+    gap: 3.5rem;
     align-items: center;
 }
 

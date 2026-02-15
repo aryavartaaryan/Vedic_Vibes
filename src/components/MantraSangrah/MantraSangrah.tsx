@@ -4,6 +4,7 @@ import React, { useState, useRef, useEffect, useCallback } from 'react';
 import Link from 'next/link';
 import { Flower2, Play, Pause, X, Sparkles, Heart, Volume2, VolumeX } from 'lucide-react';
 import styles from './MantraSangrah.module.css';
+import LightweightPlayer from '../LightweightPlayer/LightweightPlayer';
 
 interface Track {
     id: string;
@@ -24,7 +25,8 @@ const INITIAL_PLAYLIST: Track[] = [
         titleHi: 'ॐ सहना ववतु (शांति मंत्र)',
         src: '/audio/Om_Sahana_Vavatu_Shanti_Mantra.mp3',
         startTime: 0,
-        isDefault: true
+        isDefault: true,
+        type: 'mantra'
     }
 ];
 
@@ -49,16 +51,14 @@ const formatTitle = (filename: string): string => {
 
 interface MantraSangrahProps {
     lang: 'en' | 'hi';
-    startPlaying?: boolean;
-    forceTrackId?: string | null;
-    isPaused?: boolean;
-    isSessionPaused?: boolean;
+    activeTrack?: Track | null; // NEW: Single source of truth
     onTrackEnded?: (trackId: string) => void;
     onPlayingChange?: (isPlaying: boolean) => void;
     externalPlaylist?: any[];
     currentIndex?: number;
     onSelectIndex?: (index: number) => void;
     onMutedChange?: (isMuted: boolean) => void;
+    isMuted?: boolean; // NEW: Prop to control mute state
     onTimeUpdate?: (current: number, duration: number) => void;
     videoProgress?: number;
     videoTime?: number;
@@ -66,6 +66,8 @@ interface MantraSangrahProps {
     onVideoSeek?: (time: number) => void;
     onVideoToggle?: () => void;
     sessionActive?: boolean;
+    onActiveTrackChange?: (track: Track | null) => void;
+    onTrackSelect?: (track: Track) => void; // Delegate control
 }
 
 // Helper to get Hindi title
@@ -111,15 +113,13 @@ const getHindiTitle = (filename: string): string => {
 
 export default function MantraSangrah({
     lang: langProp,
-    startPlaying = false,
-    forceTrackId,
-    isPaused,
+    activeTrack, // NEW input
     onTrackEnded,
     externalPlaylist,
     currentIndex,
     onSelectIndex,
     onMutedChange,
-    isSessionPaused = false,
+    isMuted: isMutedProp, // Destructure prop
     onPlayingChange,
     videoProgress,
     videoTime,
@@ -127,25 +127,20 @@ export default function MantraSangrah({
     onVideoSeek,
     onVideoToggle,
     onTimeUpdate,
-    sessionActive = false
+    sessionActive = false,
+    onActiveTrackChange,
+    onTrackSelect
 }: MantraSangrahProps) {
     const [isOpen, setIsOpen] = useState(false);
     const [playlist, setPlaylist] = useState<Track[]>(INITIAL_PLAYLIST);
     const [currentTrack, setCurrentTrack] = useState<Track | null>(null);
     const [isPlaying, setIsPlaying] = useState(false);
-    const [isMuted, setIsMuted] = useState(false);
+    const [isMuted, setIsMuted] = useState(isMutedProp || false);
     const [progress, setProgress] = useState(0);
     const [lang, setLangState] = useState(langProp);
     const [duration, setDuration] = useState(0);
-    const [manualPlaybackOverride, setManualPlaybackOverride] = useState(false);
 
-    // Sync with prop if needed
-    useEffect(() => {
-        setLangState(langProp);
-    }, [langProp]);
-
-
-    // Fetch dynamic playlist
+    // RESTORED: Fetch dynamic playlist
     useEffect(() => {
         const fetchPlaylist = async () => {
             try {
@@ -153,19 +148,18 @@ export default function MantraSangrah({
                 if (response.ok) {
                     const data = await response.json();
                     if (data.files && Array.isArray(data.files)) {
-                        // Filter out unwanted tracks
                         const filteredFiles = data.files.filter((file: any) =>
                             !file.name.includes('Nitya_Santhoshini')
                         );
 
-                        let newTracks: Track[] = filteredFiles.map((file: any, index: number) => {
+                        // Map files to Track objects
+                        let newTracks: Track[] = filteredFiles.map((file: any) => {
                             let title = formatTitle(file.name);
                             let titleHi = getHindiTitle(file.name);
                             let isSpecial = false;
                             let isDefault = false;
-                            let id = file.path;
+                            let id = file.path; // Use path as ID for library items
 
-                            // Identify specific tracks
                             if (file.name.includes('Guidance')) {
                                 title = 'Guidance';
                                 id = 'guidance';
@@ -174,14 +168,10 @@ export default function MantraSangrah({
                             } else if (file.name.includes('Lalitha Sahasranamam I Manojna')) {
                                 title = 'Lalitha Sahasranamam';
                                 isSpecial = true;
-                            }
-
-                            let startTime = 0;
-                            if (file.name.includes('vishnu_sahasranama')) {
+                            } else if (file.name.includes('vishnu_sahasranama')) {
                                 title = 'Vishnu Sahasranama';
                                 isSpecial = true;
                                 isDefault = true;
-                                startTime = 5;
                             }
 
                             return {
@@ -189,9 +179,10 @@ export default function MantraSangrah({
                                 title,
                                 titleHi,
                                 src: file.path,
-                                startTime,
+                                startTime: file.name.includes('vishnu_sahasranama') ? 5 : 0,
                                 isSpecial,
-                                isDefault
+                                isDefault,
+                                type: 'mantra'
                             };
                         });
 
@@ -214,28 +205,12 @@ export default function MantraSangrah({
 
                         remainingTracks.sort((a, b) => a.title.localeCompare(b.title));
 
-                        // Order: Guidance -> Sahana -> Lalitha -> Vishnu -> Others
-                        if (guidanceTrack) {
-                            guidanceTrack.isDefault = true;
-                            orderedTracks.push(guidanceTrack);
-                        }
-                        if (sahanaTrack) {
-                            if (!guidanceTrack) sahanaTrack.isDefault = true;
-                            orderedTracks.push(sahanaTrack);
-                        }
-                        if (lalithaTrack) {
-                            if (!sahanaTrack) lalithaTrack.isDefault = true;
-                            orderedTracks.push(lalithaTrack);
-                        }
+                        if (guidanceTrack) { guidanceTrack.isDefault = true; orderedTracks.push(guidanceTrack); }
+                        if (sahanaTrack) { if (!guidanceTrack) sahanaTrack.isDefault = true; orderedTracks.push(sahanaTrack); }
+                        if (lalithaTrack) { if (!sahanaTrack) lalithaTrack.isDefault = true; orderedTracks.push(lalithaTrack); }
                         if (vishnuTrack) orderedTracks.push(vishnuTrack);
 
-                        const finalPlaylist = [...orderedTracks, ...remainingTracks];
-
-                        setPlaylist(finalPlaylist);
-
-                        if (!currentTrack && finalPlaylist.length > 0) {
-                            setCurrentTrack(finalPlaylist[0]);
-                        }
+                        setPlaylist([...orderedTracks, ...remainingTracks]);
                     }
                 }
             } catch (error) {
@@ -246,13 +221,11 @@ export default function MantraSangrah({
         fetchPlaylist();
     }, []);
 
+
     // Refs for state access inside event listeners
     const audioRef = useRef<HTMLAudioElement | null>(null);
-    const currentTrackRef = useRef<Track | null>(null);
-    const playlistRef = useRef<Track[]>([]);
     const onTrackEndedRef = useRef(onTrackEnded);
     const onPlayingChangeRef = useRef(onPlayingChange);
-    const lastAutoClosedIndex = useRef<number | null>(null);
 
     // Keep refs updated
     useEffect(() => {
@@ -260,325 +233,108 @@ export default function MantraSangrah({
         onPlayingChangeRef.current = onPlayingChange;
     }, [onTrackEnded, onPlayingChange]);
 
-    // Keep refs updated
+    // Initialize audio ref cleanup
     useEffect(() => {
-        currentTrackRef.current = currentTrack;
-    }, [currentTrack]);
-
-    useEffect(() => {
-        playlistRef.current = playlist;
-    }, [playlist]);
-
-    const playTrack = async (track: Track) => {
-        const audio = audioRef.current;
-        if (!audio) return;
-
-        setCurrentTrack(track);
-        currentTrackRef.current = track;
-
-        audio.src = track.src;
-        audio.currentTime = track.startTime || 0; // Fallback if startTime is missing
-        setProgress(0);
-
-        try {
-            await audio.play();
-            setIsPlaying(true);
-            setManualPlaybackOverride(true); // User-selected/Auto-selected from this library
-        } catch (err: any) {
-            if (err && typeof err === 'object' && 'name' in err && err.name === 'AbortError') {
-                console.log("Mantra play request was interrupted (AbortError), ignoring.");
-            } else if (err && typeof err === 'object' && 'name' in err && err.name === 'NotAllowedError') {
-                console.warn("Autoplay blocked (NotAllowedError). Muting and retrying...");
-                audio.muted = true;
-                setIsMuted(true);
-                try {
-                    await audio.play();
-                    setIsPlaying(true);
-                } catch (muteErr) {
-                    console.error("Muted playback also failed:", muteErr);
-                    setIsPlaying(false);
-                }
-            } else {
-                console.error("Mantra playback failed:", err);
-                setIsPlaying(false);
-            }
-        }
-    };
-
-    // Initialize audio element on mount, clean up on unmount
-    useEffect(() => {
-        // Create audio element
-        const audio = new Audio();
-        audio.volume = 0.5;
-        audio.preload = 'auto';
-        audioRef.current = audio;
-
-        // Event handlers
-        const handleTimeUpdate = () => {
-            if (audio.duration) {
-                setProgress((audio.currentTime / audio.duration) * 100);
-                if (onTimeUpdate) onTimeUpdate(audio.currentTime, audio.duration);
-            }
-        };
-
-        const handleLoadedMetadata = () => {
-            setDuration(audio.duration);
-            if (onTimeUpdate) onTimeUpdate(audio.currentTime, audio.duration);
-        };
-
-        const handleEnded = () => {
-            const current = currentTrackRef.current;
-            const currentPlaylist = playlistRef.current;
-
-            if (onTrackEndedRef.current && current) {
-                console.log(`Mantra ${current.id} ended. Notifying parent.`);
-                onTrackEndedRef.current(current.id);
-                return;
-            }
-
-            // Fallback to internal sequential logic ONLY if no parent listener
-            // AND never reset to Guidance (index 0) automatically
-            const currentIdx = currentPlaylist.findIndex(t => t.id === current?.id);
-            if (currentIdx !== -1 && currentIdx < currentPlaylist.length - 1) {
-                const nextTrack = currentPlaylist[currentIdx + 1];
-                // If next is guidance, skip it
-                if (nextTrack.id === 'guidance') {
-                    if (currentIdx + 2 < currentPlaylist.length) {
-                        playTrack(currentPlaylist[currentIdx + 2]);
-                    }
-                } else {
-                    playTrack(nextTrack);
-                }
-            } else if (currentPlaylist.length > 1) {
-                // Loop back to index 1 (skip Guidance)
-                playTrack(currentPlaylist[1]);
-            }
-        };
-
-        const handlePlay = () => {
-            setIsPlaying(true);
-            onPlayingChangeRef.current?.(true);
-        };
-
-        const handlePause = () => {
-            setIsPlaying(false);
-            onPlayingChangeRef.current?.(false);
-        };
-
-        const handleError = (e: Event) => {
-            console.error('Audio error:', e);
-            setIsPlaying(false);
-            onPlayingChangeRef.current?.(false);
-        };
-
-        // Add event listeners
-        audio.addEventListener('timeupdate', handleTimeUpdate);
-        audio.addEventListener('loadedmetadata', handleLoadedMetadata);
-        audio.addEventListener('ended', handleEnded);
-        audio.addEventListener('play', handlePlay);
-        audio.addEventListener('pause', handlePause);
-        audio.addEventListener('error', handleError);
-
-        // Load default track (Lalita Sahasranama)
-        const defaultTrack = playlist.find(t => t.isDefault) || playlist[0];
-        setCurrentTrack(defaultTrack);
-        audio.src = defaultTrack.src;
-
-        // CLEANUP: Stop audio and remove all listeners when navigating away
         return () => {
             console.log("Unmounting MantraSangrah, stopping audio...");
-            audio.pause();
-            audio.src = ''; // Release audio resource
-            audio.removeEventListener('timeupdate', handleTimeUpdate);
-            audio.removeEventListener('loadedmetadata', handleLoadedMetadata);
-            audio.removeEventListener('ended', handleEnded);
-            audio.removeEventListener('play', handlePlay);
-            audio.removeEventListener('pause', handlePause);
-            audio.removeEventListener('error', handleError);
-            audioRef.current = null;
-        };
-    }, []); // Empty deps - runs once on mount, cleans up on unmount
-
-    // Handle external play trigger (from IntroVideoFlash completion)
-    useEffect(() => {
-        if (startPlaying && audioRef.current) {
-            const playSequence = async () => {
-                const audio = audioRef.current;
-                if (!audio) return;
-
-                const effectivePlaylist = playlist || externalPlaylist || [];
-                const firstTrack = effectivePlaylist[0];
-
-                if (firstTrack && firstTrack.type === 'mantra') {
-                    console.log(`[MantraSangrah] startPlaying: Starting with ${firstTrack.title}`);
-                    // Ensure track has all required fields for playTrack
-                    const normalizedTrack: Track = {
-                        ...firstTrack,
-                        id: firstTrack.id || firstTrack.src,
-                        title: firstTrack.title || formatTitle(firstTrack.src),
-                        titleHi: firstTrack.titleHi || firstTrack.title || formatTitle(firstTrack.src),
-                        src: firstTrack.src,
-                        startTime: firstTrack.startTime || 0
-                    };
-                    playTrack(normalizedTrack);
-                } else {
-                    console.log("[MantraSangrah] startPlaying: No starting mantra found in playlist.");
-                }
-            };
-            playSequence();
-        }
-    }, [startPlaying]);
-
-    useEffect(() => {
-        if (forceTrackId && audioRef.current) {
-            // Search in both internal and external playlists
-            const allTracks = [...(playlist || []), ...(externalPlaylist || [])];
-            const track = allTracks.find(t => t.id === forceTrackId || t.src === forceTrackId);
-
-            if (track) {
-                // GUARD: If this track is already loaded, don't restart it (which resets currentTime)
-                // We check the source directly to avoid resets on re-render
-                const isSameSrc = audioRef.current.src.includes(encodeURI(track.src));
-                if (isSameSrc) {
-                    if (audioRef.current.paused && !isPaused && !isSessionPaused) {
-                        console.log(`[MantraSangrah] Track already loaded but paused, resuming instead of restarting.`);
-                        audioRef.current.play().catch(() => { });
-                    } else {
-                        console.log(`[MantraSangrah] Track ${track.title} already active, skipping redundant restart.`);
-                    }
-                    return;
-                }
-
-                console.log(`Forcing track from parent: ${track.title} (ID/Src: ${forceTrackId})`);
-                // Stop current audio before switching
+            if (audioRef.current) {
                 audioRef.current.pause();
-                audioRef.current.currentTime = 0;
-                // Ensure track has all required fields for playTrack
-                const normalizedTrack: Track = {
-                    ...track,
-                    id: track.id || track.src,
-                    title: track.title || formatTitle(track.src),
-                    titleHi: track.titleHi || track.title || formatTitle(track.src),
-                    src: track.src,
-                    startTime: track.startTime || 0
-                };
-                playTrack(normalizedTrack);
-                setManualPlaybackOverride(false); // Reset on external sequence change
-            } else {
-                console.warn(`Could not find forced track: ${forceTrackId}`);
+                audioRef.current.src = '';
             }
-        }
-    }, [forceTrackId, playlist, externalPlaylist]);
+        };
+    }, []);
 
+
+
+    // REFACTORED: Single Source of Truth - 'activeTrack' Prop
+    // We no longer maintain internal currentTrack or playOperationId for logic.
+    // The parent tells us WHAT to play. We just sync the <audio> element to it.
+
+    // Effect: Sync Audio Element with Active Track
     useEffect(() => {
         const audio = audioRef.current;
         if (!audio) return;
 
-        // isPaused (prop) is for video/mantra turn coordination
-        // isSessionPaused is for manual overrides
-        // manualPlaybackOverride (Internal) allows library tracks to play even during video turns
-        if (!sessionActive || (isSessionPaused && !manualPlaybackOverride) || (isPaused && !startPlaying && !forceTrackId && !manualPlaybackOverride)) {
-            if (!audio.paused) {
-                console.log("[MantraSangrah] Session inactive or paused. Silencing audio.");
-                audio.pause();
+        if (activeTrack) {
+            // 1. Check if source needs updating
+            const encodedSrc = encodeURI(activeTrack.src).replace(/\(/g, '%28').replace(/\)/g, '%29');
+            const currentSrc = audio.src;
+
+            // Allow for browser-encoded variations in comparison
+            const isSameSource = currentSrc.includes(encodedSrc) || currentSrc === encodedSrc;
+
+            if (!isSameSource) {
+                console.log(`[MantraSangrah] Loading NEW Track: ${activeTrack.title}`);
+                audio.src = encodedSrc;
+                audio.currentTime = activeTrack.startTime || 0;
             }
-        } else if (!isPaused && audio.paused && (!isSessionPaused || manualPlaybackOverride) && sessionActive) {
-            // Resume if sequence moved back to mantra turn or manually unpaused
-            console.log(`[MantraSangrah] Resuming playback. isPaused:${isPaused} isSessionPaused:${isSessionPaused} manual:${manualPlaybackOverride}`);
-            audio.play().catch(err => {
-                if (err && typeof err === 'object' && 'name' in err && err.name === 'AbortError') {
-                    // Silent
-                } else {
-                    console.warn("Resume play failed:", err);
+
+            // 2. Enforce Playback (Aggressive: If track exists, PLAY IT)
+            if (activeTrack) {
+                const playPromise = audio.play();
+                if (playPromise !== undefined) {
+                    playPromise
+                        .then(() => {
+                            // Playback started successfully
+                            if (!isPlaying) setIsPlaying(true);
+                        })
+                        .catch(err => {
+                            if (err.name === 'AbortError') {
+                                // Benign: triggered by rapid track switching
+                            } else if (err.name === 'NotAllowedError') {
+                                console.warn("[MantraSangrah] Autoplay blocked. Retrying with mute...");
+                                audio.muted = true;
+                                setIsMuted(true);
+                                audio.play().catch(e => console.error("Muted play failed", e));
+                            } else {
+                                console.error("[MantraSangrah] Play error:", err);
+                            }
+                        });
                 }
-            });
-        }
-    }, [isPaused, isSessionPaused, startPlaying, forceTrackId, sessionActive, manualPlaybackOverride]);
-
-
-    // AUTO-CLOSE MENU & SYNC: When a video starts or sequence changes
-    useEffect(() => {
-        if (externalPlaylist && currentIndex !== undefined) {
-            const track = externalPlaylist[currentIndex];
-            if (track && track.type === 'video') {
-                // If the menu is open and we haven't auto-closed for THIS video yet, close it.
-                if (isOpen && lastAutoClosedIndex.current !== currentIndex) {
-                    console.log(`[MantraSangrah] Auto-closing menu for video index ${currentIndex}.`);
-                    setIsOpen(false);
-                }
-
-                // ALWAYS mark this index as "handled" for auto-close, so manual reopening by user works.
-                lastAutoClosedIndex.current = currentIndex;
-
-                // CLEAR internal library selection to let sequential controls take over
-                if (currentTrack) {
-                    setCurrentTrack(null);
-                    currentTrackRef.current = null;
-                    if (audioRef.current) {
-                        audioRef.current.pause();
-                        setIsPlaying(false);
-                    }
-                }
-            } else {
-                // If it's not a video (e.g. back to mantra), reset the close lock for future videos
-                if (lastAutoClosedIndex.current !== currentIndex) {
-                    lastAutoClosedIndex.current = null;
-                }
-            }
-        }
-    }, [currentIndex, externalPlaylist, isOpen, currentTrack]);
-
-    const selectTrack = async (track: Track) => {
-        const audio = audioRef.current;
-        if (!audio) return;
-
-        // If clicking the already selected track, toggle play/pause
-        if (currentTrack?.id === track.id) {
-            if (audio.paused) {
-                audio.play().catch(() => { });
-                setIsPlaying(true);
             } else {
                 audio.pause();
                 setIsPlaying(false);
             }
-            return;
+        } else {
+            // No active track -> Pause and Reset
+            if (!audio.paused) {
+                console.log("[MantraSangrah] No active track. Pausing.");
+                audio.pause();
+            }
+            setIsPlaying(false);
+            // Optionally clear src to stop buffering, or keep for resume? 
+            // Better to keep for now, but strictly paused.
         }
+    }, [activeTrack, sessionActive]);
 
-        // Play new track
-        playTrack(track);
-    };
-
-    const togglePlayPause = useCallback(async () => {
+    // Handle User Interactions (Play/Pause Toggle)
+    const togglePlayPause = useCallback(() => {
         const audio = audioRef.current;
-        if (!audio) return;
-
-        // If no track, select default
-        if (!currentTrack) {
-            const defaultTrack = playlist.find(t => t.isDefault) || playlist[0];
-            playTrack(defaultTrack);
+        if (!audio || !activeTrack) {
+            // If no active track, maybe ask parent to start default?
+            if (onTrackSelect && playlist.length > 0) {
+                onTrackSelect(playlist[0]);
+            }
             return;
         }
 
         if (audio.paused) {
-            try {
-                await audio.play();
-                setIsPlaying(true);
-                setManualPlaybackOverride(true);
-                if (onPlayingChangeRef.current) onPlayingChangeRef.current(true);
-            } catch (err: any) {
-                if (err && typeof err === 'object' && 'name' in err && err.name === 'AbortError') {
-                    // Silent
-                } else {
-                    console.log('Playback failed:', err);
-                }
-            }
+            audio.play().catch(console.error);
         } else {
             audio.pause();
-            setIsPlaying(false);
-            setManualPlaybackOverride(false);
-            if (onPlayingChangeRef.current) onPlayingChangeRef.current(false);
         }
-    }, [currentTrack]);
+    }, [activeTrack, playlist, onTrackSelect]);
+
+    const selectTrack = async (track: Track) => {
+        console.log(`[MantraSangrah] User clicked track: ${track.title}`);
+
+        // DELEGATE TO PARENT ALWAYS via onTrackSelect
+        if (onTrackSelect) {
+            onTrackSelect(track);
+        }
+    };
+
+
 
     const toggleMute = useCallback(() => {
         const audio = audioRef.current;
@@ -618,43 +374,35 @@ export default function MantraSangrah({
 
     return (
         <>
-            {/* Floating Sound Toggle - Always Visible */}
-            <button
-                className={styles.soundToggle}
-                onClick={toggleMute}
-                aria-label={isMuted ? "Unmute" : "Mute"}
-                title={isMuted ? (lang === 'hi' ? 'ध्वनि चालू करें' : 'Unmute') : (lang === 'hi' ? 'ध्वनि बंद करें' : 'Mute')}
-            >
-                {isMuted ? <VolumeX size={22} /> : <Volume2 size={22} />}
-            </button>
 
-            {/* Floating Golden Lotus Trigger - Top Left Temple Pillar */}
-            <div className={`${styles.triggerContainer} ${isOpen || !sessionActive ? styles.triggerHidden : ''}`}>
-                <button
-                    className={styles.trigger}
-                    onClick={() => setIsOpen(true)}
-                    aria-label="Open Mantra Collection"
-                >
-                    <span className={styles.lotusIcon}>🪷</span>
-                </button>
-                <span className={styles.triggerLabel}>
-                    {lang === 'hi' ? 'ध्यान के लिए अपना श्रोत या मंत्र चुनें' : 'Choose your Mantra for Meditation'}
-                </span>
-            </div>
 
-            {/* Acharya Samvad - Top Right Temple Pillar */}
-            <div className={`${styles.acharyaContainer} ${!sessionActive ? styles.triggerHidden : ''}`}>
-                <Link
-                    href={`/acharya-samvad?lang=${lang}`}
-                    className={styles.acharyaTrigger}
-                    aria-label="Consult Acharya"
-                >
-                    <span className={styles.acharyaIcon}>🪔</span>
-                </Link>
-                <span className={styles.acharyaLabel}>
-                    {lang === 'hi' ? 'आचार्य संवाद' : 'Acharya Samvad'}
-                </span>
-            </div>
+            {/* FLOATING TRIGGER - LEFT (Mantra Sangrah) */}
+            {!isOpen && (
+                <div className={styles.triggerContainer}>
+                    <button
+                        className={styles.trigger}
+                        onClick={() => setIsOpen(true)}
+                        aria-label="Open Mantra Sangrah"
+                    >
+                        <span className={styles.lotusIcon}>🪷</span>
+                    </button>
+                    <div className={styles.triggerLabel}>मंत्र संग्रह</div>
+                </div>
+            )}
+
+            {/* FLOATING TRIGGER - RIGHT (Acharya Samvad) */}
+            {!isOpen && (
+                <div className={styles.acharyaContainer}>
+                    <a
+                        href={`/acharya-samvad?lang=${lang}`}
+                        className={styles.acharyaTrigger}
+                        aria-label="Chat with Acharya"
+                    >
+                        <span className={styles.acharyaIcon}>🪔</span>
+                    </a>
+                    <div className={styles.acharyaLabel}>आचार्य संवाद</div>
+                </div>
+            )}
 
             {/* Overlay */}
             {isOpen && (
@@ -796,54 +544,101 @@ export default function MantraSangrah({
                             const displayProgress = isVideo ? (videoProgress || 0) : progress;
                             const displayTime = isVideo ? (videoTime || 0) : (audioRef.current?.currentTime || 0);
 
+                            // Calculate Next Track Info
+                            let nextItem = null;
+                            if (isSequenceActive && externalPlaylist.length > 0) {
+                                // Default next index
+                                let nextIdx = (currentIndex + 1) % externalPlaylist.length;
+
+                                // Skip 'Guidance' (index 0) if looping back and list > 1
+                                if (nextIdx === 0 && externalPlaylist.length > 1) {
+                                    nextIdx = 1;
+                                }
+                                nextItem = externalPlaylist[nextIdx];
+                            }
+
                             return (
-                                <>
-                                    <button
-                                        className={styles.miniPlayBtn}
-                                        onClick={() => {
-                                            if (isVideo && onVideoToggle) {
-                                                onVideoToggle();
-                                            } else {
-                                                // For ALL mantras (sequence or library), toggle audio directly
-                                                togglePlayPause();
-                                            }
-                                        }}
-                                    >
-                                        {currentlyPlaying ? <Pause size={22} /> : <Play size={22} className={styles.playIconOffset} />}
-                                    </button>
-
-                                    <div className={styles.miniTrackInfo}>
-                                        <div className={styles.miniTrackHeader}>
-                                            <span className={styles.miniTrackTitle}>
-                                                {lang === 'hi' ? (activeItem?.titleHi || activeItem?.title) : (activeItem?.title || activeItem?.titleHi)}
-                                            </span>
-                                            <span className={styles.miniTime}>
-                                                {formatTime(displayTime)} / {formatTime(isVideo ? (videoDuration || 0) : duration)}
-                                            </span>
-                                        </div>
-
-                                        {/* Seamless Progress Bar */}
-                                        <div
-                                            className={styles.miniProgressBar}
-                                            onClick={handleProgressClick}
-                                        >
-                                            <div
-                                                className={styles.miniProgressFill}
-                                                style={{ width: `${displayProgress}%` }}
-                                            />
-                                        </div>
-                                    </div>
-                                </>
+                                <LightweightPlayer
+                                    lang={lang}
+                                    title={activeItem?.title || ''}
+                                    titleHi={activeItem?.titleHi || ''}
+                                    type={activeItem?.type as any || 'mantra'}
+                                    isPlaying={currentlyPlaying}
+                                    isMuted={isMuted}
+                                    progress={displayProgress}
+                                    currentTime={displayTime}
+                                    duration={isVideo ? (videoDuration || 0) : duration}
+                                    onTogglePlay={isVideo ? (onVideoToggle || (() => { })) : togglePlayPause}
+                                    onToggleMute={toggleMute}
+                                    onNext={() => {
+                                        // If using external playlist control, use that.
+                                        if (isSequenceActive && externalPlaylist && currentIndex !== undefined) {
+                                            const nextIdx = (currentIndex + 1) % externalPlaylist.length;
+                                            onSelectIndex?.(nextIdx);
+                                        }
+                                    }}
+                                    onPrevious={() => {
+                                        if (isSequenceActive && externalPlaylist && currentIndex !== undefined) {
+                                            let prevIdx = currentIndex - 1;
+                                            if (prevIdx < 0) prevIdx = externalPlaylist.length - 1;
+                                            onSelectIndex?.(prevIdx);
+                                        }
+                                    }}
+                                    onSeek={(time) => {
+                                        if (isVideo) {
+                                            onVideoSeek?.(time);
+                                        } else {
+                                            if (audioRef.current) audioRef.current.currentTime = time;
+                                        }
+                                    }}
+                                />
                             );
                         })()}
                     </div>
                 )}
 
-                {/* Footer */}
                 <div className={styles.footer}>
                     <span>🙏 ॐ शान्ति शान्ति शान्ति 🙏</span>
                 </div>
             </div>
+
+            {/* Hidden Audio Element for State Management */}
+            <audio
+                ref={audioRef}
+                onTimeUpdate={(e) => {
+                    const audio = e.currentTarget;
+                    if (audio.duration) {
+                        setProgress((audio.currentTime / audio.duration) * 100);
+                        onTimeUpdate?.(audio.currentTime, audio.duration);
+                    }
+                }}
+                onLoadedMetadata={(e) => {
+                    setDuration(e.currentTarget.duration);
+                    onTimeUpdate?.(e.currentTarget.currentTime, e.currentTarget.duration);
+                }}
+                onEnded={() => {
+                    // Notify parent that THIS specific track ended
+                    if (activeTrack && onTrackEnded) {
+                        console.log(`[MantraSangrah] Track ended: ${activeTrack.title}`);
+                        onTrackEnded(activeTrack.id);
+                    }
+                }}
+                onPlay={() => {
+                    setIsPlaying(true);
+                    onPlayingChange?.(true);
+                }}
+                onPause={() => {
+                    setIsPlaying(false);
+                    onPlayingChange?.(false);
+                }}
+                onError={(e) => {
+                    console.error('Audio element error:', e);
+                    setIsPlaying(false);
+                    onPlayingChange?.(false);
+                }}
+                preload="auto"
+                style={{ display: 'none' }}
+            />
         </>
     );
 }

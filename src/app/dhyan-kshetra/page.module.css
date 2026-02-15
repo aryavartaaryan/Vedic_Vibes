@@ -1,7 +1,7 @@
 /* Page specific styles for Dhyan Kshetra */
 
 .container {
-    background: #000;
+    background: radial-gradient(circle at 50% 50%, #050d1a 0%, #020810 100%);
     min-height: 100vh;
     position: relative;
     overflow: hidden;
@@ -385,7 +385,8 @@
 /* SESSION DASHBOARD (Unified Up Next + Countdown) */
 .sessionDashboard {
     position: absolute;
-    top: 130px;
+    top: 120px;
+    /* Safe distance from top */
     left: 50%;
     transform: translateX(-50%);
     z-index: 100;
@@ -538,4 +539,77 @@
 
 .upNextTitle {
     font-size: 0.9rem;
+}
+
+.fixedSkipBtn {
+    position: fixed;
+    bottom: 50px;
+    /* Lowered from 120px */
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 10000;
+    /* Significantly increased to ensure it's on top */
+    padding: 14px 36px;
+    /* Slightly larger touch target */
+    font-family: 'Noto Serif Devanagari', serif;
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: #000;
+    background: linear-gradient(135deg, #FFD700 0%, #FFAA00 100%);
+    border: 2px solid rgba(255, 255, 255, 0.4);
+    border-radius: 50px;
+    cursor: pointer;
+    pointer-events: auto;
+    /* Explicitly enable pointer events */
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5), 0 0 20px rgba(255, 215, 0, 0.6);
+    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    animation: floatBtn 3s ease-in-out infinite;
+    backdrop-filter: blur(4px);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    /* Ensure it handles touch events well */
+    touch-action: manipulation;
+}
+
+.fixedSkipBtn:hover {
+    transform: translateX(-50%) scale(1.05) translateY(-5px);
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.6), 0 0 30px rgba(255, 215, 0, 0.8);
+    background: linear-gradient(135deg, #FFED4D 0%, #FFC300 100%);
+}
+
+.fixedSkipBtn:active {
+    transform: translateX(-50%) scale(0.95);
+}
+
+@keyframes floatBtn {
+
+    0%,
+    100% {
+        transform: translateX(-50%) translateY(0);
+    }
+
+    50% {
+        transform: translateX(-50%) translateY(-10px);
+    }
+}
+
+@media (min-width: 1200px) {
+    .titleText {
+        font-size: 5rem;
+    }
+
+    .dashboardPill {
+        padding: 20px 40px;
+        border-radius: 20px;
+        gap: 8px;
+    }
+
+    .dashboardTitle {
+        font-size: 1.4rem;
+    }
+
+    .dashboardHeader {
+        font-size: 1.1rem;
+    }
 }

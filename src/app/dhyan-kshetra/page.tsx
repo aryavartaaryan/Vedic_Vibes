@@ -1,13 +1,14 @@
 "use client";
 
 import React, { useState, useEffect, useMemo } from "react";
-import { Globe, Sparkles } from 'lucide-react';
+import { Globe, Sparkles, Volume2, VolumeX } from 'lucide-react';
 import styles from "../vedic-rasoi/rasoi.module.css";
 import translations from '@/lib/vaidya-translations.json';
 import pageStyles from "./page.module.css";
 import SriYantra from '@/components/SriYantra/SriYantra';
 import MantraSangrah from '@/components/MantraSangrah/MantraSangrah';
 import IntroVideoFlash from '@/components/IntroVideoFlash/IntroVideoFlash';
+import LightweightPlayer from '@/components/LightweightPlayer/LightweightPlayer';
 
 // Move static videoList outside to prevent re-renders from recreating it
 const VIDEO_LIST: string[] = [
@@ -41,16 +42,20 @@ export default function DhyanKakshaPage() {
     const [audioTime, setAudioTime] = useState(0);
     const [audioDuration, setAudioDuration] = useState(0);
     const [isVideoLoading, setIsVideoLoading] = useState(false);
+    const [activeMantra, setActiveMantra] = useState<any>(null);
+    const [manualTrack, setManualTrack] = useState<any>(null); // NEW: For library/manual selections
     const sequentialVideoRef = React.useRef<HTMLVideoElement>(null);
 
     const playlist = useMemo(() => {
         // PRE-REQUISITE ITEMS (The Specific Start Sequence)
+        // 1. HARDCODED START SEQUENCE (Spiritual Priority)
         const startSequence = [
             { type: "mantra", id: "guidance", src: "/audio/Guidance.wav", title: "Guidance", titleHi: "आज्ञा और मार्गदर्शन" },
-            { type: "mantra", id: "/audio/Om_Sahana_Vavatu_Shanti_Mantra.mp3", src: "/audio/Om_Sahana_Vavatu_Shanti_Mantra.mp3", title: "Om Sahana Vavatu", titleHi: "ॐ सहना ववतु" },
-            { type: "mantra", id: "/audio/Lalitha Sahasranamam I Manojna & Pradanya - Om Voices Junior I The names of Goddess Lalitha Devi [zNYj8GrXEQk].mp3", src: "/audio/Lalitha Sahasranamam I Manojna & Pradanya - Om Voices Junior I The names of Goddess Lalitha Devi [zNYj8GrXEQk].mp3", title: "Lalitha Sahasranamam", titleHi: "ललिता सहस्रनाम" },
+            { type: "mantra", id: "sahana", src: "/audio/Om_Sahana_Vavatu_Shanti_Mantra.mp3", title: "Om Sahana Vavatu", titleHi: "ॐ सहना ववतु" },
+            { type: "mantra", id: "lalitha", src: "/audio/Lalitha_Sahasranamam.mp3", title: "Lalitha Sahasranamam", titleHi: "ललिता सहस्रनाम" },
+            { type: "mantra", id: "shivatandava", src: "/audio/Shiva Tandava Stotram (All 18 Slokas)  Vande Guru Paramparaam  'Shiva-Bhakta' Ravana.mp3", title: "Shiva Tandava", titleHi: "शिव ताण्डव स्तोत्रम्" },
             { type: "video", id: "v_vishesh", src: "https://ik.imagekit.io/aup4wh6lq/VISHNU%20SAHASRANAMAM%20_%20Madhubanti%20Bagchi%20&%20Siddharth%20Bhavsar%20_%20Stotra%20For%20Peace%20&%20Divine%20Blessings.mp4", title: "Vishesh", titleHi: "विष्णु सहस्रनाम", startTime: 7 },
-            { type: "video", id: "v1", src: VIDEO_LIST[0], title: "Maheshvara Sutram", titleHi: "महेश्वर सूत्रम्", trimEnd: 4 }, // "Kashika"
+            { type: "mantra", id: "shantipath", src: "/audio/Agnihotra_Shantipath_-_Vedic_Chants_for_Universal_Peace_and_Well-Being_part_2_(mp3.pm).mp3", title: "Shanti Mantra", titleHi: "अग्निहोत्र शांतिपाठ" },
         ];
 
         // If NOT first time, remove the Guidance mantra
@@ -58,8 +63,9 @@ export default function DhyanKakshaPage() {
             ? startSequence.filter(item => item.id !== "guidance")
             : startSequence;
 
-        // POOL OF REMAINING MEDIA (ordered by spiritual importance: high → low)
+        // POOL OF REMAINING MEDIA (alternating)
         const remainingVideos = [
+            { type: "video", id: "v1", src: VIDEO_LIST[0], title: "Maheshvara Sutram", titleHi: "महेश्वर सूत्रम्", trimEnd: 4 },
             { type: "video", id: "v2", src: VIDEO_LIST[1], title: "Shiv Shakti Energy", titleHi: "शिव शक्ति ऊर्जा" },
             { type: "video", id: "v3", src: VIDEO_LIST[2], title: "Mahadev Nav Varsh", titleHi: "महादेव नव वर्ष" },
             { type: "video", id: "v4", src: VIDEO_LIST[3], title: "Ardhanarishwara", titleHi: "अर्धनारीश्वर स्वरूप" },
@@ -70,83 +76,127 @@ export default function DhyanKakshaPage() {
         ];
 
         const remainingMantras = [
-            { type: "mantra", id: "/audio/Challakere_Brothers_vedic_chanting_-_Shri_suktam_(mp3.pm).mp3", src: "/audio/Challakere_Brothers_vedic_chanting_-_Shri_suktam_(mp3.pm).mp3", title: "Shri Suktam", titleHi: "श्री सूक्तम्" },
-            { type: "mantra", id: "/audio/Anant_-_a_collection_of_vedic_chants_-_05._Narayana_Suktam_(mp3.pm).mp3", src: "/audio/Anant_-_a_collection_of_vedic_chants_-_05._Narayana_Suktam_(mp3.pm).mp3", title: "Narayana Suktam", titleHi: "नारायण सूक्तम्" },
-            { type: "mantra", id: "/audio/Challakere_Brothers_vedic_chanting_-_MahaMrtyunjaya_mantrah_108_times_(mp3.pm).mp3", src: "/audio/Challakere_Brothers_vedic_chanting_-_MahaMrtyunjaya_mantrah_108_times_(mp3.pm).mp3", title: "MahaMrtyunjaya", titleHi: "महामृत्युंजय मंत्र" },
-            { type: "mantra", id: "/audio/Shiva Tandava Stotram (All 18 Slokas)  Vande Guru Paramparaam  'Shiva-Bhakta' Ravana.mp3", src: "/audio/Shiva Tandava Stotram (All 18 Slokas)  Vande Guru Paramparaam  'Shiva-Bhakta' Ravana.mp3", title: "Shiva Tandava", titleHi: "शिव ताण्डव स्तोत्रम्" }
+            { type: "mantra", id: "shrisuktam", src: "/audio/Challakere_Brothers_vedic_chanting_-_Shri_suktam_(mp3.pm).mp3", title: "Shri Suktam", titleHi: "श्री सूक्तम्" },
+            { type: "mantra", id: "narayana", src: "/audio/Anant_-_a_collection_of_vedic_chants_-_05._Narayana_Suktam_(mp3.pm).mp3", title: "Narayana Suktam", titleHi: "नारायण सूक्तम्" },
+            { type: "mantra", id: "mahamrtyunjaya", src: "/audio/Challakere_Brothers_vedic_chanting_-_MahaMrtyunjaya_mantrah_108_times_(mp3.pm).mp3", title: "MahaMrtyunjaya", titleHi: "महामृत्युंजय मंत्र" },
+            { type: "mantra", id: "rudrashtakam", src: "/audio/Agam - Rudrashtakam  रदरषटकम  Most POWERFUL Shiva Mantras Ever  Lyrical Video  Shiv.mp3", title: "Rudrashtakam", titleHi: "रुद्राष्टकम" },
+            { type: "mantra", id: "hanuman", src: "/audio/Powerful Hanuman Chalisa  HanuMan  Teja Sajja  Saicharan  Hanuman Jayanti Song  Jai Hanuman.mp3", title: "Hanuman Chalisa", titleHi: "हनुमान चालीसा" },
+            { type: "mantra", id: "virija", src: "/audio/Virija Homa Mantra  Uma Mohan  Promod Shanker  Times Music Spiritual.mp3", title: "Virija Homa Mantra", titleHi: "विरजा होम मंत्र" },
+            { type: "mantra", id: "dainik", src: "/audio/दैनिक अग्निहोत्र _ Dainik Agnihotra _ Ramashish _ Spiritual Mantra _ Latest Mantra 2024 _ मंत्र.mp3", title: "Dainik Agnihotra", titleHi: "दैनिक अग्निहोत्र" }
         ];
 
-        // ALTERNATING: mantra → video → mantra → video ...
+        // ALTERNATING: video → mantra → video → mantra ...
+        // We start with a video after the initial sacred block
         const alternatingSection: any[] = [];
         const maxPairs = Math.min(remainingVideos.length, remainingMantras.length);
 
         for (let i = 0; i < maxPairs; i++) {
-            alternatingSection.push(remainingMantras[i]);
             alternatingSection.push(remainingVideos[i]);
+            alternatingSection.push(remainingMantras[i]);
         }
 
-        // REMAINING ITEMS (leftover videos after mantras are exhausted)
+        // REMAINING ITEMS
         const leftovers = [
-            ...remainingMantras.slice(maxPairs),
-            ...remainingVideos.slice(maxPairs)
+            ...remainingVideos.slice(maxPairs),
+            ...remainingMantras.slice(maxPairs)
         ];
 
         return [...effectiveStartSequence, ...alternatingSection, ...leftovers];
     }, [isFirstTime]);
 
-    const currentItem = playlist[currentIndex];
+    // UNIFIED CONTROLLER LOGIC
+    // 1. Derive Active Item (Prioritize Manual Track)
+    const activeItem = useMemo(() => {
+        if (manualTrack) return manualTrack;
+        return playlist[currentIndex] || null;
+    }, [manualTrack, playlist, currentIndex]);
 
-    const handleSelectIndex = (index: number) => {
-        if (index === currentIndex) {
-            // TOGGLE PLAY/PAUSE
-            setIsSessionPaused(!isSessionPaused);
-            return;
-        }
+    // ALIAS for compatibility with existing effects
+    const currentItem = activeItem;
 
-        console.log(`Manual selection: Index ${index}`, playlist[index]);
-
-        // Reset unified video control bar state
-        setVideoProgress(0);
-        setVideoTime(0);
-        setVideoDuration(0);
-
-        setCurrentIndex(index);
-        setIsSessionPaused(false);
-
-        // AUTO-SCROLL TO TOP: Ensure video/player is visible
-        if (typeof window !== 'undefined') {
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-        }
-
-        if (playlist[index].type === 'mantra') {
-            // STOP active video if any
-            if (sequentialVideoRef.current) {
-                sequentialVideoRef.current.pause();
-            }
-            setForceMantraId(playlist[index].id || playlist[index].src || null);
-            setIsMantraPlaying(true);
-        } else {
-            // STOP active audio
-            setIsMantraPlaying(false);
-            setForceMantraId(null);
-        }
-    };
-
+    // 2. Format Time Helper (Preserved)
     const formatTime = (seconds: number) => {
         const mins = Math.floor(seconds / 60);
         const secs = Math.floor(seconds % 60);
         return `${mins}:${secs.toString().padStart(2, '0')}`;
     };
 
-    const goNext = () => {
-        let nextIndex = (currentIndex + 1) % playlist.length;
-        // SKIP index 0 (Guidance/Margdarshan) during automatic transitions
-        // We only want it to play once at the start.
-        if (nextIndex === 0 && playlist.length > 1) {
-            nextIndex = 1;
+    // 3. Unified Track Selection Handler
+    const handleTrackSelect = (track: any) => {
+        console.log(`[DhyanKshetra] Track Selected: ${track.title}`);
+
+        // Stop any running video first
+        if (sequentialVideoRef.current) {
+            sequentialVideoRef.current.pause();
+            sequentialVideoRef.current.currentTime = 0;
         }
-        console.log(`[Sequence] goNext: ${currentIndex} -> ${nextIndex}`);
-        handleSelectIndex(nextIndex);
+
+        // Check if track is in main sequence
+        const seqIndex = playlist.findIndex(p => p.id === track.id || p.src === track.src);
+
+        if (seqIndex !== -1) {
+            console.log(`[Playback] Switching to Sequence Index: ${seqIndex}`);
+            setManualTrack(null);
+            setCurrentIndex(seqIndex);
+        } else {
+            console.log(`[Playback] Switching to Manual Track: ${track.title}`);
+            setManualTrack(track);
+        }
+
+        // Ensure playback environment is ACTIVE
+        setStartBackgroundLoop(true);
+        setIsSessionPaused(false);
+        setVideoProgress(0);
+    };
+
+    // 3.5 Unified Index Selection (For Sequence Items)
+    const handleSelectIndex = (index: number) => {
+        console.log(`[DhyanKshetra] Index Selected: ${index}`);
+        setManualTrack(null); // Clear manual override
+        setCurrentIndex(index);
+        setStartBackgroundLoop(true);
+        setIsSessionPaused(false);
+    };
+
+    // 4. Unified Next Logic
+    const goNext = () => {
+        if (manualTrack) {
+            console.log("[Playback] Manual track ended. Returning to sequence.");
+            setManualTrack(null);
+            // Optional: Advance to next in sequence or stay? 
+            // Let's stay on current index so sequence resumes naturally?
+            // Or advance? Let's advance to keep flow moving.
+            let nextIndex = (currentIndex + 1) % playlist.length;
+            // Skip Guidance if looping
+            if (nextIndex === 0 && playlist.length > 1) nextIndex = 1;
+            setCurrentIndex(nextIndex);
+        } else {
+            let nextIndex = (currentIndex + 1) % playlist.length;
+            if (nextIndex === 0 && playlist.length > 1) {
+                nextIndex = 1;
+            }
+            console.log(`[Sequence] Auto-Advancing: ${currentIndex} -> ${nextIndex}`);
+            setCurrentIndex(nextIndex);
+        }
+
+        // Ensure video is reset if we are moving to one
+        if (sequentialVideoRef.current) {
+            sequentialVideoRef.current.pause();
+            sequentialVideoRef.current.currentTime = 0;
+        }
+    };
+
+    const goPrevious = () => {
+        let prevIndex = currentIndex - 1;
+        if (prevIndex < 0) prevIndex = playlist.length - 1;
+
+        // Skip Guidance if moving backwards too
+        if (prevIndex === 0 && playlist.length > 1) {
+            prevIndex = playlist.length - 1;
+        }
+
+        console.log(`[Sequence] goPrevious: ${currentIndex} -> ${prevIndex}`);
+        handleSelectIndex(prevIndex);
     };
 
     // Scroll to top on mount and lock body scroll
@@ -467,8 +517,16 @@ export default function DhyanKakshaPage() {
                     <button
                         onClick={() => {
                             if (introVideos.length > 0) {
+                                // 1. UNLOCK AUDIO CONTEXT IMMEDIATELY
+                                const unlockAudio = new Audio();
+                                unlockAudio.src = "data:audio/wav;base64,UklGRigAAABXQVZFZm10IBIAAAABAAEARKwAAIhYAQACABAGZGF0YQAAAAA="; // Silent WAV
+                                unlockAudio.play().then(() => {
+                                    console.log("[Audio] Global Context Unlocked");
+                                }).catch(e => console.warn("[Audio] Unlock failed:", e));
+
                                 setIsFirstTime(true);
                                 setHasStarted(true);
+                                setIsMantraPlaying(true); // Trigger initial mantra playback logic
                             }
                         }}
                         disabled={introVideos.length === 0}
@@ -511,7 +569,7 @@ export default function DhyanKakshaPage() {
                     videos={introVideos}
                     onFadeOutStart={() => {
                         console.log("[Intro] Fade out started, initiating background early...");
-                        setStartBackgroundLoop(true);
+                        // REMOVED: setStartBackgroundLoop(true) - to prevent Guidance form starting too early
                     }}
                     onComplete={() => {
                         console.log("Intro complete. Starting Margdarshan...");
@@ -527,7 +585,8 @@ export default function DhyanKakshaPage() {
                         }
                     }}
                 />
-            )}
+            )
+            }
 
             {/* ... language button ... */}
             <button
@@ -559,44 +618,59 @@ export default function DhyanKakshaPage() {
                 {lang === 'en' ? 'हिन्दी' : 'English'}
             </button>
 
+            {/* Mute/Unmute Button - Right Aligned Icon Only */}
+            <button
+                onClick={() => setIsMuted(!isMuted)}
+                style={{
+                    position: 'fixed',
+                    top: '20px',
+                    right: '20px',
+                    zIndex: 100,
+                    padding: '0.6rem',
+                    background: 'linear-gradient(135deg, rgba(10, 5, 2, 0.9) 0%, rgba(25, 12, 5, 0.85) 100%)',
+                    color: '#FFD700',
+                    border: '1.5px solid rgba(212, 175, 55, 0.5)',
+                    borderRadius: '50%',
+                    boxShadow: '0 0 15px rgba(255, 165, 0, 0.25), 0 4px 15px rgba(0, 0, 0, 0.4)',
+                    cursor: 'pointer',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    transition: 'all 0.3s ease',
+                    backdropFilter: 'blur(10px)',
+                    WebkitBackdropFilter: 'blur(10px)'
+                }}
+                title={isMuted ? (lang === 'en' ? 'Unmute' : 'अनम्यूट') : (lang === 'en' ? 'Mute' : 'म्यूट')}
+            >
+                {isMuted ? <VolumeX size={20} /> : <Volume2 size={20} />}
+            </button>
+
             {/* Mantra Sangrah - Divine Audio Player */}
             <MantraSangrah
                 lang={lang}
-                startPlaying={isMantraPlaying}
-                forceTrackId={forceMantraId}
-                isPaused={currentItem.type === 'video'}
-                isSessionPaused={isSessionPaused}
-                sessionActive={!showIntro}
+                // UNIFIED CONTROLLER:
+                // Only play if activeItem is a mantra AND the main loop has started.
+                activeTrack={startBackgroundLoop && activeItem && (activeItem.type === 'mantra' || !activeItem.type) ? activeItem : null}
+                sessionActive={!isSessionPaused}
+
                 onPlayingChange={(playing) => {
                     setIsMantraPlaying(playing);
-                    // If a mantra starts playing, PAUSE the video
-                    if (playing && currentItem.type === 'video') {
-                        // We DON'T set isSessionPaused to true here, as it might pause the mantra itself
-                        // Instead, we just pause the video element
-                        if (sequentialVideoRef.current) {
-                            sequentialVideoRef.current.pause();
-                        }
-                    } else if (playing && isSessionPaused) {
-                        // Reset session pause if manually starting a mantra from library
-                        setIsSessionPaused(false);
-                    } else if (!playing && (currentItem.type === 'mantra')) {
-                        // User manually paused a mantra - set session paused so resume effect doesn't override
+                    // Update global pause state if needed for UI sync
+                    if (!playing && activeItem?.type === 'mantra') {
                         setIsSessionPaused(true);
+                    } else {
+                        setIsSessionPaused(false);
                     }
                 }}
                 onTrackEnded={() => {
-                    if (currentItem.type === 'mantra') {
-                        goNext();
-                    }
+                    goNext();
                 }}
-                externalPlaylist={playlist}
-                currentIndex={currentIndex}
+                onTrackSelect={handleTrackSelect}
                 onSelectIndex={handleSelectIndex}
+                externalPlaylist={playlist}
                 onMutedChange={setIsMuted}
-                onTimeUpdate={(current, total) => {
-                    setAudioTime(current);
-                    setAudioDuration(total);
-                }}
+                isMuted={isMuted}
+                onActiveTrackChange={(track) => setActiveMantra(track)}
                 // Video Control Props
                 videoProgress={videoProgress}
                 videoTime={videoTime}
@@ -619,136 +693,148 @@ export default function DhyanKakshaPage() {
                 }}
             />
 
-            {/* BACKGROUND LAYERS */}
-            {startBackgroundLoop && (
-                <div style={{
-                    position: 'absolute',
-                    top: 0,
-                    left: 0,
-                    width: '100vw',
-                    height: '100vh',
-                    zIndex: 1,
-                    pointerEvents: 'none'
-                }}>
-                    {/* LAYER 1: Meditation Sequence Video (Darshans) */}
-                    <video
-                        ref={sequentialVideoRef}
-                        playsInline
-                        onEnded={goNext}
-                        onWaiting={() => setIsVideoLoading(true)}
-                        onPlaying={() => setIsVideoLoading(false)}
-                        onCanPlay={() => setIsVideoLoading(false)}
-                        onLoadedData={() => setIsVideoLoading(false)}
-                        onLoadStart={() => setIsVideoLoading(true)}
-                        onStalled={() => setIsVideoLoading(true)}
-                        onError={(e) => {
-                            setIsVideoLoading(false);
-                            const error = (e.currentTarget.error);
-                            console.error(`[Sequential Video Error] Code ${error?.code}: ${error?.message}`, currentItem.src);
-                        }}
-                        onTimeUpdate={(e) => {
-                            const video = e.currentTarget;
+            {/* LIGHTWEIGHT MEDIA PLAYER - Global Control Center */}
+            {/* LIGHTWEIGHT MEDIA PLAYER - Global Control Center (REMOVED - Now inside Mantra Menu) */}
 
-                            // Update unified control bar state
-                            if (video.duration > 0) {
-                                setVideoTime(video.currentTime);
-                                setVideoDuration(video.duration);
-                                setVideoProgress((video.currentTime / video.duration) * 100);
-                            }
+            {/* MAIN CONTENT LAYER - Video Player (Only render when actual video is playing) */}
+            {
+                startBackgroundLoop && currentItem.type === 'video' && (
+                    <div style={{
+                        position: 'absolute',
+                        top: 0,
+                        left: 0,
+                        width: '100vw',
+                        height: '100vh',
+                        zIndex: 1,
+                        pointerEvents: 'none'
+                    }}>
+                        {/* LAYER 1: Meditation Sequence Video (Darshans) */}
+                        <video
+                            ref={sequentialVideoRef}
+                            playsInline
+                            onEnded={goNext}
+                            onWaiting={() => setIsVideoLoading(true)}
+                            onPlaying={() => setIsVideoLoading(false)}
+                            onCanPlay={() => setIsVideoLoading(false)}
+                            onLoadedData={() => setIsVideoLoading(false)}
+                            onLoadStart={() => setIsVideoLoading(true)}
+                            onStalled={() => setIsVideoLoading(true)}
+                            onError={(e) => {
+                                setIsVideoLoading(false);
+                                const error = (e.currentTarget.error);
+                                console.error(`[Sequential Video Error] Code ${error?.code}: ${error?.message}`, currentItem.src);
+                            }}
+                            onTimeUpdate={(e) => {
+                                const video = e.currentTarget;
 
-                            const trim = (currentItem as any).trimEnd;
-                            if (trim && video.currentTime > 0 && video.duration > 0) {
-                                if (video.duration - video.currentTime <= trim) {
-                                    console.log(`[Trimming] Early transition for ${currentItem.id}`);
-                                    goNext();
+                                // Update unified control bar state
+                                if (video.duration > 0) {
+                                    setVideoTime(video.currentTime);
+                                    setVideoDuration(video.duration);
+                                    setVideoProgress((video.currentTime / video.duration) * 100);
                                 }
-                            }
-                        }}
-                        style={{
-                            display: currentItem.type === 'video' ? 'block' : 'none',
-                            position: 'absolute',
-                            top: 0,
-                            left: 0,
-                            width: '100%',
-                            height: '100%',
-                            objectFit: 'contain', // User requested no cutting
-                            objectPosition: 'center',
-                            transition: 'opacity 1s ease-in-out',
-                            zIndex: 10,
-                            backgroundColor: '#000' // Ensure black bars if ratio differs
-                        }}
-                    />
 
-                    {/* VIDEO LOADING OVERLAY */}
-                    {isVideoLoading && currentItem.type === 'video' && (
-                        <div className={pageStyles.videoBufferingOverlay}>
-                            <div className={pageStyles.spiritualSpinner}>
-                                <div className={pageStyles.spinnerLotus}>🪷</div>
-                                <span className={pageStyles.loadingText}>
-                                    {lang === 'hi' ? 'संचित हो रहा है... (Loading)' : 'Accumulating... (Loading)'}
-                                </span>
-                            </div>
-                        </div>
-                    )}
+                                const trim = (currentItem as any).trimEnd;
+                                if (trim && video.currentTime > 0 && video.duration > 0) {
+                                    if (video.duration - video.currentTime <= trim) {
+                                        console.log(`[Trimming] Early transition for ${currentItem.id}`);
+                                        goNext();
+                                    }
+                                }
+                            }}
+                            style={{
+                                display: currentItem.type === 'video' ? 'block' : 'none',
+                                position: 'absolute',
+                                top: 0,
+                                left: 0,
+                                width: '100%',
+                                height: '100%',
+                                objectFit: 'contain', // User requested no cutting
+                                objectPosition: 'center',
+                                transition: 'opacity 1s ease-in-out',
+                                zIndex: 10,
+                                backgroundColor: '#000' // Ensure black bars if ratio differs
+                            }}
+                        />
 
-                    {/* SESSION DASHBOARD (Unified Up Next - Restored to Top Alignment) */}
-                    {!showIntro && (
-                        <div className={pageStyles.sessionDashboard}>
-                            <div className={pageStyles.dashboardPill}>
-                                {/* Up Next Only */}
-                                <div className={pageStyles.dashboardHeader}>
-                                    <Sparkles size={14} className={pageStyles.nextIcon} />
-                                    <span>{lang === 'hi' ? 'अगला अनुभव' : 'Up Next'}</span>
+                        {/* VIDEO LOADING OVERLAY */}
+                        {isVideoLoading && currentItem.type === 'video' && (
+                            <div className={pageStyles.videoBufferingOverlay}>
+                                <div className={pageStyles.spiritualSpinner}>
+                                    <div className={pageStyles.spinnerLotus}>🪷</div>
+                                    <span className={pageStyles.loadingText}>
+                                        {lang === 'hi' ? 'संचित हो रहा है... (Loading)' : 'Accumulating... (Loading)'}
+                                    </span>
                                 </div>
-                                <div className={pageStyles.dashboardTitle}>
+                            </div>
+                        )}
+
+                        {/* SESSION DASHBOARD (Unified Up Next - Restored to Top Alignment) */}
+                        {!showIntro && (
+                            <div className={pageStyles.sessionDashboard}>
+                                <div className={pageStyles.dashboardPill}>
+                                    {/* Up Next Only */}
+                                    <div className={pageStyles.dashboardHeader}>
+                                        <Sparkles size={14} className={pageStyles.nextIcon} />
+                                        <span>{lang === 'hi' ? 'अगला अनुभव' : 'Up Next'}</span>
+                                    </div>
+                                    <div className={pageStyles.dashboardTitle}>
+                                        {(() => {
+                                            let nextIdx = (currentIndex + 1) % playlist.length;
+                                            // Skip Guidance
+                                            if (nextIdx === 0 && playlist.length > 1) nextIdx = 1;
+
+                                            let nextItem = playlist[nextIdx];
+
+                                            // Skip Sahana display (Intro Mantra)
+                                            if (nextItem && (nextItem.id === 'sahana' || nextItem.src.includes('Sahana'))) {
+                                                nextIdx = (nextIdx + 1) % playlist.length;
+                                                nextItem = playlist[nextIdx];
+                                            }
+
+                                            return (
+                                                <>
+                                                    <span className={pageStyles.nextTypeIcon} style={{ marginRight: '8px' }}>
+                                                        {nextItem.type === 'video' ? '📽️' : '🎵'}
+                                                    </span>
+                                                    {lang === 'hi' ? nextItem.titleHi : nextItem.title}
+                                                </>
+                                            );
+                                        })()}
+                                    </div>
+
+                                    {/* शेष (Remaining Time) - Only for mantras > 3 min */}
                                     {(() => {
-                                        let nextIdx = (currentIndex + 1) % playlist.length;
-                                        if (nextIdx === 0 && playlist.length > 1) nextIdx = 1;
-                                        const nextItem = playlist[nextIdx];
+                                        const isVideo = currentItem.type === 'video';
+                                        const cur = isVideo ? videoTime : audioTime;
+                                        const dur = isVideo ? videoDuration : audioDuration;
+
+                                        if (currentItem.id === 'guidance' || dur < 180) return null;
+
+                                        const remaining = Math.max(0, dur - cur);
+
                                         return (
-                                            <>
-                                                <span className={pageStyles.nextTypeIcon} style={{ marginRight: '8px' }}>
-                                                    {nextItem.type === 'video' ? '📽️' : '🎵'}
-                                                </span>
-                                                {lang === 'hi' ? nextItem.titleHi : nextItem.title}
-                                            </>
+                                            <div className={pageStyles.dashboardShesh}>
+                                                <span>{lang === 'hi' ? 'शेष' : 'Remaining'}</span>
+                                                <span className={pageStyles.sheshTime}>{formatTime(remaining)}</span>
+                                            </div>
                                         );
                                     })()}
                                 </div>
 
-                                {/* शेष (Remaining Time) - Only for mantras > 3 min */}
-                                {(() => {
-                                    const isVideo = currentItem.type === 'video';
-                                    const cur = isVideo ? videoTime : audioTime;
-                                    const dur = isVideo ? videoDuration : audioDuration;
-
-                                    if (currentItem.id === 'guidance' || dur < 180) return null;
-
-                                    const remaining = Math.max(0, dur - cur);
-
-                                    return (
-                                        <div className={pageStyles.dashboardShesh}>
-                                            <span>{lang === 'hi' ? 'शेष' : 'Remaining'}</span>
-                                            <span className={pageStyles.sheshTime}>{formatTime(remaining)}</span>
-                                        </div>
-                                    );
-                                })()}
                             </div>
-
-                            {/* Skip Guidance Button */}
-                            {currentItem.id === 'guidance' && (
-                                <button
-                                    className={pageStyles.skipGuidanceBtn}
-                                    onClick={() => goNext()}
-                                >
-                                    {lang === 'hi' ? 'मार्गदर्शन स्किप करें ⏭️' : 'Skip Guidance ⏭️'}
-                                </button>
-                            )}
-                        </div>
-                    )}
+                        )}
 
 
-                    {/* LAYER 2: Ambient Background Loop (During Mantras) - A/B Double Buffering */}
+
+
+                    </div>
+                )
+            }
+
+            {/* LAYER 2: Ambient Background Loop (During Mantras) - A/B Double Buffering */}
+            {
+                startBackgroundLoop && currentItem.type === 'mantra' && (
                     <div
                         style={{
                             position: 'absolute',
@@ -822,8 +908,8 @@ export default function DhyanKakshaPage() {
                             )
                         )}
                     </div>
-                </div>
-            )}
+                )
+            }
 
             {/* Dark Overlay REMOVED for brightness */}
             {/* <div style={{...}} /> */}
@@ -852,6 +938,7 @@ export default function DhyanKakshaPage() {
 
 
             </div>
-        </main>
+
+        </main >
     );
 }

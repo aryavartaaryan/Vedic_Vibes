@@ -266,6 +266,27 @@
 }
 
 /* --- RESPONSIVE --- */
+@media (min-width: 1200px) {
+    .contentWrapper {
+        max-width: 1200px;
+        padding: 4rem 6rem;
+    }
+
+    .title {
+        font-size: 5rem;
+    }
+
+    .bodyText {
+        font-size: 1.5rem;
+    }
+
+    .auroraContainer {
+        width: 300px;
+        height: 300px;
+        margin-bottom: 0;
+    }
+}
+
 @media (max-width: 768px) {
     .contentWrapper {
         padding: 1.5rem;

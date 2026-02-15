@@ -228,6 +228,27 @@
     transform: translateX(0);
 }
 
+@media (min-width: 1200px) {
+    .sanskritText {
+        font-size: 4.5rem;
+    }
+
+    .meaningText {
+        font-size: 2rem;
+        max-width: 70%;
+    }
+
+    .card {
+        max-width: 1200px;
+        padding: 6rem 5rem;
+    }
+
+    .solarOrb {
+        width: 600px;
+        height: 600px;
+    }
+}
+
 @media (max-width: 768px) {
     .sanskritText {
         font-size: 1.8rem;

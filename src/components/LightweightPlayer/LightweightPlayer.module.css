@@ -1,0 +1,306 @@
+/* ============================================
+   VEDIC MEDIA PLAYER - DIVINE CHARIOT THEME
+   ============================================ */
+.playerWrapper {
+    position: relative;
+    width: 100%;
+    z-index: 100;
+    font-family: 'Noto Serif Devanagari', serif;
+    display: flex;
+    justify-content: center;
+    /* Remove fixed positioning so it sits inside the menu container */
+}
+
+.playerPill {
+    /* Glassmorphism Container - LIGHT & ETHEREAL */
+    background:
+        radial-gradient(circle at 50% 0%, rgba(255, 255, 255, 0.2) 0%, transparent 60%),
+        linear-gradient(180deg, rgba(255, 255, 255, 0.15) 0%, rgba(255, 255, 255, 0.05) 100%);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+
+    border: 1px solid rgba(255, 215, 0, 0.3);
+    border-radius: 40px;
+    /* More rounded/slim feel */
+    padding: 8px 24px 10px 24px;
+    /* Reduced vertical padding */
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    /* Reduced gap */
+
+    /* Subtle Shadow */
+    box-shadow:
+        0 10px 30px rgba(0, 0, 0, 0.4),
+        0 0 20px rgba(255, 165, 0, 0.05),
+        inset 0 1px 0 rgba(255, 255, 255, 0.05);
+
+    transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+    min-width: 300px;
+    /* Slightly narrower */
+}
+
+.playerPill:hover {
+    border-color: rgba(255, 215, 0, 0.5);
+    box-shadow:
+        0 25px 60px rgba(0, 0, 0, 0.8),
+        0 0 40px rgba(255, 165, 0, 0.15),
+        inset 0 1px 0 rgba(255, 255, 255, 0.15);
+}
+
+/* ============================================
+   1. PROGRESS BAR (Top Edge)
+   ============================================ */
+.progressContainer {
+    position: absolute;
+    top: 0;
+    left: 20px;
+    right: 20px;
+    height: 3px;
+    background: rgba(255, 255, 255, 0.08);
+    cursor: pointer;
+    overflow: hidden;
+    /* Create a break in the border feeling */
+}
+
+.progressFill {
+    height: 100%;
+    /* Vedic Saffron Gradient */
+    background: linear-gradient(90deg, #FFD700 0%, #FF9933 100%);
+    box-shadow: 0 0 10px rgba(255, 165, 0, 0.6);
+    border-radius: 0 2px 2px 0;
+    transition: width 0.1s linear;
+}
+
+/* ============================================
+   2. TRACK INFO (Centered)
+   ============================================ */
+.trackInfoCentered {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 4px;
+    width: 100%;
+    padding: 4px 0 0 0;
+}
+
+.trackTitle {
+    margin: 0;
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: #F5E6D3;
+    /* Cream/Off-white */
+    letter-spacing: 0.5px;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.6);
+
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 280px;
+}
+
+.trackSubtitle {
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: #D4AF37;
+    /* Muted Gold */
+    font-weight: 600;
+}
+
+/* ============================================
+   3. SYMMETRICAL CONTROLS ROW
+   ============================================ */
+.controlsRow {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    gap: 20px;
+}
+
+.controlWing {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    /* Increased gap for better spacing */
+    flex: 1;
+}
+
+/* New Feature Buttons (Playlist & Acharya) */
+.featureBtn {
+    background: rgba(255, 215, 0, 0.1);
+    border: 1px solid rgba(255, 215, 0, 0.3);
+    border-radius: 50%;
+    /* Circular */
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #FFD700;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 0 10px rgba(255, 165, 0, 0.1);
+    position: relative;
+    overflow: hidden;
+}
+
+.featureBtn:hover {
+    background: rgba(255, 215, 0, 0.2);
+    border-color: rgba(255, 215, 0, 0.6);
+    box-shadow: 0 0 15px rgba(255, 165, 0, 0.3);
+    transform: scale(1.05);
+}
+
+.featureBtn::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: 50%;
+    box-shadow: inset 0 0 10px rgba(255, 215, 0, 0.2);
+    opacity: 0;
+    transition: opacity 0.3s;
+}
+
+.featureBtn:hover::after {
+    opacity: 1;
+}
+
+/* Pulse animation for "Attentive" look */
+.pulseSlow {
+    animation: goldPulse 3s infinite ease-in-out;
+}
+
+@keyframes goldPulse {
+    0% {
+        box-shadow: 0 0 0 0 rgba(255, 215, 0, 0.2);
+    }
+
+    50% {
+        box-shadow: 0 0 0 6px rgba(255, 215, 0, 0);
+    }
+
+    100% {
+        box-shadow: 0 0 0 0 rgba(255, 215, 0, 0);
+    }
+}
+
+.controlWing:first-child {
+    justify-content: flex-end;
+    /* Push Mute/Prev towards center */
+}
+
+.controlWing:last-child {
+    justify-content: flex-start;
+    /* Push Next/Time towards center */
+}
+
+/* Secondary Buttons (Mute, Prev, Next) */
+.secondaryBtn {
+    background: transparent;
+    border: none;
+    color: rgba(212, 175, 55, 0.7);
+    cursor: pointer;
+    padding: 8px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+}
+
+.secondaryBtn:hover {
+    color: #FFD700;
+    background: rgba(255, 215, 0, 0.1);
+    transform: scale(1.1);
+}
+
+/* Center Play Button (The Sun) */
+.centerPiece {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.primaryPlayBtn {
+    width: 40px;
+    /* Compact play button */
+    height: 40px;
+    border-radius: 50%;
+    border: 1px solid rgba(255, 215, 0, 0.5);
+
+    /* Golden Sun Gradient - More Subtle */
+    background: radial-gradient(circle at 30% 30%, rgba(255, 215, 0, 0.2) 0%, rgba(20, 10, 5, 0.6) 100%);
+    box-shadow:
+        0 0 15px rgba(255, 165, 0, 0.15),
+        inset 0 0 10px rgba(255, 215, 0, 0.05);
+
+    color: #FFD700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.primaryPlayBtn:hover {
+    transform: scale(1.15);
+    background: radial-gradient(circle at 30% 30%, rgba(255, 215, 0, 0.3) 0%, rgba(40, 20, 10, 0.8) 100%);
+    box-shadow:
+        0 0 30px rgba(255, 165, 0, 0.4),
+        0 0 60px rgba(255, 215, 0, 0.2);
+    border-color: #FFD700;
+    color: #FFF;
+}
+
+.primaryPlayBtn:active {
+    transform: scale(0.95);
+}
+
+.playIconOffset {
+    margin-left: 4px;
+    /* Optical center */
+}
+
+/* Time Display */
+.timeDisplay {
+    font-family: 'Inter', sans-serif;
+    /* Clean number font */
+    font-size: 0.75rem;
+    color: rgba(255, 215, 0, 0.6);
+    font-variant-numeric: tabular-nums;
+    min-width: 40px;
+    letter-spacing: 0.5px;
+}
+
+/* Mobile Adjustments */
+@media (max-width: 768px) {
+    .playerPill {
+        min-width: 90vw;
+        padding: 12px 16px 14px 16px;
+        gap: 10px;
+    }
+
+    .trackTitle {
+        font-size: 1rem;
+        max-width: 220px;
+    }
+
+    .controlsRow {
+        gap: 12px;
+    }
+
+    .controlWing {
+        gap: 8px;
+    }
+
+    .primaryPlayBtn {
+        width: 50px;
+        height: 50px;
+    }
+}
