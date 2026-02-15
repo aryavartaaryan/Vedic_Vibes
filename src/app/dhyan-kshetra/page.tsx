@@ -737,7 +737,13 @@ export default function DhyanKakshaPage() {
                                 <button
                                     className={pageStyles.skipGuidanceBtn}
                                     onClick={() => {
-                                        handleSelectIndex(1);
+                                        // Force clear current mantra first to ensure state change
+                                        setForceMantraId(null);
+                                        setIsMantraPlaying(false);
+                                        // Then switch to Sahana Vavatu on next tick
+                                        setTimeout(() => {
+                                            handleSelectIndex(1);
+                                        }, 50);
                                     }}
                                 >
                                     {lang === 'hi' ? 'मार्गदर्शन स्किप करें ⏭️' : 'Skip Guidance ⏭️'}
