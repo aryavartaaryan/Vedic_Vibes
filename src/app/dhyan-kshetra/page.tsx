@@ -41,24 +41,49 @@ export default function DhyanKakshaPage() {
     const sequentialVideoRef = React.useRef<HTMLVideoElement>(null);
 
     const playlist = useMemo(() => {
-        return [
+        // PRE-REQUISITE ITEMS (The Specific Start Sequence)
+        const startSequence = [
             { type: "mantra", id: "guidance", src: "/audio/Guidance.wav", title: "Guidance", titleHi: "दर्शन और मार्गदर्शन" },
             { type: "mantra", id: "/audio/Om_Sahana_Vavatu_Shanti_Mantra.mp3", src: "/audio/Om_Sahana_Vavatu_Shanti_Mantra.mp3", title: "Om Sahana Vavatu", titleHi: "ॐ सहना ववतु" },
-            { type: "video", id: "v1", src: VIDEO_LIST[0], title: "Maheshvara Sutram", titleHi: "महेश्वर सूत्रम्", trimEnd: 4 },
             { type: "mantra", id: "/audio/Lalitha Sahasranamam I Manojna & Pradanya - Om Voices Junior I The names of Goddess Lalitha Devi [zNYj8GrXEQk].mp3", src: "/audio/Lalitha Sahasranamam I Manojna & Pradanya - Om Voices Junior I The names of Goddess Lalitha Devi [zNYj8GrXEQk].mp3", title: "Lalitha Sahasranamam", titleHi: "ललिता सहस्रनाम (विशेष)" },
+            { type: "video", id: "v_vishesh", src: "https://ik.imagekit.io/aup4wh6lq/VISHNU%20SAHASRANAMAM%20_%20Madhubanti%20Bagchi%20&%20Siddharth%20Bhavsar%20_%20Stotra%20For%20Peace%20&%20Divine%20Blessings.mp4", title: "Vishesh", titleHi: "विष्णु सहस्रनाम", startTime: 7 },
+            { type: "video", id: "v1", src: VIDEO_LIST[0], title: "Maheshvara Sutram", titleHi: "महेश्वर सूत्रम् (काशिका)", trimEnd: 4 }, // "Kashika"
+        ];
+
+        // POOL OF REMAINING MEDIA
+        const remainingVideos = [
             { type: "video", id: "v2", src: VIDEO_LIST[1], title: "Shiv Shakti Energy", titleHi: "शिव शक्ति ऊर्जा" },
-            { type: "video", id: "v_vishesh", src: "https://ik.imagekit.io/aup4wh6lq/VISHNU%20SAHASRANAMAM%20_%20Madhubanti%20Bagchi%20&%20Siddharth%20Bhavsar%20_%20Stotra%20For%20Peace%20&%20Divine%20Blessings.mp4", title: "Vishesh", titleHi: "विष्णु सहस्रनाम | मधुबंती बागची & सिद्धार्थ भावसार | शांति और दिव्य आशीर्वाद के लिए स्तोत्र", startTime: 7 },
             { type: "video", id: "v3", src: VIDEO_LIST[2], title: "Mahadev Nav Varsh", titleHi: "महादेव नव वर्ष" },
-            { type: "mantra", id: "/audio/Challakere_Brothers_vedic_chanting_-_Shri_suktam_(mp3.pm).mp3", src: "/audio/Challakere_Brothers_vedic_chanting_-_Shri_suktam_(mp3.pm).mp3", title: "Shri Suktam", titleHi: "श्री सूक्तम्" },
             { type: "video", id: "v4", src: VIDEO_LIST[3], title: "Ardhanarishwara", titleHi: "अर्धनारीश्वर स्वरूप" },
-            { type: "mantra", id: "/audio/Anant_-_a_collection_of_vedic_chants_-_05._Narayana_Suktam_(mp3.pm).mp3", src: "/audio/Anant_-_a_collection_of_vedic_chants_-_05._Narayana_Suktam_(mp3.pm).mp3", title: "Narayana Suktam", titleHi: "नारायण सूक्तम्" },
             { type: "video", id: "v5", src: VIDEO_LIST[4], title: "Shiv Swarnamala", titleHi: "शिव स्वर्णमाला स्तुति" },
-            { type: "mantra", id: "/audio/Challakere_Brothers_vedic_chanting_-_MahaMrtyunjaya_mantrah_108_times_(mp3.pm).mp3", src: "/audio/Challakere_Brothers_vedic_chanting_-_MahaMrtyunjaya_mantrah_108_times_(mp3.pm).mp3", title: "MahaMrtyunjaya", titleHi: "महामृत्युंजय मंत्र" },
             { type: "video", id: "v6", src: VIDEO_LIST[5], title: "Sound Healing", titleHi: "नाद चिकित्सा" },
-            { type: "mantra", id: "/audio/Shiva Tandava Stotram (All 18 Slokas)  Vande Guru Paramparaam  'Shiva-Bhakta' Ravana.mp3", src: "/audio/Shiva Tandava Stotram (All 18 Slokas)  Vande Guru Paramparaam  'Shiva-Bhakta' Ravana.mp3", title: "Shiva Tandava", titleHi: "शिव ताण्डव स्तोत्रम्" },
             { type: "video", id: "v7", src: VIDEO_LIST[6], title: "Mahashivratri Special", titleHi: "महाशिवरात्रि दर्शन" },
             { type: "video", id: "v8", src: VIDEO_LIST[7], title: "Kaal Bhairav Ashtakam", titleHi: "काल भैरव अष्टकम्" }
         ];
+
+        const remainingMantras = [
+            { type: "mantra", id: "/audio/Challakere_Brothers_vedic_chanting_-_Shri_suktam_(mp3.pm).mp3", src: "/audio/Challakere_Brothers_vedic_chanting_-_Shri_suktam_(mp3.pm).mp3", title: "Shri Suktam", titleHi: "श्री सूक्तम्" },
+            { type: "mantra", id: "/audio/Anant_-_a_collection_of_vedic_chants_-_05._Narayana_Suktam_(mp3.pm).mp3", src: "/audio/Anant_-_a_collection_of_vedic_chants_-_05._Narayana_Suktam_(mp3.pm).mp3", title: "Narayana Suktam", titleHi: "नारायण सूक्तम्" },
+            { type: "mantra", id: "/audio/Challakere_Brothers_vedic_chanting_-_MahaMrtyunjaya_mantrah_108_times_(mp3.pm).mp3", src: "/audio/Challakere_Brothers_vedic_chanting_-_MahaMrtyunjaya_mantrah_108_times_(mp3.pm).mp3", title: "MahaMrtyunjaya", titleHi: "महामृत्युंजय मंत्र" },
+            { type: "mantra", id: "/audio/Shiva Tandava Stotram (All 18 Slokas)  Vande Guru Paramparaam  'Shiva-Bhakta' Ravana.mp3", src: "/audio/Shiva Tandava Stotram (All 18 Slokas)  Vande Guru Paramparaam  'Shiva-Bhakta' Ravana.mp3", title: "Shiva Tandava", titleHi: "शिव ताण्डव स्तोत्रम्" }
+        ];
+
+        // ALTERNATING SECTION
+        const alternatingSection: any[] = [];
+        const maxPairs = Math.min(remainingVideos.length, remainingMantras.length);
+
+        for (let i = 0; i < maxPairs; i++) {
+            alternatingSection.push(remainingVideos[i]);
+            alternatingSection.push(remainingMantras[i]);
+        }
+
+        // REMAINING ITEMS (Videos or Mantras left over)
+        const leftovers = [
+            ...remainingVideos.slice(maxPairs),
+            ...remainingMantras.slice(maxPairs)
+        ];
+
+        return [...startSequence, ...alternatingSection, ...leftovers];
     }, []);
 
     const currentItem = playlist[currentIndex];
