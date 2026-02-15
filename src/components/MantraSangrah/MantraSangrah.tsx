@@ -58,6 +58,7 @@ interface MantraSangrahProps {
     currentIndex?: number;
     onSelectIndex?: (index: number) => void;
     onMutedChange?: (isMuted: boolean) => void;
+    onTimeUpdate?: (current: number, duration: number) => void;
     videoProgress?: number;
     videoTime?: number;
     videoDuration?: number;
@@ -124,6 +125,7 @@ export default function MantraSangrah({
     videoDuration,
     onVideoSeek,
     onVideoToggle,
+    onTimeUpdate,
     sessionActive = false
 }: MantraSangrahProps) {
     const [isOpen, setIsOpen] = useState(false);
@@ -314,11 +316,13 @@ export default function MantraSangrah({
         const handleTimeUpdate = () => {
             if (audio.duration) {
                 setProgress((audio.currentTime / audio.duration) * 100);
+                if (onTimeUpdate) onTimeUpdate(audio.currentTime, audio.duration);
             }
         };
 
         const handleLoadedMetadata = () => {
             setDuration(audio.duration);
+            if (onTimeUpdate) onTimeUpdate(audio.currentTime, audio.duration);
         };
 
         const handleEnded = () => {
@@ -806,20 +810,9 @@ export default function MantraSangrah({
                                             {activeItem?.titleHi || activeItem?.title}
                                         </span>
 
-                                        <div
-                                            className={styles.miniProgressContainer}
-                                            onClick={handleProgressClick}
-                                        >
-                                            <div
-                                                className={styles.miniProgressBar}
-                                                style={{ width: `${displayProgress}%` }}
-                                            />
-                                        </div>
                                     </div>
 
-                                    <div className={styles.miniTimeDisplay}>
-                                        <span>{formatTime(displayTime)}</span>
-                                    </div>
+                                    {/* Time display moved to on-screen countdown as requested */}
                                 </>
                             );
                         })()}

@@ -38,6 +38,8 @@ export default function DhyanKakshaPage() {
     const [videoProgress, setVideoProgress] = useState(0);
     const [videoTime, setVideoTime] = useState(0);
     const [videoDuration, setVideoDuration] = useState(0);
+    const [audioTime, setAudioTime] = useState(0);
+    const [audioDuration, setAudioDuration] = useState(0);
     const [isVideoLoading, setIsVideoLoading] = useState(false);
     const sequentialVideoRef = React.useRef<HTMLVideoElement>(null);
 
@@ -128,6 +130,12 @@ export default function DhyanKakshaPage() {
             setIsMantraPlaying(false);
             setForceMantraId(null);
         }
+    };
+
+    const formatTime = (seconds: number) => {
+        const mins = Math.floor(seconds / 60);
+        const secs = Math.floor(seconds % 60);
+        return `${mins}:${secs.toString().padStart(2, '0')}`;
     };
 
     const goNext = () => {
@@ -586,6 +594,10 @@ export default function DhyanKakshaPage() {
                 currentIndex={currentIndex}
                 onSelectIndex={handleSelectIndex}
                 onMutedChange={setIsMuted}
+                onTimeUpdate={(current, total) => {
+                    setAudioTime(current);
+                    setAudioDuration(total);
+                }}
                 // Video Control Props
                 videoProgress={videoProgress}
                 videoTime={videoTime}
@@ -703,6 +715,29 @@ export default function DhyanKakshaPage() {
                                         );
                                     })()}
                                 </div>
+                            </div>
+                        </div>
+                    )}
+
+                    {/* FLOATING COUNTDOWN PILL (Vedic Premium) */}
+                    {!showIntro && (
+                        <div className={pageStyles.countdownContainer}>
+                            <div className={pageStyles.countdownPill}>
+                                <span className={pageStyles.countdownLabel}>
+                                    {lang === 'hi' ? 'समय' : 'TIME'}
+                                </span>
+                                <span className={pageStyles.countdownValue}>
+                                    {(() => {
+                                        const isVideo = currentItem.type === 'video';
+                                        const cur = isVideo ? videoTime : audioTime;
+                                        const dur = isVideo ? videoDuration : audioDuration;
+                                        const remaining = Math.max(0, dur - cur);
+                                        return formatTime(remaining);
+                                    })()}
+                                </span>
+                                <span className={pageStyles.countdownSesh}>
+                                    {lang === 'hi' ? 'शेष' : 'Remaining'}
+                                </span>
                             </div>
                         </div>
                     )}
