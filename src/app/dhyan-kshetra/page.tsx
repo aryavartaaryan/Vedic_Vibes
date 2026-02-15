@@ -395,47 +395,36 @@ export default function DhyanKakshaPage() {
                     position: 'fixed',
                     inset: 0,
                     zIndex: 9999,
-                    background: 'radial-gradient(circle at center, #1a0f05 0%, #0a0502 100%)',
+                    background: 'radial-gradient(circle at center, #001a33 0%, #000814 100%)',
                     display: 'flex',
                     flexDirection: 'column',
                     alignItems: 'center',
                     justifyContent: 'center',
-                    gap: '2rem',
+                    gap: '2.5rem',
                     textAlign: 'center',
                     padding: '2rem'
                 }}>
-                    <div style={{
-                        width: '120px',
-                        height: '120px',
-                        borderRadius: '50%',
-                        background: 'rgba(212, 175, 55, 0.1)',
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        boxShadow: '0 0 40px rgba(184, 134, 11, 0.2)',
-                        border: '1px solid rgba(212, 175, 55, 0.3)',
-                        animation: 'pulse 3s infinite ease-in-out'
-                    }}>
-                        <div className={pageStyles.goldenOmEntranceContainer}>
-                            <img src="/images/golden_om_enter.png" alt="Vedic Om" className={pageStyles.goldenOmEntrance} />
-                        </div>
+                    <div className={pageStyles.goldenOmEntranceContainer}>
+                        <img src="/images/golden_om_enter.png" alt="Vedic Om" className={pageStyles.goldenOmEntrance} />
                     </div>
 
                     <div style={{ maxWidth: '600px' }}>
                         <h1 style={{
                             color: '#FFD700',
                             fontFamily: "'Playfair Display', serif",
-                            fontSize: '2.5rem',
+                            fontSize: '3rem',
                             marginBottom: '1rem',
-                            textShadow: '0 0 20px rgba(255, 215, 0, 0.3)'
+                            textShadow: '0 0 30px rgba(0, 150, 255, 0.5), 0 0 15px rgba(255, 215, 0, 0.3)',
+                            letterSpacing: '2px'
                         }}>
                             ध्यान क्षेत्र
                         </h1>
                         <p style={{
-                            color: 'rgba(255, 255, 255, 0.8)',
-                            fontSize: '1.2rem',
+                            color: 'rgba(245, 230, 211, 0.9)',
+                            fontSize: '1.3rem',
                             lineHeight: '1.6',
-                            fontFamily: "'Noto Serif Devanagari', serif"
+                            fontFamily: "'Noto Serif Devanagari', serif",
+                            textShadow: '0 2px 4px rgba(0,0,0,0.5)'
                         }}>
                             Prepare for a divine meditation experience.<br />
                             दिव्य ध्यान अनुभव के लिए तैयार रहें।
