@@ -463,12 +463,12 @@ export default function MantraSangrah({
         // isPaused (prop) is for video/mantra turn coordination
         // isSessionPaused is for manual overrides
         // manualPlaybackOverride (Internal) allows library tracks to play even during video turns
-        if (!sessionActive || isSessionPaused || (isPaused && !startPlaying && !forceTrackId && !manualPlaybackOverride)) {
+        if (!sessionActive || (isSessionPaused && !manualPlaybackOverride) || (isPaused && !startPlaying && !forceTrackId && !manualPlaybackOverride)) {
             if (!audio.paused) {
                 console.log("[MantraSangrah] Session inactive or paused. Silencing audio.");
                 audio.pause();
             }
-        } else if (!isPaused && audio.paused && !isSessionPaused && sessionActive) {
+        } else if (!isPaused && audio.paused && (!isSessionPaused || manualPlaybackOverride) && sessionActive) {
             // Resume if sequence moved back to mantra turn or manually unpaused
             console.log("[MantraSangrah] Attempting to resume playback (Session Active).");
             audio.play().catch(err => {

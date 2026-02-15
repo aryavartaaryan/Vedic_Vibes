@@ -34,6 +34,8 @@ export default function DhyanKakshaPage() {
     const [isSessionPaused, setIsSessionPaused] = useState(false);
     const [introVideos, setIntroVideos] = useState<{ src: string, text?: string | string[] }[]>([]);
     const [slideVideos, setSlideVideos] = useState<string[]>([]);
+    const [videoProgress, setVideoProgress] = useState(0);
+    const [videoTime, setVideoTime] = useState(0);
     const [videoDuration, setVideoDuration] = useState(0);
     const [isVideoLoading, setIsVideoLoading] = useState(false);
     const sequentialVideoRef = React.useRef<HTMLVideoElement>(null);
@@ -486,7 +488,8 @@ export default function DhyanKakshaPage() {
                     setIsMantraPlaying(playing);
                     // If a mantra starts playing, PAUSE the video
                     if (playing && currentItem.type === 'video') {
-                        setIsSessionPaused(true);
+                        // We DON'T set isSessionPaused to true here, as it might pause the mantra itself
+                        // Instead, we just pause the video element
                         if (sequentialVideoRef.current) {
                             sequentialVideoRef.current.pause();
                         }

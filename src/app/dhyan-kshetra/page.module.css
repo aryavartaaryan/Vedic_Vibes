@@ -120,8 +120,8 @@
     }
 
     .sriYantraContainer {
-        margin-top: 42vh !important;
-        /* Moved up from 48vh */
+        margin-top: 38vh !important;
+        /* Moved up from 42vh */
         width: 100% !important;
         display: flex !important;
         justify-content: center !important;
@@ -158,8 +158,8 @@
     width: 100%;
     display: flex;
     justify-content: center;
-    margin-top: 60px;
-    /* Lowered from 40px, moved up from 100px */
+    margin-top: 10px;
+    /* Moved up from 60px */
     z-index: 5;
 }
 
