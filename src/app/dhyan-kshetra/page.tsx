@@ -276,7 +276,7 @@ export default function DhyanKakshaPage() {
     }, []);
 
     // Function to prepare the NEXT slide into the inactive buffer
-    const pickRandomSlide = (isAgnihotraSession: boolean) => {
+    const pickRandomSlide = (isAgnihotraSession: boolean = false) => {
         if (ambientSlides.length === 0) return;
 
         const currentActive = activeBuffer === 'A' ? currentSlideA : currentSlideB;
